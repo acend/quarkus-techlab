@@ -1,6 +1,6 @@
 # REST Services in Quarkus
 
-
+Most modern APIs are based on REST principles. In this chapter we learn how to implement REST Services and Clients in Quarkus to produce and consume REST APIs. 
 
 ## Create your first Quarkus application
 
@@ -33,7 +33,7 @@ To test the application you can start the application in dev-mode by executing
 ``` 
 
 The command starts the application in dev-mode which means you do have active
-live reloading on each API call. Try hitting the api and test the
+live reloading on each API call. Try hitting the API and test the
 `GreetingResource.java`: 
 
 ```bash
@@ -43,7 +43,7 @@ curl http://localhost:8080/hello
 ```
 
 You should get the 'hello' response in your console. Try altering the response
-given in the `GreetingResource.java` and hit the api again, Quarkus should make
+given in the `GreetingResource.java` and hit the API again, Quarkus should perform
 a live reload and print the altered response without manually restarting your
 application.
 
