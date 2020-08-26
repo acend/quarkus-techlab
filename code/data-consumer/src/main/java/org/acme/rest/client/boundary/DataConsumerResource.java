@@ -17,8 +17,6 @@ public class DataConsumerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public SensorMeasurement getData() {
-        System.out.println("getData called");
-        System.out.println(dataProducerService.getSensorMeasurement());
         return dataProducerService.getSensorMeasurement();
     }
 }
