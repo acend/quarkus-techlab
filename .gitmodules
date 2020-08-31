@@ -1,6 +1,8 @@
 [submodule "code/quarkus-techlab-data-producer"]
 	path = code/quarkus-techlab-data-producer
 	url = https://github.com/g1raffi/quarkus-techlab-data-producer
+	branch = master
 [submodule "code/quarkus-techlab-data-consumer"]
 	path = code/quarkus-techlab-data-consumer
 	url = https://github.com/g1raffi/quarkus-techlab-data-consumer
+	branch = master
