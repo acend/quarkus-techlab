@@ -39,9 +39,17 @@ curl http://localhost:8081/data
 
 ```
 
-You should get your desired response. 
+You should get your desired response.
 
-## Jenkins build pipelines
+### Native builds
+
+TODO: Write about native builds
 
 
-## OpenShift deployments
+## OpenShift resources
+
+TODO: Write about the openshift resources needed
+
+## Create deployments with Tekton
+
+TODO: Write about Tekton Pipelines

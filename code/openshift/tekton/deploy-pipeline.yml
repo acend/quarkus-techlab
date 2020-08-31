@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: build-and-deploy
+spec:
+  resources:
+  - name: git-repo
+    type: git
+  - name: image
+    type: image
+  params:
+  - name: deployment-name
+    type: string
+    description: Name of the deployment to be patched
+  - name: docker-file
+    description: Path to the Dockerfile
+    type: string
+    default: src/main/docker/Dockerfile.jvm
+  tasks:
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    resources:
+      inputs:
+      - name: source
+        resource: git-repo
+      outputs:
+      - name: image
+        resource: image
+    params:
+    - name: TLSVERIFY
+      value: "false"
+    - name: DOCKERFILE
+      value: $(params.docker-file)
+  - name: apply-manifests
+    taskRef:
+      name: apply-manifests
+    resources:
+      inputs:
+      - name: source
+        resource: git-repo
+    runAfter:
+    - build-image
+    
