@@ -4,9 +4,11 @@ Techlab for writing Java microservices implemented in Quarkus
 
 ## Content
 
-  * Introduction to Quarkus
-  * REST API Example
-  * Run, Build, Deploy
+  * [Introduction to Quarkus](content/introduction.md)
+  * [REST Services with Quarkus](content/rest.md)
+  * [Build Quarkus applications](content/build.md)
+  * [Deploy to OpenShift](content/openshift.md)
+  * [CI/CD with Tekton](content/tekton.md)
   * Messaging with Quarkus
   * Monitoring 
 
