@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: build-and-deploy
+  name: apply-and-build
 spec:
   resources:
   - name: git-repo
@@ -17,6 +17,13 @@ spec:
     type: string
     default: src/main/docker/Dockerfile.jvm
   tasks:
+  - name: apply-manifests
+    taskRef:
+      name: apply-manifests
+    resources:
+      inputs:
+      - name: source
+        resource: git-repo
   - name: build-image
     taskRef:
       name: buildah
@@ -28,18 +35,10 @@ spec:
       outputs:
       - name: image
         resource: image
+    runAfter:
+    - apply-manifests
     params:
     - name: TLSVERIFY
       value: "false"
     - name: DOCKERFILE
       value: $(params.docker-file)
-  - name: apply-manifests
-    taskRef:
-      name: apply-manifests
-    resources:
-      inputs:
-      - name: source
-        resource: git-repo
-    runAfter:
-    - build-image
-    
