@@ -6,3 +6,6 @@
 	path = code/quarkus-techlab-data-consumer
 	url = https://github.com/g1raffi/quarkus-techlab-data-consumer
 	branch = master
+[submodule "code/quarkus-techlab-infrastructure"]
+	path = code/quarkus-techlab-infrastructure
+	url = git@github.com:g1raffi/quarkus-techlab-infrastructure.git
