@@ -15,14 +15,14 @@ metadata:
 spec:
   kafka:
     version: 2.5.0
-    replicas: 3
+    replicas: 1
     listeners:
       plain: {}
       tls: {}
     config:
       auto.create.topics.enable: false
-      offsets.topic.replication.factor: 3
-      transaction.state.log.replication.factor: 3
+      offsets.topic.replication.factor: 1
+      transaction.state.log.replication.factor: 1
       transaction.state.log.min.isr: 2
       log.message.format.version: "2.5"
     storage:
@@ -33,7 +33,7 @@ spec:
         size: 100Gi
         deleteClaim: false
   zookeeper:
-    replicas: 3
+    replicas: 1
     storage:
       type: persistent-claim
       size: 100Gi
@@ -44,7 +44,7 @@ spec:
 
 ```
 
-This creates a cluster with 3 active kafka and zookeeper replicas. 
+This creates a cluster with an active kafka and zookeeper replicas. 
 
 To use kafka as a message broker we need to set up a topic to which we can send and from which we can consume data. Create another resource file infrastructure/src/main/openshift/kafka/manual-topic.yml:
 
@@ -57,8 +57,8 @@ metadata:
   labels:
     strimzi.io/cluster: subzero
 spec:
-  partitions: 3
-  replicas: 3
+  partitions: 1
+  replicas: 1
   config:
     retention.ms: 7200000
     segment.bytes: 1073741824

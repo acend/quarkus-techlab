@@ -15,7 +15,11 @@ Techlab for writing Java microservices implemented in Quarkus
 ## Prerequisites
 
 To follow along this techlab you will need: 
+  * Git
+  * GitHub Account
   * Java OpenJDK 11
-  * GraalVM CE 19.3.1
+  * GraalVM CE 19.3.1 (optional)
   * Docker
+  * OpenShift CLI binary (oc)
+  * Tekton CLI binary (tkn)
 
