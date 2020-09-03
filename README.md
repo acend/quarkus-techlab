@@ -9,7 +9,7 @@ Techlab for writing Java microservices implemented in Quarkus
   * [Build Quarkus applications](content/build.md)
   * [Deploy to OpenShift](content/openshift.md)
   * [CI/CD with Tekton](content/tekton.md)
-  * Messaging with Quarkus
+  * [Messaging with Quarkus and Kafka](content/kafka.md)
   * Monitoring 
 
 ## Prerequisites
