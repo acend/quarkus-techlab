@@ -1,0 +1,14 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: quarkus-techlab-pipelinebinding
+spec:
+  params:
+  - name: gitrevision
+    value: $(body.head_commit.id)
+  - name: namespace
+    value: quarkus-techlab
+  - name: gitrepositoryurl
+    value: $(body.repository.url)
+  - name: gitrepositoryname
+    value: $(body.repository.name)

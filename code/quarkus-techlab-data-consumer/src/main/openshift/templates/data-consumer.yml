@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: List
+metadata:
+  labels:
+    application: quarkus-techlab
+items:
+
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-consumer
+  
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-consumer
+    spec:
+      replicas: 1
+      selector:
+        deploymentConfig: data-consumer
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            application: quarkus-techlab
+            deploymentConfig: data-consumer
+        spec:
+          containers:
+            - image: data-consumer
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshhold: 1
+                timeoutSeconds: 15
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 15
+              name: data-consumer
+              port:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 500Mi
+                requests:
+                  cpu: 50m
+                  memory: 100Mi
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames: 
+              - data-consumer
+            from:
+              kind: ImageStreamTag
+              name: data-consumer:latest
+          type: ImageChange
+        - type: ConfigChange
+  
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-consumer
+    spec:
+      ports:
+        - name: data-consumer-http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentConfig: data-consumer
+      sessionAffinity: None
+      type: ClusterIP
+          

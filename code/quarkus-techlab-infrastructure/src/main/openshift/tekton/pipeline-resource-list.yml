@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: List
+metadata:
+  labels:
+    application: quarkus-techlab
+items:
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: data-producer-repo
+  spec:
+    type: git
+    params:
+    - name: url
+      value: https://github.com/g1raffi/quarkus-techlab-data-producer.git
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: data-producer-image
+  spec:
+    type: image
+    params:
+    - name: url
+      value: image-registry.openshift-image-registry.svc:5000/quarkus-techlab/data-producer:latest
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: data-consumer-repo
+  spec:
+    type: git
+    params:
+    - name: url
+      value: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: data-consumer-image
+  spec:
+    type: image
+    params:
+    - name: url
+      value: image-registry.openshift-image-registry.svc:5000/quarkus-techlab/data-consumer:latest

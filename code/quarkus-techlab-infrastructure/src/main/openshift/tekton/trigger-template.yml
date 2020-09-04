@@ -1,0 +1,58 @@
+
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: quarkus-techlab-triggerbinding
+spec:
+  params:
+  - name: gitrevision
+    description: The git revision
+    default: master
+  - name: gitrepositoryurl
+    description: The git repository url
+  - name: namespace
+    description: The namespace to create the resources
+  - name: gitrepositoryname
+    description: The name of the deployment to be created / patched
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineResource
+    metadata:
+      name: source-repo-$(params.gitrepositoryname)
+      namespace: $(params.namespace)
+    spec:
+      type: git
+      params:
+      - name: revision
+        value: $(params.gitrevision)
+      - name: url
+        value: $(params.gitrepositoryurl)
+  - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineResource
+    metadata:
+      name: image-source-$(params.gitrepositoryname)
+      namespace: $(params.namespace)
+    spec:
+      type: image
+      params:
+      - name: url
+        value: image-registry.openshift-image-registry.svc:5000/${params.namespace}/$(params.gitrepositoryname):latest
+  - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineRun
+    metadata:
+      name: $(params.gitrepositoryname)-pipelinerun
+      namespace: $(params.namespace)
+    spec:
+      pipelineRef:
+        name: apply-and-build
+      serviceAccount: 'pipeline'
+      resources:
+      - name: my-source-repo
+        resourceRef:
+          name: source-repo-$(params.gitrepositoryname)
+      - name: my-image-resource
+        resourceRef:
+          name: image-source-$(params.gitrepositoryname)
+      params:
+      - name: deployment-name
+        value: $(params.gitrepositoryname)

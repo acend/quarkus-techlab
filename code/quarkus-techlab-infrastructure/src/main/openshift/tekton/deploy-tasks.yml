@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: apply-manifests
+spec:
+  resources:
+    inputs:
+      - type: git
+        name: source
+  params:
+    - name: manifest_dir
+      description: The directory in source that contains yaml manifests
+      type: string
+      default: "src/main/openshift/templates"
+  steps:
+    - name: apply
+      image: appuio/oc:v4.3
+      workingDir: /workspace
+      command: ["/bin/bash", "-c"]
+      args:
+        - |-
+          echo Applying manifests in $(inputs.params.manifest_dir) directory
+          oc apply -f source/$(inputs.params.manifest_dir)
+          echo -----------------------------------
