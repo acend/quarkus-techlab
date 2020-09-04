@@ -14,9 +14,9 @@ command:
 ```bash 
 
 mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
-    -DprojectGroupId=org.acme \
+    -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=getting-started \
-    -DclassName="org.acme.quickstart.GreetingResource" \
+    -DclassName="ch.puzzle.quarkustechlab.GreetingResource" \
     -Dpath="/hello"
 
 ``` 
@@ -57,9 +57,9 @@ Create a new Quarkus application like shown before called 'data-producer'. The a
 ```bash
 
 mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
-    -DprojectGroupId=org.acme \
+    -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=data-producer \
-    -DclassName="org.acme.quickstart.DataResource" \
+    -DclassName="ch.puzzle.quarkustechlab.restproducer.boundary.DataResource" \
     -Dpath="/data"
 ```
 
@@ -99,8 +99,6 @@ It should look something like this:
 
 ```java
 
-package org.acme.quickstart.entity;
-
 public class SensorMeasurement {
 
     public Double data;
@@ -113,15 +111,6 @@ public class SensorMeasurement {
 ```
 
 ```java
-
-package org.acme.quickstart;
-
-import org.acme.quickstart.entity.SensorMeasurement;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 @Path("/data")
 public class DataResource {
@@ -145,9 +134,9 @@ With another microservice we would like to consume the data served by our data-p
 ```bash
 
 mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
-    -DprojectGroupId=org.acme \
+    -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=data-consumer \
-    -DclassName="org.acme.rest.client.DataConsumer" \
+    -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumer" \
     -Dpath="/data" \
     -Dextensions="rest-client, resteasy-jsonb"
 
@@ -158,14 +147,6 @@ In the data-consumer microservice we will have another resource on the path "/da
 ```java
 
 // DataProducerService
-package org.acme.rest.client.boundary;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-
-import org.acme.quickstart.entity.SensorMeasurement;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/data")
 @RegisterRestClient
@@ -213,16 +194,6 @@ To use the registered RestClient in our application inject it into the DataConsu
 You can edit our resource in the data-consumer to use the `DataProducerService` to create a proxy consuming the data-producer's API and return it. 
 
 ```java
-
-package org.acme.rest.client.boundary;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.acme.rest.client.entity.SensorMeasurement;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Path("/data")
 public class DataConsumerResource {
