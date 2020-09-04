@@ -5,7 +5,7 @@ In this section we are going to define and create pipelines using Tekton to appl
 
 ## Pipelines
 
-With OpenShift 4 pipelines come in as a tech-preview feature. They represent a cloud-native CI/CD solution based on Kubernetes resources. Under the hood it uses Tekton building blocks to automate deployment by abstracting away the underlaying implementation details. Pipelines are a serverless system which runs pipelines wiht all required dependencies isolated in containers. 
+With OpenShift 4 pipelines come in as a tech-preview feature. They represent a cloud-native CI/CD solution based on Kubernetes resources. Under the hood it uses Tekton building blocks to automate deployment by abstracting away the underlaying implementation details. Pipelines are a serverless system which runs pipelines with all required dependencies isolated in containers. 
 
 Let's dive in and look at the resources. 
 
