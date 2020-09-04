@@ -1,6 +1,6 @@
 # Messaging with Quarkus
 
-Modern web applications running a microservice architecture need information to flow through multiple microservices. We have already seen one way of communication between two microservices, we exposed a REST interface on one application and consumed it from athoner. Communication through REST is very easy to implement and understand but it has also it's downsides. 
+Modern web applications running a microservice architecture need information to flow through multiple microservices. We have already seen one way of communication between two microservices, we exposed a REST interface on one application and consumed it from another. Communication through REST is very easy to implement and understand but it has also it's downsides. 
 For example what happens when our called microservice is not available. The REST call will just return a time-out and every application has to handle it's fallback by itself. 
 Here the concept of Messaging comes in handy. Messaging allows our application to be loosely coupled by communicating asynchronously. It transfers the responsibility of handling the information flow between single nodes of your application to the message broker.
 
