@@ -15,7 +15,7 @@ In this techlab you are going to set up your own Kafka cluster which will handle
 apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
-  name: quarkus-techlab-user$
+  name: quarkus-techlab-user
 spec:
   kafka:
     version: 2.5.0
@@ -34,13 +34,13 @@ spec:
       volumes:
       - id: 0
         type: persistent-claim
-        size: 100Gi
+        size: 10Gi
         deleteClaim: false
   zookeeper:
     replicas: 1
     storage:
       type: persistent-claim
-      size: 100Gi
+      size: 10Gi
       deleteClaim: false
   entityOperator:
     topicOperator: {}
@@ -57,7 +57,7 @@ kind: KafkaTopic
 metadata:
   name: manual
   labels:
-    strimzi.io/cluster: quarkus-techlab-user$
+    strimzi.io/cluster: quarkus-techlab-user
 spec:
   partitions: 1
   replicas: 1
