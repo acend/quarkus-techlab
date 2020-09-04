@@ -6,7 +6,7 @@ focused on developer experience, making things just work with little to no
 configuration and allowing to do live coding." - quarkus.io
 
 In short, Quarkus brings a framework built upon JakartaEE standards to build
-microservices in the Java environment. Per defulat Quarkus comes with full CDI
+microservices in the Java environment. Per default Quarkus comes with full CDI
 integration, RESTeasy-JAX-RS, dev mode and many more features.
 
 Quarkus provides a list of extensions and frameworks which can be included into
