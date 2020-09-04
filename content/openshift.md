@@ -16,7 +16,7 @@ For the next chapter we need to prepare our applications to run in a cloud envir
 
 When you restart your applications they both will expose automatically the '/health' endpoint which indicates that the application is up and running. 
 
-Additionally we need to configure the connection from our data-consumer to the data-producer. As for now the data-consumer simply points to the url configured in the application.properties which gets injected to the defined RestClient. 
+Additionally we need to configure the connection from our data-consumer to the data-producer. As for now the data-consumer simply points to the url configured in the `application.properties` which gets injected to the defined RestClient. 
 
 Extend your application.properties of the data-consumer to: 
 
@@ -30,8 +30,8 @@ application.data-producer.url=data-producer
 application.data-producer.port=8080
 %dev.application.data-producer.port=8080
 
-org.acme.rest.client.boundary.DataProducerService/mp-rest/url=http://${application.data-producer.url}:${application.data-producer.port}
-org.acme.rest.client.boundary.DataProducerService/mp-rest/scope=javax.inject.Singleton
+data-producer-api/mp-rest/url=http://${application.data-producer.url}:${application.data-producer.port}
+data-producer-api/mp-rest/scope=javax.inject.Singleton
 
 ```
 
@@ -150,7 +150,7 @@ To continue we will log into our cluster:
 
 ```bash
 
-oc login --server=https://api.ocp.aws.puzzle.ch:6443
+oc login --server=https://${OCP_URL}>:${OCP_PORT}
 
 ```
 
@@ -183,7 +183,7 @@ docker tag data-producer:native $REGISTRY/$OPENSHIFT_PROJECT/data-producer:lates
 docker tag data-consumer:native $REGISTRY/$OPENSHIFT_PROJECT/data-consumer:latest
 
 // TODO: Insert correct registry link
-docker login -u $USERNAME registry.aws.ocp.puzzle.ch -p $(oc whoami -t)
+docker login -u $USERNAME $REGISTRY -p $(oc whoami -t)
 
 // Push images
 docker push $REGISTRY/$OPENSHIFT_PROJECT/data-producer:latest
