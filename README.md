@@ -2,6 +2,7 @@
 
 In this guided hands-on training, we learn how to implement microservices with help of the Quarkus framework.
 
+
 ## Content Sections
 
 The training content resides within the [content](content) directory.
@@ -17,7 +18,7 @@ The page uses the [docsy theme](https://github.com/google/docsy) which is includ
 
 After cloning the main repo, you need to initialize the submodule like this:
 
-```bash
+```s
 git submodule update --init --recursive
 ```
 
@@ -26,13 +27,13 @@ git submodule update --init --recursive
 
 Build the image:
 
-```bash
+```s
 docker build -t puzzle/quarkus-techlab:latest .
 ```
 
 Run it locally:
 
-```bash
+```s
 docker run -i -p 8080:8080 puzzle/quarkus-techlab
 ```
 
@@ -41,13 +42,13 @@ docker run -i -p 8080:8080 puzzle/quarkus-techlab
 
 Build the image:
 
-```bash
+```s
 buildah build-using-dockerfile -t puzzle/quarkus-techlab:latest .
 ```
 
 Run it locally with the following command. Beware that `--rmi` automatically removes the built image when the container stops, so you either have to rebuild it or remove the parameter from the command.
 
-```bash
+```s
 podman run --rm --rmi --interactive --publish 8080:8080 localhost/puzzle/quarkus-techlab
 ```
 
@@ -57,7 +58,7 @@ podman run --rm --rmi --interactive --publish 8080:8080 localhost/puzzle/quarkus
 To develop locally we don't want to rebuild the entire container image every time something changed, and it is also important to use the same hugo versions like in production.
 We simply mount the working directory into a running container, where hugo is started in the server mode.
 
-```bash
+```s
 export HUGO_VERSION=<version-in-dockerfile>
 docker run \
   --rm --interactive \
@@ -75,7 +76,7 @@ Custom rules are in `.markdownlint.json`.
 There's a GitHub Action `.github/workflows/markdownlint.yaml` for CI.
 For local checks, you can either use Visual Studio Code with the corresponding extension (markdownlint), or the command line like this:
 
-```shell script
+```s
 npm install
 npm run mdlint
 ```

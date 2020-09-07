@@ -7,9 +7,9 @@ description: >
    Bring our microservices to the OpenShift plattform.
 ---
 
-## {{% param sectionnumber %}}.1 Defining Resources
+## {{% param sectionnumber %}}.1: Defining Resources
 
-To build our simple applications we need for each part an ImageStream, DeploymentConfig and Service. To define the needed resources create a template folder in your applications repository (src/main/openshift/templates) and add a new file to it `data-producer.yml` / `data-consumer.yml`: 
+To build our simple applications we need for each part an ImageStream, DeploymentConfig and Service. To define the needed resources create a template folder in your applications repository (src/main/openshift/templates) and add a new file to it `data-producer.yml` / `data-consumer.yml`:
 
 ```yml
 -- data-consumer.yml
@@ -84,7 +84,7 @@ items:
       triggers:
         - imageChangeParams:
             automatic: true
-            containerNames: 
+            containerNames:
               - data-consumer
             from:
               kind: ImageStreamTag
@@ -111,14 +111,14 @@ items:
 
 ```
 
-This defines a list of OpenShift resources containing the ImageStream, DeploymentConfig and Service for the application. To read more about [OpenShift](https://docs.openshift.com/container-platform/4.5/welcome/index.html) or [Kubernetes](https://kubernetes.io/docs/home/) resources please see the official documentations. 
+This defines a list of OpenShift resources containing the ImageStream, DeploymentConfig and Service for the application. To read more about [OpenShift](https://docs.openshift.com/container-platform/4.5/welcome/index.html) or [Kubernetes](https://kubernetes.io/docs/home/) resources please see the official documentations.
 
 
-## {{% param sectionnumber %}} Applying our resources
+## {{% param sectionnumber %}}.2: Applying our resources
 
-To continue we will log into our cluster: 
+To continue we will log into our cluster:
 
-```bash
+```s
 
 oc login --server=https://${OCP_URL}>:${OCP_PORT}
 
@@ -126,7 +126,7 @@ oc login --server=https://${OCP_URL}>:${OCP_PORT}
 
 We then create a new project
 
-```bash
+```s
 
 oc new-project quarkus-techlab-userXY
 oc project quarkus-techlab-userXY
@@ -135,19 +135,20 @@ oc project quarkus-techlab-userXY
 
 Then we will apply our defined resources with:
 
-```bash
+```s
 
 oc apply -f data-consumer/src/main/openshift/templates
 
 ```
 
-The output should confirm that the three resources have been generated successfully. 
+The output should confirm that the three resources have been generated successfully.
 
-## Start a deployment
+
+## {{% param sectionnumber %}}.3: Start a deployment
 
 Due to the fact that we defined an trigger on ImageChange in the DeploymentConfig a deployment starts whenever we push or tag a new image to our ImageStream. To deploy our application we simply tag and push our images to the registry.
 
-```bash
+```s
 // Tag images
 docker tag data-producer:native $REGISTRY/$OPENSHIFT_PROJECT/data-producer:latest
 docker tag data-consumer:native $REGISTRY/$OPENSHIFT_PROJECT/data-consumer:latest
@@ -163,7 +164,7 @@ docker push $REGISTRY/$OPENSHIFT_PROJECT/data-consumer:latest
 
 When the image is pushed OpenShift will automatically rollout your application. To verify your deployment use the oc tool to watch the pods in your project:
 
-```bash
+```s
 
 oc get pods -w
 
@@ -171,9 +172,9 @@ oc get pods -w
 
 You will see that two pods will start `data-producer-1-*****` and `data-consumer-1-*****`. After a short time the readiness probes should succeed and both pods will change their status to `Running`, which means your application is ready to use!
 
-Create a route to the data-consumer service with: 
+Create a route to the data-consumer service with:
 
-```bash
+```s
 
 oc expose svc data-consumer
 
@@ -181,12 +182,12 @@ oc expose svc data-consumer
 
 Now test your data-consumer application with:
 
-```bash
+```s
 
  curl http://$(oc get route data-consumer -o go-template --template='{{.spec.host}}')/data
 
-``` 
+```
 
-You should see the response given from the application in the expected format. 
+You should see the response given from the application in the expected format.
 
 Nice, our application now runs in the clouds!

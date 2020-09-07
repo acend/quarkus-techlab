@@ -7,7 +7,7 @@ description: >
    Configurate our microservices to be cloud ready.
 ---
 
-## {{% param sectionnumber %}}.1 
+## {{% param sectionnumber %}}.1
 
 For the next chapter we need to prepare our applications to run in a cloud environment. One important aspect of this will be adding health checks to our applications. Implementing or adding health checks to your Quarkus application is - as expected - easy. Simply add the extension 'smallrye-health' to your applications with the following command:
 
@@ -17,11 +17,11 @@ For the next chapter we need to prepare our applications to run in a cloud envir
 
 ```
 
-When you restart your applications they both will expose automatically the '/health' endpoint which indicates that the application is up and running. 
+When you restart your applications they both will expose automatically the '/health' endpoint which indicates that the application is up and running.
 
-Additionally we need to configure the connection from our data-consumer to the data-producer. As for now the data-consumer simply points to the url configured in the `application.properties` which gets injected to the defined RestClient. 
+Additionally we need to configure the connection from our data-consumer to the data-producer. As for now the data-consumer simply points to the url configured in the `application.properties` which gets injected to the defined RestClient.
 
-Extend your application.properties of the data-consumer to: 
+Extend your application.properties of the data-consumer to:
 
 ```java
 

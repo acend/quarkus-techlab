@@ -13,8 +13,7 @@
     }
   },
   "dependencies": {
-    "husky": "^4.2.5",
-    "markdownlint": "^0.20.4"
+    "husky": "^4.2.5"
   },
   "scripts": {
     "mdlint": "markdownlint --config .markdownlint.json content *.md"

@@ -11,7 +11,8 @@ description: >
 
 In this section we learn how microservices can communicate through REST. In this example we want to build a microservice which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes it on ot's own endpoint.
 
- ### {{% param sectionnumber %}}.2: Producing Data
+
+### {{% param sectionnumber %}}.2: Producing Data
 
 Create a new Quarkus application like shown before called 'data-producer'. The application should expose a `DataResource` on the path "/data" which provides the user with a randomly generated double when requested.
 
@@ -90,7 +91,8 @@ public class DataResource {
 
 For more information about writing REST APIs with Quarkus see the [documentation](https://quarkus.io/guides/rest-json)
 
- ### {{% param sectionnumber %}}.3: Consuming Data 
+
+### {{% param sectionnumber %}}.3: Consuming Data
 
 With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called 'data-consumer' with the follwing extensions: "rest-client, resteasy-jsonb".
 
@@ -105,7 +107,7 @@ mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
 
 ```
 
-In the data-consumer microservice we will have another resource on the path "/data" which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST Client. 
+In the data-consumer microservice we will have another resource on the path "/data" which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST Client.
 
 ```java
 
@@ -122,15 +124,17 @@ public interface DataProducerService {
 
 ```
 
-To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our `application.properties`. 
-We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean. 
+To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our `application.properties`.
+We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean.
 
-```
+```yaml
+
 ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http://localhost:8080/data
 ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/scope=javax.inject.Singleton
-``` 
 
-When managing multiple RestClients the configuration with the fully qualified name of the class (`ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService`) the readability suffers pretty fast. You can extend the annotation of the RestClient (`@RegisterRestClient`) with a configKey property to shorten the configurations. 
+```
+
+When managing multiple RestClients the configuration with the fully qualified name of the class (`ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService`) the readability suffers pretty fast. You can extend the annotation of the RestClient (`@RegisterRestClient`) with a configKey property to shorten the configurations.
 
 ```java
 
@@ -151,10 +155,10 @@ public interface DataProducerService {
 data-producer-api/mp-rest/url=http://localhost:8080/data
 data-producer-api/mp-rest/scope=javax.inject.Singleton
 
-``` 
+```
 
 To use the registered RestClient in our application inject it into the DataConsumerResource and simply call the defined interface's method. To inject a RestClient into your desired class create a field of type `DataProducerService dataProducerService` and annotate it with `@RestClient`.
-You can edit our resource in the data-consumer to use the `DataProducerService` to create a proxy consuming the data-producer's API and return it. 
+You can edit our resource in the data-consumer to use the `DataProducerService` to create a proxy consuming the data-producer's API and return it.
 
 ```java
 

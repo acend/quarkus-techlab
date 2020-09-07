@@ -10,6 +10,7 @@ description: >
 ## Task {{% param sectionnumber %}}.1: Create your application
 
 To create your first Quarkus application you have several possibilities:
+
 * Create your application with the [Quickstart UI](https://code.quarkus.io/)
 * Create your application with maven
 

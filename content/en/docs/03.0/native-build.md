@@ -7,14 +7,14 @@ description: >
    Test Native builds for Quarkus.
 ---
 
-## {{% param sectionnumber %}}.1 
+## {{% param sectionnumber %}}.1
 
 As the name says, native builds will run the Quarkus application as a native executable. The executable will get optimized and prepared in the ahead-of-time compilation process. As you would expect the compilation and build of a native executable takes a ridiculous amount of memory and time. Native executables are built by the GraalVM or the upstream community project Mandrel. If you want to read further about native executables in Quarkus head over to the official [Documentation](https://quarkus.io/guides/building-native-image).
 
 For now, we simply want to build native images to be fast as lightning!
 
-There are multiple ways to build native images. One possibility is to install the GraalVM and use Maven locally with `./mvnw package -Pnative` then use the Dockerfile.native to create your image. 
-The lazy way is simpler. We create a multistage Dockerfile to do both steps in our docker build process. 
+There are multiple ways to build native images. One possibility is to install the GraalVM and use Maven locally with `./mvnw package -Pnative` then use the Dockerfile.native to create your image.
+The lazy way is simpler. We create a multistage Dockerfile to do both steps in our docker build process.
 
 ```Dockerfile
 # Dockerfile.multistage
@@ -49,7 +49,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 Now you can create your own native executable with:
 
-```bash
+```s
 
 ~/data-producer ./mvnw clean package
 ~/data-consumer ./mvnw clean package
@@ -58,15 +58,15 @@ Now you can create your own native executable with:
 
 ```
 
-Now start the built native images. You will realize that the startup time is almost instantaneous. 
+Now start the built native images. You will realize that the startup time is almost instantaneous.
 
-```
-__  ____  __  _____   ___  __ ____  ______ 
- --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
- -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
---\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+```s
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) data-consumer 1.0-SNAPSHOT native (powered by Quarkus 1.7.0.Final) started in 0.031s. Listening on: http://0.0.0.0:8080
-2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Profile prod activated. 
+2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Profile prod activated.
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Installed features: [cdi, rest-client, resteasy, resteasy-jsonb, smallrye-health]
 
 ```

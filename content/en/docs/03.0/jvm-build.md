@@ -7,11 +7,11 @@ description: >
    Test JVM builds for Quarkus.
 ---
 
-## {{% param sectionnumber %}}.1 
+## {{% param sectionnumber %}}.1
 
-To build a Quarkus application to be run with the JVM you can use the provided Dockerfile `Dockerfile.jvm`. 
+To build a Quarkus application to be run with the JVM you can use the provided Dockerfile `Dockerfile.jvm`.
 
-```bash
+```s
 
 ~/data-producer ./mvnw clean package
 ~/data-consumer ./mvnw clean package
@@ -22,16 +22,16 @@ To build a Quarkus application to be run with the JVM you can use the provided D
 
 The image will be produced and tagged as data-producer:latest / data-consumer:latest. You can test and run the built image locally with:
 
-```bash
+```s
 
 docker run --network host data-producer:latest
 docker run --network host data-consumer:latest
 
 ```
 
-When the applications are up and running you can test the API again: 
+When the applications are up and running you can test the API again:
 
-```bash
+```s
 
 curl http://localhost:8081/data
 

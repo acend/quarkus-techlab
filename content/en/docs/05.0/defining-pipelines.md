@@ -7,9 +7,8 @@ description: >
    Defining pipelines for our microservices.
 ---
 
-# {{% param title %}}
-
 In this example we are going to build a CI/CD pipeline to apply our current manifests (OpenShift Resources), build our image and push it into our docker-registry. To define a minimal pipeline we need at least a Task, a Pipeline and PipelineResources which are going to be used by our Pipeline.
+
 
 ## {{% param sectionnumber %}}.1: Define our first Task
 
@@ -46,11 +45,12 @@ spec:
 
 We define that we will need a input Resource (PipelineResource) of type git (Git-Repository), we can use a parameter called 'manifest_dir' to define where our templates reside which we are going to apply. In the specification (`spec:`) we define a set of steps which are executed in this specific Task.
 
-In this example Task we can see that we will use a container `appuio/oc:v4.3` which provides us an image with provided OpenShift CLI (`oc`) available. We start the container with the defined arguments which are going to apply our manifests on the used namespace. 
+In this example Task we can see that we will use a container `appuio/oc:v4.3` which provides us an image with provided OpenShift CLI (`oc`) available. We start the container with the defined arguments which are going to apply our manifests on the used namespace.
+
 
 ## {{% param sectionnumber %}}.2: Define the Pipeline
 
-After we have taken a look at the Task we are going to execute we will take a look at the entire Pipeline. The Pipeline will look like this: 
+After we have taken a look at the Task we are going to execute we will take a look at the entire Pipeline. The Pipeline will look like this:
 
 ```yaml
 
@@ -102,10 +102,11 @@ spec:
 
 ```
 
-We can see that we are going to use two PipelineResources, a git repository (`{type: git, name: git-repo}`) and a image reference (`{type: image, name: image}`). We can parameterize our Pipeline with the parameters `deployent-name` which will specify the microservice we will build and deploy and the parameter `docker-file` which will be passed into the second step to define where our Dockerfile's location is. 
-In the `tasks` specification we define which Tasks the Pipeline will execute. We can define the behaviour of execution of these Tasks with additional flags, for example we define that the Task `build-image` will be runned after `apply-manifests` with the `runAfter` element. 
+We can see that we are going to use two PipelineResources, a git repository (`{type: git, name: git-repo}`) and a image reference (`{type: image, name: image}`). We can parameterize our Pipeline with the parameters `deployent-name` which will specify the microservice we will build and deploy and the parameter `docker-file` which will be passed into the second step to define where our Dockerfile's location is.
+In the `tasks` specification we define which Tasks the Pipeline will execute. We can define the behaviour of execution of these Tasks with additional flags, for example we define that the Task `build-image` will be runned after `apply-manifests` with the `runAfter` element.
 You can see now that the workflow passes the defined PipelineResources for one Task to another as defined inputs and outputs.
 The Task `build-image` is a predefined ClusterTask which comes with the Tekton Operator installation on our OpenShift cluster.
+
 
 ## {{% param sectionnumber %}}.3: Define PipelineResources
 
@@ -158,11 +159,12 @@ items:
 
 ```
 
-This defines a List of PipelineResources with four elements, for each application we define a git-repository of type `git` and an image reference of type `image`. 
+This defines a List of PipelineResources with four elements, for each application we define a git-repository of type `git` and an image reference of type `image`.
+
 
 ## {{% param sectionnumber %}}.4: Apply the Pipeline
 
-Create a directory / module to hold your infrastructure objects `quarkus-techlab-infrastructure` and save these resource definitions under `quarkus-techlab-infrastructure/src/main/openshift/tekton`. Make sure you are in your defined namespace and apply these resources: 
+Create a directory / module to hold your infrastructure objects `quarkus-techlab-infrastructure` and save these resource definitions under `quarkus-techlab-infrastructure/src/main/openshift/tekton`. Make sure you are in your defined namespace and apply these resources:
 
 ```s
 
@@ -170,7 +172,7 @@ oc apply -f quarkus-techlab-infrastructure/src/main/openshift/tekton
 
 ```
 
-You will see that the the resources will be created. 
+You will see that the the resources will be created.
 
 ```s
 
@@ -185,9 +187,10 @@ pipelineresource.tekton.dev/data-consumer-image created
 
 ```
 
+
 ## {{% param sectionnumber %}}.5: Start and run the pipeline
 
-To run your newly defined Pipeline you will use the Tekton binary (`tkn`). Simply run the following command to start a PipelineRun of your defined Pipeline. 
+To run your newly defined Pipeline you will use the Tekton binary (`tkn`). Simply run the following command to start a PipelineRun of your defined Pipeline.
 
 ```s
 
@@ -195,10 +198,11 @@ tkn pipeline start apply-and-build -r git-repo=data-consumer-repo -r image=data-
 
 ```
 
-Tekton will prompt you with a command to follow the logs of the started PipelineRun. If you enter the prompted command you will follow the PipelineRuns logs on your command line. 
+Tekton will prompt you with a command to follow the logs of the started PipelineRun. If you enter the prompted command you will follow the PipelineRuns logs on your command line.
+
 
 ## {{% param sectionnumber %}}.6: What did just happen
 
-We declared in this chapter our first own CI/CD Pipelines as Kubernetes-native resources. We defined a Pipeline which uses multiple PipelineResources in it's Tasks to apply our manifests, build and deploy our applications. 
+We declared in this chapter our first own CI/CD Pipelines as Kubernetes-native resources. We defined a Pipeline which uses multiple PipelineResources in it's Tasks to apply our manifests, build and deploy our applications.
 
 Update your microservices, change the infrastructure declaration and test your deployment again!

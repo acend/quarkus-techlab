@@ -9,9 +9,9 @@ description: >
 
 ## {{% param sectionnumber %}}.1: ActiveMQ Artemis
 
-In order to make our microservices to communicate through messaging we need to setup a message broker first. In this first example we are going to use [Artemis ActiveM](https://activemq.apache.org/components/artemis/) as our message broker. Artemis provides us a simple message broker which comes with a few handy features which we are going to make use of. 
+In order to make our microservices to communicate through messaging we need to setup a message broker first. In this first example we are going to use [Artemis ActiveM](https://activemq.apache.org/components/artemis/) as our message broker. Artemis provides us a simple message broker which comes with a few handy features which we are going to make use of.
 
-To setup our Artemis ActiveMQ instance we are going to use a docker image and run it locally: 
+To setup our Artemis ActiveMQ instance we are going to use a docker image and run it locally:
 
 ```s
 
@@ -19,22 +19,24 @@ docker run -it --rm -p 8161:8161 -p 61616:61616 -p 5672:5672 -e ARTEMIS_USERNAME
 
 ```
 
-If you have your container up and running you can log into the web UI on [http://localhost:8161/console](http://localhost:8161/console) and click yourself through the interface. 
+If you have your container up and running you can log into the web UI on [http://localhost:8161/console](http://localhost:8161/console) and click yourself through the interface.
+
 
 ## {{% param sectionnumber %}}.2: Microservices
 
-In order to use messaging instead of REST calls we do need to change our implementation. If you like you can leave the entire REST implementation and just create a new package `artemis` inside your application. 
+In order to use messaging instead of REST calls we do need to change our implementation. If you like you can leave the entire REST implementation and just create a new package `artemis` inside your application.
 
 In order to use messaging we are going to use the Quarkus extension "quarkus-artemis-jms", add this extension to your producer and consumer project.
 
 ```s
 
-./quarkus-techlab-data-consumer/mvnw quarkus:add-extension -Dextensions="quarkus-artemis-jms" 
-./quarkus-techlab-data-producer/mvnw quarkus:add-extension -Dextensions="quarkus-artemis-jms" 
+./quarkus-techlab-data-consumer/mvnw quarkus:add-extension -Dextensions="quarkus-artemis-jms"
+./quarkus-techlab-data-producer/mvnw quarkus:add-extension -Dextensions="quarkus-artemis-jms"
 
 ```
 
 Let's start with producing data to a Queue:
+
 
 ### {{% param sectionnumber %}}.2.1: Producing data
 
@@ -66,7 +68,7 @@ public class JmsDataProducer implements Runnable {
     }
 }
 
-``` 
+```
 
 We need to setup the ConnectionFactory so our microservices know how to communicate with our Artemis message broker. We add the following properties to our `application.properties` files in both microservices:
 
@@ -79,6 +81,7 @@ quarkus.artemis.username=quarkus
 quarkus.artemis.password=quarkus
 
 ```
+
 
 ### {{% param sectionnumber %}}.2.2: Consuming data
 
@@ -126,7 +129,7 @@ public class JmsDataConsumer implements Runnable {
 
 ```
 
-Let's create a REST resource to see the lastData property consumed: 
+Let's create a REST resource to see the lastData property consumed:
 
 ```java
 
@@ -145,4 +148,4 @@ public class JmsDataResource {
 
 ```
 
-If you run both applications you will see that the consumer receives an Message every five seconds with new data from the message broker. If you check the Artemis UI you can see under 'Diagram' your Queue with an active consumer connected to it. When you head over to the 'Queues' tab you can read or manipulate your Queues manually. You can also use your defined REST resource to check the data. 
+If you run both applications you will see that the consumer receives an Message every five seconds with new data from the message broker. If you check the Artemis UI you can see under 'Diagram' your Queue with an active consumer connected to it. When you head over to the 'Queues' tab you can read or manipulate your Queues manually. You can also use your defined REST resource to check the data.

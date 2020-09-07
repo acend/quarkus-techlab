@@ -7,11 +7,9 @@ description: >
    Deploy our microservices with ActiveMQ Artemis to the cloud.
 ---
 
-# {{% param title %}}
-
 Let's configure our microservices and message broker on OpenShift so we can test this in our production ready environment.
 
-Create the artemis resources: 
+Create the artemis resources:
 
 ```yaml
 

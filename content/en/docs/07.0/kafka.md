@@ -9,13 +9,14 @@ description: >
 
 ## {{% param title %}}
 
-We have defined our requirements for our new microservices which we want to have reactive. Apache Kafka brings a lot of handy features to build such systems at big scale. 
+We have defined our requirements for our new microservices which we want to have reactive. Apache Kafka brings a lot of handy features to build such systems at big scale.
 
 In this chapter we want to use Apache Kafka as our message oriented middleware. Kafka has some own concepts and introduces a ton of other functionality. But for starters were going to use it as a simple message broker.
 
+
 ### {{% param sectionnumber %}}.1: Define Kafka Cluster
 
-In this techlab you are going to set up your own Kafka cluster which will handle your messages. Add the following resource definition to your infrastructure project under `quarkus-techlab-infrastructure/src/main/openshift/kafka`: 
+In this techlab you are going to set up your own Kafka cluster which will handle your messages. Add the following resource definition to your infrastructure project under `quarkus-techlab-infrastructure/src/main/openshift/kafka`:
 
 ```yaml
 
@@ -55,7 +56,7 @@ spec:
 
 ```
 
-For starters we need a simple Kafka Topic `manual` which we will use as communication channel to transfer data from one microservice to another. 
+For starters we need a simple Kafka Topic `manual` which we will use as communication channel to transfer data from one microservice to another.
 
 ```yaml
 
@@ -82,11 +83,12 @@ oc apply -f quarkus-techlab-infrastructure/src/main/openshift/kafka
 
 ```
 
-You will see that OpenShift will deploy a single node Kafka cluster into your namespace. 
+You will see that OpenShift will deploy a single node Kafka cluster into your namespace.
 
 For local development we will create a small docker-compose file to start a Kafka cluster:
 
 quarkus-techlab-infrastructure/src/main/docker/kafka/docker-compose.yml
+
 ```yaml
 
 version: '2'
@@ -122,7 +124,7 @@ services:
 
 ```
 
-Start your cluster with: 
+Start your cluster with:
 
 ```s
 
@@ -130,9 +132,10 @@ docker-compose -f quarkus-techlab-infrastructure/src/main/docker/kafka/docker-co
 
 ```
 
+
 ### {{% param sectionnumber %}}.2: Producing messages
 
-In order to use reactive messaging with kafka in our microservices we will add another extension to them: 
+In order to use reactive messaging with kafka in our microservices we will add another extension to them:
 
 ```s
 
@@ -143,8 +146,9 @@ In order to use reactive messaging with kafka in our microservices we will add a
 
 Let's start by creating a reactive producer which is going to do the same thing he always does: Produce random SensorMeasurements.
 
-ch.puzzle.quarkustechlab.reactiveproducer.boundary.ReactiveDataProducer.java
+
 ```java
+// ch.puzzle.quarkustechlab.reactiveproducer.boundary.ReactiveDataProducer.java
 
 @ApplicationScoped
 public class ReactiveDataProducer {
@@ -160,8 +164,8 @@ public class ReactiveDataProducer {
 
 As you can see we create a Flowable of SensorMeasurement which you can imagine as a stream of data sent to the channel "data-inbound-reactive". After setting up the data producer we need to connect the Connectors to our Kafka cluster.
 
-application.properties
 ```yaml
+#application.properties
 
 [...]
 
@@ -176,13 +180,14 @@ mp.messaging.outgoing.data.value.serializer=io.quarkus.kafka.client.serializatio
 
 ```
 
+
 ### {{% param sectionnumber %}}.3: Consuming messages
 
-On the other side we want to consume the data we just produced in the Kafka `manual` Topic. 
-Let's create a ReactiveDataConsumer class: 
+On the other side we want to consume the data we just produced in the Kafka `manual` Topic.
+Let's create a ReactiveDataConsumer class:
 
-ch.puzzle.quarkustechlab.reactiveconsumer.boundary.ReactiveDataConsumer.java
 ```java
+// ch.puzzle.quarkustechlab.reactiveconsumer.boundary.ReactiveDataConsumer.java
 
 @ApplicationScoped
 public class ReactiveDataConsumer {
@@ -197,10 +202,11 @@ public class ReactiveDataConsumer {
 
 ```
 
-To receive and deserialize our messages we need to impelement a SensorMeasurementDeserializer which inherits from the JsonbDeserializer: 
+To receive and deserialize our messages we need to impelement a SensorMeasurementDeserializer which inherits from the JsonbDeserializer:
 
-ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
 ```java
+// ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
+
 
 public class SensorMeasurementDeserializer extends JsonbDeserializer<SensorMeasurement> {
 
@@ -209,7 +215,7 @@ public class SensorMeasurementDeserializer extends JsonbDeserializer<SensorMeasu
     }
 }
 
-``` 
+```
 
 After creating the deserializer we need to setup the connectors for the consumer to connect to our Kafka cluster:
 
