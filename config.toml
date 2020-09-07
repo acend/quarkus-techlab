@@ -1,5 +1,5 @@
-baseurl = "/"
-title = "AMM Techlab"
+baseurl = "/quarkus-techlab/docs/"
+title = "Quarkus Techlab"
 
 enableGitInfo = true
 
