@@ -7,7 +7,7 @@ description: >
   This section covers implementing REST services.
 ---
 
-## {{% param sectionnumber %}}.1: Impelementing REST Services
+## {{% param sectionnumber %}}.1: Implementing REST Services
 
 In this section we learn how microservices can communicate through REST. In this example we want to build a microservice which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes it on ot's own endpoint.
 
