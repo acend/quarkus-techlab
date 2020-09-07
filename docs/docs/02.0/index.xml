@@ -121,7 +121,8 @@ To add an extension to your existing Quarkus application simply use:&lt;/p&gt;
     &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
 &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For more information about writing REST APIs with Quarkus see the &lt;a href=&#34;https://quarkus.io/guides/rest-json&#34;&gt;documentation&lt;/a&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Please update or delete the generated tests which Quarkus provides when generating a project. They will not be needed any further and only have demonstration purposes.&lt;/p&gt;
+&lt;p&gt;For more information about writing REST APIs with Quarkus see the &lt;a href=&#34;https://quarkus.io/guides/rest-json&#34;&gt;documentation&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;223-consuming-data&#34;&gt;2.2.3: Consuming Data&lt;/h3&gt;
 &lt;p&gt;With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called &amp;lsquo;data-consumer&amp;rsquo; with the follwing extensions: &amp;ldquo;rest-client, resteasy-jsonb&amp;rdquo;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
@@ -145,10 +146,11 @@ mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create &lt;span style=&#34;color
     &lt;span style=&#34;color:#000&#34;&gt;SensorMeasurement&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;getSensorMeasurement&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;();&lt;/span&gt;
 &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our &lt;code&gt;application.properties&lt;/code&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Implement the same POJO as in the producer again for the data-consumer project.&lt;/p&gt;
+&lt;p&gt;To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our &lt;code&gt;application.properties&lt;/code&gt;.
 We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;//localhost&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#0000cf;font-weight:bold&#34;&gt;8080&lt;/span&gt;/data&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;//localhost&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#0000cf;font-weight:bold&#34;&gt;8080&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/scope=javax.inject.Singleton&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When managing multiple RestClients the configuration with the fully qualified name of the class (&lt;code&gt;ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService&lt;/code&gt;) the readability suffers pretty fast. You can extend the annotation of the RestClient (&lt;code&gt;@RegisterRestClient&lt;/code&gt;) with a configKey property to shorten the configurations.&lt;/p&gt;
@@ -184,6 +186,7 @@ You can edit our resource in the data-consumer to use the &lt;code&gt;DataProduc
 &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To run both microservices you have to alter the &lt;code&gt;application.properties&lt;/code&gt; of the consumer and change it&amp;rsquo;s default port. Simply add &lt;code&gt;quarkus.http.port=8081&lt;/code&gt; to your &lt;code&gt;application.properties&lt;/code&gt; and the default port will be changed.&lt;/p&gt;
+&lt;p&gt;When you have both microservices running, try sending a request to the consumer. You will see that we receive a SensorMeasurement, which the data-producer produced.&lt;/p&gt;
 
       </description>
     </item>

@@ -25,12 +25,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/docs/05.0/defining-pipelines/" />
-<meta property="article:modified_time" content="2020-09-07T13:16:09+02:00" /><meta property="og:site_name" content="Quarkus Techlab" />
+<meta property="article:modified_time" content="2020-09-07T13:20:53+02:00" /><meta property="og:site_name" content="Quarkus Techlab" />
 <meta itemprop="name" content="5.1 Defining pipelines">
 <meta itemprop="description" content="Defining pipelines for our microservices.
 ">
-<meta itemprop="dateModified" content="2020-09-07T13:16:09+02:00" />
-<meta itemprop="wordCount" content="659">
+<meta itemprop="dateModified" content="2020-09-07T13:20:53+02:00" />
+<meta itemprop="wordCount" content="807">
 
 
 
@@ -137,7 +137,7 @@
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/offline-search-index.043fb41c0c63b213a5afa2ce1e1d78216fd87aae92df5b24e5aa2a06da05efa0efeba3ed900db911b3ac77df006b0bf48a373a2c7e74516c37dfb0cf11a41707.json"
+  data-offline-search-index-json-src="/offline-search-index.e2b1bbd95c17cec4949940ecb68eb5ab2329e70f24e273d0eafbb02f69a59f4abe1fed0fc433c7895cfc654a1999bb6b10418c76f5e8ee11c3e181fb2e5be403.json"
   data-offline-search-base-href="/"
 >
 
@@ -167,7 +167,7 @@
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/offline-search-index.043fb41c0c63b213a5afa2ce1e1d78216fd87aae92df5b24e5aa2a06da05efa0efeba3ed900db911b3ac77df006b0bf48a373a2c7e74516c37dfb0cf11a41707.json"
+  data-offline-search-index-json-src="/offline-search-index.e2b1bbd95c17cec4949940ecb68eb5ab2329e70f24e273d0eafbb02f69a59f4abe1fed0fc433c7895cfc654a1999bb6b10418c76f5e8ee11c3e181fb2e5be403.json"
   data-offline-search-base-href="/"
 >
 
@@ -668,7 +668,53 @@ The Task <code>build-image</code> is a predefined ClusterTask which comes with t
 
 </code></pre></div><h2 id="515-start-and-run-the-pipeline">5.1.5: Start and run the pipeline</h2>
 <p>To run your newly defined Pipeline you will use the Tekton binary (<code>tkn</code>). Simply run the following command to start a PipelineRun of your defined Pipeline.</p>
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-s" data-lang="s">
+<p>First add a multistage Dockerfile for JVM builds to your two repositories:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#8f5902;font-style:italic"># quarkus-techlab-data-consumer/src/main/docker/Dockerfile.multistage.jvm</span><span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#8f5902;font-style:italic">## Stage 1 : build with maven builder image with native capabilities</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">FROM</span><span style="color:#4e9a06"> quay.io/quarkus/centos-quarkus-maven:20.1.0-java11 AS build</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">COPY</span> pom.xml /usr/src/app/<span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">RUN</span> mvn -f /usr/src/app/pom.xml -B de.qaware.maven:go-offline-maven-plugin:1.2.5:resolve-dependencies<span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">COPY</span> src /usr/src/app/src<span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">USER</span><span style="color:#4e9a06"> root</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">RUN</span> chown -R quarkus /usr/src/app<span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">USER</span><span style="color:#4e9a06"> quarkus</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">RUN</span> mvn -f /usr/src/app/pom.xml clean package<span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#8f5902;font-style:italic">## Stage 2 : create the docker final image</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">FROM</span><span style="color:#4e9a06"> registry.access.redhat.com/ubi8/ubi-minimal:8.1</span><span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">ARG</span> <span style="color:#000">JAVA_PACKAGE</span><span style="color:#ce5c00;font-weight:bold">=</span>java-11-openjdk-headless<span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">ARG</span> <span style="color:#000">RUN_JAVA_VERSION</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">1</span>.3.8<span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">ENV</span> <span style="color:#000">LANG</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#39;en_US.UTF-8&#39;</span> <span style="color:#000">LANGUAGE</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#39;en_US:en&#39;</span><span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#8f5902;font-style:italic"># Install java and the run-java script</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#8f5902;font-style:italic"># Also set up permissions for user `1001`</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">RUN</span> microdnf install curl ca-certificates <span style="color:#4e9a06">${</span><span style="color:#000">JAVA_PACKAGE</span><span style="color:#4e9a06">}</span> <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> microdnf update <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> microdnf clean all <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> mkdir /deployments <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> chown <span style="color:#0000cf;font-weight:bold">1001</span> /deployments <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> chmod <span style="color:#4e9a06">&#34;g+rwX&#34;</span> /deployments <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> chown 1001:root /deployments <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> curl https://repo1.maven.org/maven2/io/fabric8/run-java-sh/<span style="color:#4e9a06">${</span><span style="color:#000">RUN_JAVA_VERSION</span><span style="color:#4e9a06">}</span>/run-java-sh-<span style="color:#4e9a06">${</span><span style="color:#000">RUN_JAVA_VERSION</span><span style="color:#4e9a06">}</span>-sh.sh -o /deployments/run-java.sh <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> chown <span style="color:#0000cf;font-weight:bold">1001</span> /deployments/run-java.sh <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> chmod <span style="color:#0000cf;font-weight:bold">540</span> /deployments/run-java.sh <span style="color:#4e9a06">\
+</span><span style="color:#4e9a06"></span>    <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> <span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;securerandom.source=file:/dev/urandom&#34;</span> &gt;&gt; /etc/alternatives/jre/lib/security/java.security<span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#8f5902;font-style:italic"># Configure the JAVA_OPTIONS, you can add -XshowSettings:vm to also display the heap size.</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">ENV</span> <span style="color:#000">JAVA_OPTIONS</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager&#34;</span><span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">COPY</span> --from<span style="color:#ce5c00;font-weight:bold">=</span>build /usr/src/app/target/lib/* /deployments/lib/<span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">COPY</span> --from<span style="color:#ce5c00;font-weight:bold">=</span>build /usr/src/app/target/*-runner.jar /deployments/app.jar<span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">EXPOSE</span><span style="color:#4e9a06"> 8080</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">USER</span><span style="color:#4e9a06"> 1001</span><span style="color:#a40000">
+</span><span style="color:#a40000">
+</span><span style="color:#a40000"></span><span style="color:#204a87;font-weight:bold">ENTRYPOINT</span> <span style="color:#000;font-weight:bold">[</span> <span style="color:#4e9a06">&#34;/deployments/run-java.sh&#34;</span> <span style="color:#000;font-weight:bold">]</span><span style="color:#a40000">
+</span><span style="color:#a40000">
+</span></code></pre></div><div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-s" data-lang="s">
 <span style="color:#000">tkn</span> <span style="color:#000">pipeline</span> <span style="color:#000">start</span> <span style="color:#000">apply</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">and</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">build</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">r</span> <span style="color:#000">git</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">repo</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">data</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">consumer</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">repo</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">r</span> <span style="color:#000">image</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">data</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">consumer</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">image</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">p</span> <span style="color:#000">deployment</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">data</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">consumer</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">p</span> <span style="color:#000">docker</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">file</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">src</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000">docker</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000">Dockerfile.multistage.jvm</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">s</span> <span style="color:#000">pipeline</span>
 
 </code></pre></div><p>Tekton will prompt you with a command to follow the logs of the started PipelineRun. If you enter the prompted command you will follow the PipelineRuns logs on your command line.</p>
@@ -678,7 +724,7 @@ The Task <code>build-image</code> is a predefined ClusterTask which comes with t
 
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified September 7, 2020: <a  href="https://github.com/puzzle/quarkus-techlab/commit/fb9fb2cbb00a803d7918c00ce98ec24cb5ea6897">Update build.yml (fb9fb2c)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified September 7, 2020: <a  href="https://github.com/puzzle/quarkus-techlab/commit/6c51d33b0301e96191d4bdb492fcdef0c31bea6a">Add fixes (6c51d33)</a>
 </div>
 </div>
 

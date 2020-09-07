@@ -25,12 +25,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/docs/02.0/implementing-rest/" />
-<meta property="article:modified_time" content="2020-09-07T13:16:09+02:00" /><meta property="og:site_name" content="Quarkus Techlab" />
+<meta property="article:modified_time" content="2020-09-07T13:20:53+02:00" /><meta property="og:site_name" content="Quarkus Techlab" />
 <meta itemprop="name" content="2.2 Impelementing RESTs Services">
 <meta itemprop="description" content="This section covers implementing REST services.
 ">
-<meta itemprop="dateModified" content="2020-09-07T13:16:09+02:00" />
-<meta itemprop="wordCount" content="623">
+<meta itemprop="dateModified" content="2020-09-07T13:20:53+02:00" />
+<meta itemprop="wordCount" content="687">
 
 
 
@@ -137,7 +137,7 @@
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/offline-search-index.043fb41c0c63b213a5afa2ce1e1d78216fd87aae92df5b24e5aa2a06da05efa0efeba3ed900db911b3ac77df006b0bf48a373a2c7e74516c37dfb0cf11a41707.json"
+  data-offline-search-index-json-src="/offline-search-index.e2b1bbd95c17cec4949940ecb68eb5ab2329e70f24e273d0eafbb02f69a59f4abe1fed0fc433c7895cfc654a1999bb6b10418c76f5e8ee11c3e181fb2e5be403.json"
   data-offline-search-base-href="/"
 >
 
@@ -167,7 +167,7 @@
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/offline-search-index.043fb41c0c63b213a5afa2ce1e1d78216fd87aae92df5b24e5aa2a06da05efa0efeba3ed900db911b3ac77df006b0bf48a373a2c7e74516c37dfb0cf11a41707.json"
+  data-offline-search-index-json-src="/offline-search-index.e2b1bbd95c17cec4949940ecb68eb5ab2329e70f24e273d0eafbb02f69a59f4abe1fed0fc433c7895cfc654a1999bb6b10418c76f5e8ee11c3e181fb2e5be403.json"
   data-offline-search-base-href="/"
 >
 
@@ -571,7 +571,8 @@ To add an extension to your existing Quarkus application simply use:</p>
     <span style="color:#ce5c00;font-weight:bold">}</span>
 <span style="color:#ce5c00;font-weight:bold">}</span>
 
-</code></pre></div><p>For more information about writing REST APIs with Quarkus see the <a href="https://quarkus.io/guides/rest-json">documentation</a></p>
+</code></pre></div><p>Please update or delete the generated tests which Quarkus provides when generating a project. They will not be needed any further and only have demonstration purposes.</p>
+<p>For more information about writing REST APIs with Quarkus see the <a href="https://quarkus.io/guides/rest-json">documentation</a></p>
 <h3 id="223-consuming-data">2.2.3: Consuming Data</h3>
 <p>With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called &lsquo;data-consumer&rsquo; with the follwing extensions: &ldquo;rest-client, resteasy-jsonb&rdquo;.</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
@@ -595,10 +596,11 @@ mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create <span style="color:#4e9a0
     <span style="color:#000">SensorMeasurement</span> <span style="color:#000">getSensorMeasurement</span><span style="color:#ce5c00;font-weight:bold">();</span>
 <span style="color:#ce5c00;font-weight:bold">}</span>
 
-</code></pre></div><p>To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our <code>application.properties</code>.
+</code></pre></div><p>Implement the same POJO as in the producer again for the data-consumer project.</p>
+<p>To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our <code>application.properties</code>.
 We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean.</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f8f8f8;text-decoration:underline">
-</span><span style="color:#f8f8f8;text-decoration:underline"></span>ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http<span style="color:#000;font-weight:bold">:</span>//localhost<span style="color:#000;font-weight:bold">:</span><span style="color:#0000cf;font-weight:bold">8080</span>/data<span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http<span style="color:#000;font-weight:bold">:</span>//localhost<span style="color:#000;font-weight:bold">:</span><span style="color:#0000cf;font-weight:bold">8080</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/scope=javax.inject.Singleton<span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><p>When managing multiple RestClients the configuration with the fully qualified name of the class (<code>ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService</code>) the readability suffers pretty fast. You can extend the annotation of the RestClient (<code>@RegisterRestClient</code>) with a configKey property to shorten the configurations.</p>
@@ -634,10 +636,11 @@ You can edit our resource in the data-consumer to use the <code>DataProducerServ
 <span style="color:#ce5c00;font-weight:bold">}</span>
 
 </code></pre></div><p>To run both microservices you have to alter the <code>application.properties</code> of the consumer and change it&rsquo;s default port. Simply add <code>quarkus.http.port=8081</code> to your <code>application.properties</code> and the default port will be changed.</p>
+<p>When you have both microservices running, try sending a request to the consumer. You will see that we receive a SensorMeasurement, which the data-producer produced.</p>
 
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified September 7, 2020: <a  href="https://github.com/puzzle/quarkus-techlab/commit/fb9fb2cbb00a803d7918c00ce98ec24cb5ea6897">Update build.yml (fb9fb2c)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified September 7, 2020: <a  href="https://github.com/puzzle/quarkus-techlab/commit/6c51d33b0301e96191d4bdb492fcdef0c31bea6a">Add fixes (6c51d33)</a>
 </div>
 </div>
 
