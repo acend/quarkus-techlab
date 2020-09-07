@@ -174,9 +174,9 @@ kafka.bootstrap.servers=quarkus-techlab-kafka-bootstrap:9092
 %dev.kafka.bootstrap.servers=localhost:9092
 
 # Configure the Kafka sink
-mp.messaging.outgoing.data.connector=smallrye-kafka
-mp.messaging.outgoing.data.topic=manual
-mp.messaging.outgoing.data.value.serializer=io.quarkus.kafka.client.serialization.JsonbSerializer
+mp.messaging.outgoing.data-inbound-reactive.connector=smallrye-kafka
+mp.messaging.outgoing.data-inbound-reactive.topic=manual
+mp.messaging.outgoing.data-inbound-reactive.value.serializer=io.quarkus.kafka.client.serialization.JsonbSerializer
 
 ```
 
