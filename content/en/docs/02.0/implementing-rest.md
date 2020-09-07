@@ -156,7 +156,7 @@ public interface DataProducerService {
 ```java
 
 // application.properties
-data-producer-api/mp-rest/url=http://localhost:8080/data
+data-producer-api/mp-rest/url=http://localhost:8080
 data-producer-api/mp-rest/scope=javax.inject.Singleton
 
 ```
