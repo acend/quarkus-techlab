@@ -1,4 +1,4 @@
-baseurl = "/quarkus-techlab/"
+baseurl = "quarkus-techlab/"
 title = "Quarkus Techlab"
 
 enableGitInfo = true
