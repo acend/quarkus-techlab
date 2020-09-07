@@ -13,7 +13,9 @@
     }
   },
   "dependencies": {
-    "husky": "^4.2.5"
+    "autoprefixer": "^9.8.6",
+    "husky": "^4.2.5",
+    "postcss-cli": "^7.1.2"
   },
   "scripts": {
     "mdlint": "markdownlint --config .markdownlint.json content *.md"
@@ -25,5 +27,8 @@
   "devDependencies": {
     "markdownlint": "^0.20.4",
     "markdownlint-cli": "^0.23.2"
-  }
+  },
+  "main": "index.js",
+  "keywords": [],
+  "license": "ISC"
 }

@@ -1,0 +1,192 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quarkus Techlab – 2. Implementing REST services in Quarkus</title>
+    <link>/docs/02.0/</link>
+    <description>Recent content in 2. Implementing REST services in Quarkus on Quarkus Techlab</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	  <atom:link href="/docs/02.0/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>Docs: 2.1 Your first Quarkus application</title>
+      <link>/docs/02.0/first-application/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/docs/02.0/first-application/</guid>
+      <description>
+        
+        
+        &lt;h2 id=&#34;task-211-create-your-application&#34;&gt;Task 2.1.1: Create your application&lt;/h2&gt;
+&lt;p&gt;To create your first Quarkus application you have several possibilities:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create your application with the &lt;a href=&#34;https://code.quarkus.io/&#34;&gt;Quickstart UI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Create your application with maven&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To create your application with maven you can execute the following maven
+command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DprojectGroupId&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;ch.puzzle &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DprojectArtifactId&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;getting-started &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DclassName&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;ch.puzzle.quarkustechlab.GreetingResource&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -Dpath&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;/hello&amp;#34;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Which creates a generated getting-started application bootstrapped for you. The
+application holds at the moment a rest resource called &lt;code&gt;GreetingResource.java&lt;/code&gt;
+which exposes a REST resource for you.
+To test the application you can start the application in dev-mode by executing&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+./mvnw compile quarkus:dev
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The command starts the application in dev-mode which means you do have active
+live reloading on each API call. Try hitting the API and test the
+&lt;code&gt;GreetingResource.java&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+curl http://localhost:8080/hello
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You should get the &amp;lsquo;hello&amp;rsquo; response in your console. Try altering the response
+given in the &lt;code&gt;GreetingResource.java&lt;/code&gt; and hit the API again, Quarkus should perform
+a live reload and print the altered response without manually restarting your
+application.&lt;/p&gt;
+&lt;p&gt;Other RESTeasy functionalities work like they always do. For further information on basic REST interaction with Quarkus see &lt;a href=&#34;https://quarkus.io/guides/rest-json&#34;&gt;Documentation&lt;/a&gt;.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Docs: 2.2 Impelementing RESTs Services</title>
+      <link>/docs/02.0/implementing-rest/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/docs/02.0/implementing-rest/</guid>
+      <description>
+        
+        
+        &lt;h2 id=&#34;221-implementing-rest-services&#34;&gt;2.2.1: Implementing REST Services&lt;/h2&gt;
+&lt;p&gt;In this section we learn how microservices can communicate through REST. In this example we want to build a microservice which produces random data when it&amp;rsquo;s REST interface is called. Another microservice consumes then the data and exposes it on ot&amp;rsquo;s own endpoint.&lt;/p&gt;
+&lt;h3 id=&#34;222-producing-data&#34;&gt;2.2.2: Producing Data&lt;/h3&gt;
+&lt;p&gt;Create a new Quarkus application like shown before called &amp;lsquo;data-producer&amp;rsquo;. The application should expose a &lt;code&gt;DataResource&lt;/code&gt; on the path &amp;ldquo;/data&amp;rdquo; which provides the user with a randomly generated double when requested.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DprojectGroupId&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;ch.puzzle &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DprojectArtifactId&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;data-producer &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DclassName&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;ch.puzzle.quarkustechlab.restproducer.boundary.DataResource&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -Dpath&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;/data&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To write better APIs and share data over our defined resources, we need the &amp;lsquo;resteasy-jsonb&amp;rsquo; extension which provides us with
+JSON-B functionalities for our REST interfaces.
+To add an extension to your existing Quarkus application simply use:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+./mvnw quarkus:add-extension -Dextensions&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;quarkus-resteasy-jsonb&amp;#34;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To see the available extensions you can use:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+./mvnw quarkus:list-extensions
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You are also able to just add the new dependency to your &lt;code&gt;pom.yml&lt;/code&gt; manually.&lt;/p&gt;
+&lt;p&gt;In the generated DataResource edit the &lt;code&gt;@GET&lt;/code&gt; endpoint to return a simple double and change the &lt;code&gt;@Produces&lt;/code&gt; type to &lt;code&gt;MediaType.APPLICATION_JSON&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@GET&lt;/span&gt;
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Produces&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;MediaType&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;APPLICATION_JSON&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;double&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;produceData&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;Math&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In our lab we want to transfer sensor measurements between our microservices. Create a new class &lt;code&gt;SensorMeasurement&lt;/code&gt; with a single public field called data which holds a Double. In the constructor assign the data field a random generated Double. Edit your REST resource to return a new &lt;code&gt;SensorMeasurement&lt;/code&gt; whenever it&amp;rsquo;s called.&lt;/p&gt;
+&lt;p&gt;It should look something like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;SensorMeasurement&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;Double&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;data&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;SensorMeasurement&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;Math&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;random&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;();&lt;/span&gt;
+    &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+&lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Path&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;/data&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;DataResource&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@GET&lt;/span&gt;
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Produces&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;MediaType&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;APPLICATION_JSON&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;SensorMeasurement&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;produceData&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;SensorMeasurement&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;();&lt;/span&gt;
+    &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For more information about writing REST APIs with Quarkus see the &lt;a href=&#34;https://quarkus.io/guides/rest-json&#34;&gt;documentation&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;223-consuming-data&#34;&gt;2.2.3: Consuming Data&lt;/h3&gt;
+&lt;p&gt;With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called &amp;lsquo;data-consumer&amp;rsquo; with the follwing extensions: &amp;ldquo;rest-client, resteasy-jsonb&amp;rdquo;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DprojectGroupId&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;ch.puzzle &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DprojectArtifactId&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;data-consumer &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -DclassName&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumer&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -Dpath&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;/data&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&lt;/span&gt;    -Dextensions&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;rest-client, resteasy-jsonb&amp;#34;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In the data-consumer microservice we will have another resource on the path &amp;ldquo;/data&amp;rdquo; which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called &lt;code&gt;DataProducerService&lt;/code&gt;. To achieve that, generate an interface called &lt;code&gt;DataProducerService&lt;/code&gt; which mirrors the data-producer&amp;rsquo;s DataResource. Annotate the &lt;code&gt;DataProducerService&lt;/code&gt; with the MicroProfile annotation &lt;code&gt;@RegisterRestClient&lt;/code&gt; to allow Quarkus to acces the interface for CDI Injection as a REST Client.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;// DataProducerService
+&lt;/span&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Path&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;/data&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@RegisterRestClient&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;DataProducerService&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@GET&lt;/span&gt;
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Produces&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;application/json&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#000&#34;&gt;SensorMeasurement&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;getSensorMeasurement&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;();&lt;/span&gt;
+&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our &lt;code&gt;application.properties&lt;/code&gt;.
+We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;//localhost&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#0000cf;font-weight:bold&#34;&gt;8080&lt;/span&gt;/data&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/scope=javax.inject.Singleton&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When managing multiple RestClients the configuration with the fully qualified name of the class (&lt;code&gt;ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService&lt;/code&gt;) the readability suffers pretty fast. You can extend the annotation of the RestClient (&lt;code&gt;@RegisterRestClient&lt;/code&gt;) with a configKey property to shorten the configurations.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;// DataProducerService
+&lt;/span&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;[...]&lt;/span&gt;
+
+&lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Path&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;/data&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@RegisterRestClient&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;configKey&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;data-producer-api&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;DataProducerService&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+
+&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;[...]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;// application.properties
+&lt;/span&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;data&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;producer&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;api&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;mp&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;rest&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;url&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;http&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;//localhost:8080/data
+&lt;/span&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;data&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;producer&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;api&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;mp&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;rest&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;scope&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;javax&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;inject&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;Singleton&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To use the registered RestClient in our application inject it into the DataConsumerResource and simply call the defined interface&amp;rsquo;s method. To inject a RestClient into your desired class create a field of type &lt;code&gt;DataProducerService dataProducerService&lt;/code&gt; and annotate it with &lt;code&gt;@RestClient&lt;/code&gt;.
+You can edit our resource in the data-consumer to use the &lt;code&gt;DataProducerService&lt;/code&gt; to create a proxy consuming the data-producer&amp;rsquo;s API and return it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+&lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Path&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;/data&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;DataConsumerResource&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@RestClient&lt;/span&gt;
+    &lt;span style=&#34;color:#000&#34;&gt;DataProducerService&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;dataProducerService&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@GET&lt;/span&gt;
+    &lt;span style=&#34;color:#5c35cc;font-weight:bold&#34;&gt;@Produces&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;MediaType&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;APPLICATION_JSON&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;SensorMeasurement&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;getData&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000&#34;&gt;dataProducerService&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#c4a000&#34;&gt;getSensorMeasurement&lt;/span&gt;&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;();&lt;/span&gt;
+    &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To run both microservices you have to alter the &lt;code&gt;application.properties&lt;/code&gt; of the consumer and change it&amp;rsquo;s default port. Simply add &lt;code&gt;quarkus.http.port=8081&lt;/code&gt; to your &lt;code&gt;application.properties&lt;/code&gt; and the default port will be changed.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+  </channel>
+</rss>

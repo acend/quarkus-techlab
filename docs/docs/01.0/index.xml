@@ -1,0 +1,18 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quarkus Techlab – 1. Introduction to Quarkus</title>
+    <link>/docs/01.0/</link>
+    <description>Recent content in 1. Introduction to Quarkus on Quarkus Techlab</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	  <atom:link href="/docs/01.0/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+  </channel>
+</rss>
