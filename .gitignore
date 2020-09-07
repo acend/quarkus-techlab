@@ -1,0 +1,15 @@
+Thumbs.db
+.DS_Store
+.dist
+.tmp
+.sass-cache
+misc/
+npm-debug.log
+node_modules
+builds
+package-lock.json
+public
+.env
+resources
+.idea/
+tmp/*
