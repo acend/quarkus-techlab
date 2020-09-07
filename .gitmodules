@@ -10,3 +10,6 @@
 	path = code/quarkus-techlab-infrastructure
   url = git@github.com:g1raffi/quarkus-techlab-infrastructure.git
   branch = master
+[submodule "themes/docsy"]
+	path = themes/docsy
+	url = https://github.com/google/docsy.git

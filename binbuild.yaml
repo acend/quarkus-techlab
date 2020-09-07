@@ -1,0 +1,78 @@
+apiVersion: v1
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: spring-boot-bb
+    name: wildfly-160-centos7
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: openshift/wildfly-160-centos7
+      from:
+        kind: DockerImage
+        name: openshift/wildfly-160-centos7
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
+  status:
+    dockerImageRepository: ""
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: spring-boot-bb
+    name: spring-boot-bb
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: ""
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: spring-boot-bb
+    name: spring-boot-bb
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: spring-boot-bb:latest
+    postCommit: {}
+    resources: {}
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: wildfly-160-centos7:latest
+      type: Source
+    triggers:
+    - github:
+        secret: u7kQquuC1Hpap8pv82Xz
+      type: GitHub
+    - generic:
+        secret: MduzcwKRw37WrDWWSfCf
+      type: Generic
+  status:
+    lastVersion: 0
+kind: List
+metadata: {}
