@@ -88,6 +88,8 @@ public class DataResource {
 
 ```
 
+Please update or delete the generated tests which Quarkus provides when generating a project. They will not be needed any further and only have demonstration purposes.
+
 
 For more information about writing REST APIs with Quarkus see the [documentation](https://quarkus.io/guides/rest-json)
 
@@ -124,12 +126,14 @@ public interface DataProducerService {
 
 ```
 
+Implement the same POJO as in the producer again for the data-consumer project.
+
 To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our `application.properties`.
 We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean.
 
 ```yaml
 
-ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http://localhost:8080/data
+ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http://localhost:8080
 ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/scope=javax.inject.Singleton
 
 ```
@@ -178,3 +182,5 @@ public class DataConsumerResource {
 ```
 
 To run both microservices you have to alter the `application.properties` of the consumer and change it's default port. Simply add `quarkus.http.port=8081` to your `application.properties` and the default port will be changed.
+
+When you have both microservices running, try sending a request to the consumer. You will see that we receive a SensorMeasurement, which the data-producer produced.
