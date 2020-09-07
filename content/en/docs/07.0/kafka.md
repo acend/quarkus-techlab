@@ -230,7 +230,7 @@ kafka.bootstrap.servers=quarkus-techlab-kafka-bootstrap:9092
 # Configure the Kafka sink
 mp.messaging.incoming.data.connector=smallrye-kafka
 mp.messaging.incoming.data.topic=manual
-mp.messaging.incoming.data.value.deserializer=io.quarkus.kafka.client.serialization.JsonbDeserializer
+mp.messaging.incoming.data.value.deserializer=ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
 
 ```
 
