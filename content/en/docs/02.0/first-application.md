@@ -10,13 +10,13 @@ description: >
 ## Task {{% param sectionnumber %}}.1: Create your application
 
 To create your first Quarkus application you have several possibilities:
-  * Create your application with the [Quickstart UI](https://code.quarkus.io/)
-  * Create your application with maven
+* Create your application with the [Quickstart UI](https://code.quarkus.io/)
+* Create your application with maven
 
 To create your application with maven you can execute the following maven
 command:
 
-```bash 
+```bash
 
 mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
     -DprojectGroupId=ch.puzzle \
@@ -24,22 +24,22 @@ mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
     -DclassName="ch.puzzle.quarkustechlab.GreetingResource" \
     -Dpath="/hello"
 
-``` 
+```
 
 Which creates a generated getting-started application bootstrapped for you. The
 application holds at the moment a rest resource called `GreetingResource.java`
-which exposes a REST resource for you. 
-To test the application you can start the application in dev-mode by executing 
+which exposes a REST resource for you.
+To test the application you can start the application in dev-mode by executing
 
-```bash 
+```bash
 
 ./mvnw compile quarkus:dev
 
-``` 
+```
 
 The command starts the application in dev-mode which means you do have active
 live reloading on each API call. Try hitting the API and test the
-`GreetingResource.java`: 
+`GreetingResource.java`:
 
 ```bash
 
@@ -52,5 +52,4 @@ given in the `GreetingResource.java` and hit the API again, Quarkus should perfo
 a live reload and print the altered response without manually restarting your
 application.
 
-Other RESTeasy functionalities work like they always do. For further information 
-on basic REST interaction with Quarkus see [Documentation](https://quarkus.io/guides/rest-json).
+Other RESTeasy functionalities work like they always do. For further information on basic REST interaction with Quarkus see [Documentation](https://quarkus.io/guides/rest-json).

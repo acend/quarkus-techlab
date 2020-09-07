@@ -11,9 +11,9 @@ description: >
 
 In this section we learn how microservices can communicate through REST. In this example we want to build a microservice which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes it on ot's own endpoint.
 
-### {{% param sectionnumber %}}.2: Producing Data
+ ### {{% param sectionnumber %}}.2: Producing Data
 
-Create a new Quarkus application like shown before called 'data-producer'. The application should expose a `DataResource` on the path "/data" which provides the user with a randomly generated double when requested. 
+Create a new Quarkus application like shown before called 'data-producer'. The application should expose a `DataResource` on the path "/data" which provides the user with a randomly generated double when requested.
 
 ```bash
 
@@ -24,8 +24,8 @@ mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
     -Dpath="/data"
 ```
 
-To write better APIs and share data over our defined resources, we need the 'resteasy-jsonb' extension which provides us with 
-JSON-B functionalities for our REST interfaces. 
+To write better APIs and share data over our defined resources, we need the 'resteasy-jsonb' extension which provides us with
+JSON-B functionalities for our REST interfaces.
 To add an extension to your existing Quarkus application simply use:
 
 ```bash
@@ -34,7 +34,7 @@ To add an extension to your existing Quarkus application simply use:
 
 ```
 
-To see the available extensions you can use: 
+To see the available extensions you can use:
 
 ```bash
 
@@ -90,7 +90,7 @@ public class DataResource {
 
 For more information about writing REST APIs with Quarkus see the [documentation](https://quarkus.io/guides/rest-json)
 
-### {{% param sectionnumber %}}.3: Consuming Data
+ ### {{% param sectionnumber %}}.3: Consuming Data 
 
 With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called 'data-consumer' with the follwing extensions: "rest-client, resteasy-jsonb".
 
