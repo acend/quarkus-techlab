@@ -1,18 +1,23 @@
-name: 'Hugo setup'
-description: 'GitHub Actions for Hugo ⚡️ Setup Hugo quickly and build your site fast. Hugo extended and Hugo Modules are supported.'
-author: 'rhertle'
-inputs:
-  hugo-version:
-    description: 'The Hugo version to download (if necessary) and use. Example: 0.58.2'
-    required: false
-    default: 'latest'
-  extended:
-    description: 'Download (if necessary) and use Hugo extended version. Example: true'
-    required: false
-    default: 'false'
-runs:
-  using: 'node12'
-  main: 'lib/index.js'
-branding:
-  icon: 'package'
-  color: 'yellow'
+name: hugo-latest-cd
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #  HUGO_ARGS: '--minify'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎 Check out master
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - name: 🚀 Build and deploy
+        uses: victoriadrake/hugo-latest-cd@master
