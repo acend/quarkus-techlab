@@ -13,3 +13,4 @@ public
 resources
 .idea/
 tmp/*
+.feedbacks
