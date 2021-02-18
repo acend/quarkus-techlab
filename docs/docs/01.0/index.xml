@@ -1,1 +1,98 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Quarkus Techlab – 1. Introduction to Quarkus</title><link>/quarkus-techlab/docs/01.0/</link><description>Recent content in 1. Introduction to Quarkus on Quarkus Techlab</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="/quarkus-techlab/docs/01.0/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Quarkus Techlab – 1. Introduction</title><link>/quarkus-techlab/docs/01.0/</link><description>Recent content in 1. Introduction on Quarkus Techlab</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="/quarkus-techlab/docs/01.0/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: 1.1 Twelve-Factor App</title><link>/quarkus-techlab/docs/01.0/12-factor-application/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quarkus-techlab/docs/01.0/12-factor-application/</guid><description>
+&lt;p>With the move from classical applications to cloud native software-as-a-service applications, the underlying practices of software engineering should change as well. The twelve-factor applications provides a methodology for building modern software systems. The main goals are:&lt;/p>
+&lt;ul>
+&lt;li>Use declarative formats for setup automation, to minimize time and cost for new developers joining the project&lt;/li>
+&lt;li>Have a clean contract with the underlying operating system, offering maximum portability between execution environments&lt;/li>
+&lt;li>Are suitable for deployment on modern cloud platforms, obviating the need for servers and systems administration&lt;/li>
+&lt;li>Minimize divergence between development and production, enabling continuous deployment for maximum agility&lt;/li>
+&lt;li>And can scale up without significant changes to tooling, architecture, or development practices&lt;/li>
+&lt;/ul>
+&lt;p>The manifesto is held generic so it applies to software systems written in any language, using any tools. The manifesto is split up into 12 factors:&lt;/p>
+&lt;h2 id="111-codebase">1.1.1: Codebase&lt;/h2>
+&lt;p>A twelve-factor application should always be tracked by a version control system (VCS), preferrably Git. Tracking versions and changes in a software system is key to it&amp;rsquo;s success and crucial for deployments.&lt;/p>
+&lt;p>Individual applications should be held in a single repository which will provide benefits for continuous integration and delivery (CICD) approaches. Every codebasy can lead to multiple instances running on different environments coming from the same deployable.&lt;/p>
+&lt;h2 id="112-dependencies">1.1.2: Dependencies&lt;/h2>
+&lt;p>Most programming languages will provide a packaging system to manage your dependencies (Maven for example). A twelve-factor application declares all it&amp;rsquo;s dependencies in their dependency manifest. It further uses a dependency isolation tool during execution to ensure that all dependencies were provided by the application itself and did not leak in from the surrounding system.&lt;/p>
+&lt;h2 id="113-config">1.1.3: Config&lt;/h2>
+&lt;p>The twelve-factor app should be parameterizable by config. Deploys (staging, production, &amp;hellip;) should differ only in configuration. The application should have a strict seperation from config to code, config varies across deploys, code does not. Configuration will get overridden by environment variables on the running system.&lt;/p>
+&lt;h2 id="114-backing-services">1.1.4: Backing services&lt;/h2>
+&lt;p>Most twelve-factor applications will rely on backing services, examples might be databases, message brokers, SMTP services. These services should be attachable (and also detachable) by configuration. The application makes no distinction between local and third party services. Both are resources accessed via the configured URL or other credentials provided by the config.&lt;/p>
+&lt;h2 id="115-build-release-run">1.1.5: Build, release, run&lt;/h2>
+&lt;p>The codebase of a twelve-factor application is transformed into a deploy through three stages:&lt;/p>
+&lt;ul>
+&lt;li>The build stage is a transform which converts a code repo into an executable bundle known as a build. Using a version of the code at a commit specified by the deployment process, the build stage fetches vendors dependencies and compiles binaries and assets.&lt;/li>
+&lt;li>The release stage takes the build produced by the build stage and combines it with the deploy’s current config. The resulting release contains both the build and the config and is ready for immediate execution in the execution environment.&lt;/li>
+&lt;li>The run stage (also known as “runtime”) runs the app in the execution environment, by launching some set of the app’s processes against a selected release.&lt;/li>
+&lt;/ul>
+&lt;p>Code becomes a build, which is combined with config to create a release.&lt;/p>
+&lt;p>The twelve-factor app uses strict separation between the build, release, and run stages. For example, it is impossible to make changes to the code at runtime, since there is no way to propagate those changes back to the build stage.&lt;/p>
+&lt;h2 id="116-processes">1.1.6: Processes&lt;/h2>
+&lt;p>The app is executed in the execution environment as one or more processes.&lt;/p>
+&lt;p>In the simplest case, the code is a stand-alone script, the execution environment is a developer’s local laptop with an installed language runtime, and the process is launched via the command line (for example, python my_script.py). On the other end of the spectrum, a production deploy of a sophisticated app may use many process types, instantiated into zero or more running processes.&lt;/p>
+&lt;p>Twelve-factor processes are stateless and share-nothing. Any data that needs to persist must be stored in a stateful backing service, typically a database.&lt;/p>
+&lt;h2 id="117-port-binding">1.1.7: Port binding&lt;/h2>
+&lt;p>Web apps are sometimes executed inside a webserver container. For example, PHP apps might run as a module inside Apache HTTPD, or Java apps might run inside Tomcat.&lt;/p>
+&lt;p>The twelve-factor app is completely self-contained and does not rely on runtime injection of a webserver into the execution environment to create a web-facing service. The web app exports HTTP as a service by binding to a port, and listening to requests coming in on that port.&lt;/p>
+&lt;p>In a local development environment, the developer visits a service URL like &lt;code>http://localhost:5000/&lt;/code> to access the service exported by their app. In deployment, a routing layer handles routing requests from a public-facing hostname to the port-bound web processes.&lt;/p>
+&lt;p>This is typically implemented by using dependency declaration to add a webserver library to the app, such as Tornado for Python, Thin for Ruby, or Jetty for Java and other JVM-based languages. This happens entirely in user space, that is, within the app’s code. The contract with the execution environment is binding to a port to serve requests.&lt;/p>
+&lt;h2 id="118-concurrency">1.1.8: Concurrency&lt;/h2>
+&lt;p>Any computer program, once run, is represented by one or more processes. Web apps have taken a variety of process-execution forms. For example, PHP processes run as child processes of Apache, started on demand as needed by request volume. Java processes take the opposite approach, with the JVM providing one massive uberprocess that reserves a large block of system resources (CPU and memory) on startup, with concurrency managed internally via threads. In both cases, the running process(es) are only minimally visible to the developers of the app.&lt;/p>
+&lt;p>Scale is expressed as running processes, workload diversity is expressed as process types.&lt;/p>
+&lt;p>In the twelve-factor app, processes are a first class citizen. Processes in the twelve-factor app take strong cues from the unix process model for running service daemons. Using this model, the developer can architect their app to handle diverse workloads by assigning each type of work to a process type. For example, HTTP requests may be handled by a web process, and long-running background tasks handled by a worker process.&lt;/p>
+&lt;h2 id="119-disposability">1.1.9: Disposability&lt;/h2>
+&lt;p>The twelve-factor app’s processes are disposable, meaning they can be started or stopped at a moment’s notice. This facilitates fast elastic scaling, rapid deployment of code or config changes, and robustness of production deploys.&lt;/p>
+&lt;p>Processes should strive to minimize startup time. Ideally, a process takes a few seconds from the time the launch command is executed until the process is up and ready to receive requests or jobs. Short startup time provides more agility for the release process and scaling up; and it aids robustness, because the process manager can more easily move processes to new physical machines when warranted.&lt;/p>
+&lt;p>Processes shut down gracefully when they receive a SIGTERM signal from the process manager. For a web process, graceful shutdown is achieved by ceasing to listen on the service port (thereby refusing any new requests), allowing any current requests to finish, and then exiting. Implicit in this model is that HTTP requests are short (no more than a few seconds), or in the case of long polling, the client should seamlessly attempt to reconnect when the connection is lost.&lt;/p>
+&lt;h2 id="1110-devprod-parity">1.1.10: Dev/prod parity&lt;/h2>
+&lt;p>Historically, there have been substantial gaps between development (a developer making live edits to a local deploy of the app) and production (a running deploy of the app accessed by end users). These gaps manifest in three areas:&lt;/p>
+&lt;ul>
+&lt;li>The time gap: A developer may work on code that takes days, weeks, or even months to go into production.&lt;/li>
+&lt;li>The personnel gap: Developers write code, ops engineers deploy it.&lt;/li>
+&lt;li>The tools gap: Developers may be using a stack like Nginx, SQLite, and OS X, while the production deploy uses Apache, MySQL, and Linux.&lt;/li>
+&lt;/ul>
+&lt;p>The twelve-factor app is designed for continuous deployment by keeping the gap between development and production small. Looking at the three gaps described above:&lt;/p>
+&lt;ul>
+&lt;li>Make the time gap small: a developer may write code and have it deployed hours or even just minutes later.&lt;/li>
+&lt;li>Make the personnel gap small: developers who wrote code are closely involved in deploying it and watching its behavior in production.&lt;/li>
+&lt;li>Make the tools gap small: keep development and production as similar as possible.&lt;/li>
+&lt;/ul>
+&lt;h2 id="1111-logs">1.1.11: Logs&lt;/h2>
+&lt;p>Logs provide visibility into the behavior of a running app. In server-based environments they are commonly written to a file on disk (a “logfile”); but this is only an output format.&lt;/p>
+&lt;p>Logs are the stream of aggregated, time-ordered events collected from the output streams of all running processes and backing services. Logs in their raw form are typically a text format with one event per line (though backtraces from exceptions may span multiple lines). Logs have no fixed beginning or end, but flow continuously as long as the app is operating.&lt;/p>
+&lt;p>A twelve-factor app never concerns itself with routing or storage of its output stream. It should not attempt to write to or manage logfiles. Instead, each running process writes its event stream, unbuffered, to stdout. During local development, the developer will view this stream in the foreground of their terminal to observe the app’s behavior.&lt;/p>
+&lt;h2 id="1112-admin-processes">1.1.12: Admin processes&lt;/h2>
+&lt;p>The process formation is the array of processes that are used to do the app’s regular business (such as handling web requests) as it runs. Separately, developers will often wish to do one-off administrative or maintenance tasks for the app, such as:&lt;/p>
+&lt;ul>
+&lt;li>Running database migrations (e.g. manage.py migrate in Django, rake db:migrate in Rails).&lt;/li>
+&lt;li>Running a console (also known as a REPL shell) to run arbitrary code or inspect the app’s models against the live database. Most languages provide a REPL by running the interpreter without any arguments (e.g. python or perl) or in some cases have a separate command (e.g. irb for Ruby, rails console for Rails).&lt;/li>
+&lt;li>Running one-time scripts committed into the app’s repo (e.g. php scripts/fix_bad_records.php).&lt;/li>
+&lt;/ul>
+&lt;p>One-off admin processes should be run in an identical environment as the regular long-running processes of the app. They run against a release, using the same codebase and config as any process run against that release. Admin code must ship with application code to avoid synchronization issues.&lt;/p></description></item><item><title>Docs: 1.3 Introduction to Quarkus</title><link>/quarkus-techlab/docs/01.0/introduction-quarkus/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quarkus-techlab/docs/01.0/introduction-quarkus/</guid><description>
+&lt;h2 id="task-131-quarkus">Task 1.3.1: Quarkus&lt;/h2>
+&lt;p>&amp;ldquo;Quarkus is a Kubernetes Native Java stack tailored for GraalVM &amp;amp; OpenJDK
+HotSpot, crafted from the best of breed Java libraries and standards. Also
+focused on developer experience, making things just work with little to no
+configuration and allowing to do live coding.&amp;rdquo; - quarkus.io&lt;/p>
+&lt;p>In short, Quarkus brings a framework built upon JakartaEE standards to build
+microservices in the Java environment. Per default Quarkus comes with full CDI
+integration, RESTeasy-JAX-RS, dev mode and many more features.&lt;/p>
+&lt;p>Quarkus provides a list of extensions and frameworks which can be included into
+your Quarkus project. Extensions (Hibernate ORM, Liquibase, Flyway, SmallRye
+Reactive Messageing, and many others) are minified and customized to work with
+the minimal resource consuming framework.&lt;/p>
+&lt;p>Due to the optimization of extensions and the framework itself, Quarkus can be
+used to create very resource friendly and efficient microservices. For example
+a normal REST API created in Quarkus takes around 12MB Memory RSS when built
+and compiled with the GraalVM as a native Image, Compiled and run by the
+JVM the application takes about 73MB Memory RSS which is still pretty slim
+compared to a standard Java stack which takes about 136MB Memory RSS.&lt;/p>
+&lt;p>Also the startup times benefit massively from the minified dependencies and
+framework. A REST API starts when built as a native image in about 0.016
+seconds. When run in a normal JVM the application starts up in about 0.943
+seconds. A traditional Java stack uses about 9.5 seconds to start up.&lt;/p>
+&lt;p>Due to the low memory consumption and fast startup times, Quarkus applications
+are very well suited for the usage in a cloud native environment. It makes the
+application fast and dynamically scalable.&lt;/p>
+&lt;p>Quarkus is open source and developed under the Apache License version 2.0. The
+entire source code is hosted on &lt;a href="https://github.com/quarkusio/quarkus">Github&lt;/a>
+and has an active community.&lt;/p></description></item></channel></rss>
