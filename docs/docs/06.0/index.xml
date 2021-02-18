@@ -386,7 +386,7 @@
 &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">template&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">${METADATA_LABELS_TEMPLATE}&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
 &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">artemis-config&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
 &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">data&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
-&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">broker-1.xml&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic">|-
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">broker-1.xml&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000;font-weight:bold">|-&lt;/span>&lt;span style="color:#8f5902;font-style:italic">
 &lt;/span>&lt;span style="color:#8f5902;font-style:italic"> &amp;lt;?xml version=&amp;#39;1.0&amp;#39;?&amp;gt;
 &lt;/span>&lt;span style="color:#8f5902;font-style:italic"> &amp;lt;configuration xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34;
 &lt;/span>&lt;span style="color:#8f5902;font-style:italic"> xmlns=&amp;#34;urn:activemq&amp;#34;
@@ -599,6 +599,6 @@
 &lt;/span>&lt;span style="color:#8f5902;font-style:italic"> &amp;lt;/address&amp;gt;
 &lt;/span>&lt;span style="color:#8f5902;font-style:italic"> &amp;lt;/addresses&amp;gt;
 &lt;/span>&lt;span style="color:#8f5902;font-style:italic"> &amp;lt;/core&amp;gt;
-&lt;/span>&lt;span style="color:#8f5902;font-style:italic"> &amp;lt;/configuration&amp;gt;
-&lt;/span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic"> &amp;lt;/configuration&amp;gt;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
 &lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Apply the template for your message broker and OpenShift will rollout a new instance of Artemis ActiveMQ in your namespace. Commit and push your changes, then deploy your microservices with your pipelines again. Check the logs of the data-consumer and you will see that the messaging works like a charm.&lt;/p></description></item></channel></rss>
