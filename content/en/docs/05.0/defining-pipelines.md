@@ -71,7 +71,7 @@ spec:
   - name: docker-file
     description: Path to the Dockerfile
     type: string
-    default: src/main/docker/Dockerfile.multistage
+    default: src/main/docker/Dockerfile.multistage.jvm
   tasks:
   - name: apply-manifests
     taskRef:
