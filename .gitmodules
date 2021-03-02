@@ -8,8 +8,15 @@
 	branch = master
 [submodule "code/quarkus-techlab-infrastructure"]
 	path = code/quarkus-techlab-infrastructure
-  url = git@github.com:g1raffi/quarkus-techlab-infrastructure.git
-  branch = master
+    url = git@github.com:g1raffi/quarkus-techlab-infrastructure.git
+    branch = master
 [submodule "themes/docsy"]
 	path = themes/docsy
 	url = https://github.com/google/docsy.git
+[submodule "themes/docsy-plus"]
+	path = themes/docsy-plus
+	url = https://github.com/puzzle/docsy-plus.git
+	branch = main
+[submodule "themes/docsy-puzzle"]
+	path = themes/docsy-puzzle
+	url = https://github.com/puzzle/docsy-puzzle.git

@@ -1,13 +1,16 @@
-baseurl = "/quarkus-techlab/"
-title = "Quarkus Techlab"
+baseurl = "/"
+title = "Quarkus Training"
 
 enableGitInfo = true
 
-theme = "docsy"
+theme = ["docsy-puzzle", "docsy-plus", "docsy"]
 
 languageCode = "en-us"
 
 contentDir = "content/en"
+
+[minify]
+disableSVG = true
 
 # default content language
 defaultContentLanguage = "en"
@@ -45,7 +48,7 @@ anchor = "smart"
 
 [Languages]
 [Languages.en]
-title = "Quarkus Techlab"
+title = "Quarkus Training"
 languageName = "German"
 weight = 1
 
@@ -62,13 +65,18 @@ url = "https://www.puzzle.ch"
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
-
+  [markup.highlight]
+    LineNos = true
+  # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
+  style = "monokai"
+  # Uncomment if you want your chosen highlight style used for code blocks without a specified language
+  guessSyntax = "true"
 
 [params]
 
 copyright = "Puzzle ITC GmbH"
 github_repo = "https://github.com/puzzle/quarkus-techlab"
-
+github_branch = "master"
 
 enabledModule = "base"
 
@@ -92,7 +100,7 @@ footer_about_disable = true
 [[params.links.developer]]
 name = "GitHub"
 icon = "fab fa-github" 
-url = "https://github.com/puzzle/quarkus-techlab"
+url = "https://github.com/puzzle/quarkus-lab"
 
 [[params.links.user]]
 name = "Twitter"
@@ -102,4 +110,4 @@ url = "https://twitter.com/puzzleitc"
 [[params.links.user]]
 name = "LinkedIn"
 icon = "fab fa-linkedin-in"
-url = "https://linkedin.com/company/puzzle-itc"
+url = "https://www.linkedin.com/company/puzzle-itc/"

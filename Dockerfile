@@ -1,20 +1,13 @@
-ARG HUGO_VERSION=0.70.0
+FROM klakegg/hugo:0.81.0-ext-ubuntu AS builder
 
-FROM acend/hugo:${HUGO_VERSION} AS builder
+ARG HUGO_ENV=default
 
-EXPOSE 8080
+COPY . /src
 
-RUN mkdir -p /opt/app/src/static && \
-    chmod -R og+rwx /opt/app
-
-WORKDIR /opt/app/src
-
-COPY . /opt/app/src
-
-RUN npm install -D --save autoprefixer postcss-cli
-
-RUN hugo --theme ${HUGO_THEME:-docsy} --minify
+RUN hugo --environment ${HUGO_ENV} --minify
 
 FROM nginxinc/nginx-unprivileged:alpine
 
-COPY --from=builder  /opt/app/src/public /usr/share/nginx/html
+EXPOSE 8080
+
+COPY --from=builder /src/public /usr/share/nginx/html
