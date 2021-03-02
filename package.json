@@ -15,7 +15,7 @@
   "dependencies": {
     "autoprefixer": "^9.8.6",
     "husky": "^4.2.5",
-    "postcss-cli": "^7.1.2"
+    "postcss-cli": "^8.0.0"
   },
   "scripts": {
     "mdlint": "markdownlint --config .markdownlint.json content *.md"
