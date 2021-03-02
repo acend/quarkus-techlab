@@ -18,7 +18,7 @@ jobs:
           # Task remove means to remove the helm release.
           task: 'remove'
           release: 'pr-${{ github.event.pull_request.number }}'
-          namespace: ' pitc-microservices-lab-test'
+          namespace: ' pitc-quarkus-techlab-test'
           version: '${{ github.sha }}'
           repository: 'https://acend.github.io/helm-charts/'
           chart: 'acend-training-chart'
