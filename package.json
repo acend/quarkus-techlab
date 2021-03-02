@@ -25,8 +25,8 @@
   },
   "homepage": "https://github.com/puzzle/quarkus-techlab#readme",
   "devDependencies": {
-    "markdownlint": "^0.20.4",
-    "markdownlint-cli": "^0.23.2"
+    "markdownlint": "0.20.4",
+    "markdownlint-cli": "0.23.2"
   },
   "main": "index.js",
   "keywords": [],
