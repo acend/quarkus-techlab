@@ -1,7 +1,6 @@
 baseurl = "/"
 title = "Quarkus Training"
 
-quarkusVersion = "1.12.0.Final"
 
 enableGitInfo = true
 
@@ -75,6 +74,8 @@ url = "https://www.puzzle.ch"
   guessSyntax = "true"
 
 [params]
+
+quarkusVersion = "1.12.0.Final"
 
 copyright = "Puzzle ITC GmbH"
 github_repo = "https://github.com/puzzle/quarkus-techlab"
