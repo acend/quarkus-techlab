@@ -12,13 +12,11 @@ The preferrable software management tool for building Quarkus applications is ei
 To create a new Quarkus project with Maven simply use the following command:
 
 ```s
-
 mvn io.quarkus:quarkus-maven-plugin:{{% param quarkusVersion%}}:create \
     -DprojectGroupId=my-groupId \
     -DprojectArtifactId=my-artifactId \
     -DprojectVersion=my-version \
     -DclassName="org.my.group.MyResource"
-
 ```
 
 With the attributes listed below you can alter the create command to your desired customization:
@@ -44,25 +42,19 @@ Quarkus extensions provide your project with several useful dependencies.
 From inside a Quarkus project, you can obtain a list of the available extensions with:
 
 ```s
-
 ./mvnw quarkus:list-extensions
-
 ```
 
 Adding extensions to your project is as simple as:
 
 ```s
-
 ./mvnw quarkus:add-extension -Dextensions="hibernate-validator"
-
 ```
 
 Extensions are passed using a comma-seperated list. They can also be installed with matching patterns:
 
 ```s
-
 ./mvnw quarkus:add-extension -Dextensions="hibernate-*"
-
 ```
 
 
@@ -71,9 +63,7 @@ Extensions are passed using a comma-seperated list. They can also be installed w
 Quarkus comes with a built-in development mode. Run your application with:
 
 ```s
-
 ./mvnw compile quarkus:dev
-
 ```
 
 You can then update the application sources, resources and configurations. The changes are automatically reflected in your running application. This is great to do development spanning UI and database as you see changes reflected immediately.
@@ -97,7 +87,7 @@ quarkus.live-reload.password=changeit
 quarkus.live-reload.url=http://my.cluster.host.com:8080
 ```
 
-Before you start Quarkus on the remote host set the environment variable QUARKUS_LAUNCH_DEVMODE=true. If you are on bare metal you can just set this via the export QUARKUS_LAUNCH_DEVMODE=true command, if you are running using docker start the image with -e QUARKUS_LAUNCH_DEVMODE=true. When the application starts you should now see the following line in the logs: Profile dev activated. Live Coding activated.
+Before you start Quarkus on the remote host set the environment variable `QUARKUS_LAUNCH_DEVMODE=true`. If you are on bare metal you can just set this via the export `QUARKUS_LAUNCH_DEVMODE=true` command, if you are running using docker start the image with `-e QUARKUS_LAUNCH_DEVMODE=true`. When the application starts you should now see the following line in the logs: Profile dev activated. Live Coding activated.
 
 The remote side does not need to include Maven or any other development tools. The normal fast-jar Dockerfile that is generated with a new Quarkus application is all you need. If you are using bare metal launch the Quarkus runner jar, do not attempt to run normal devmode.
 
@@ -116,7 +106,7 @@ If you do not want to use the HTTP feature then you can simply run the `remote-d
 
 By default, the Maven plugin picks up compiler flags to pass to javac from maven-compiler-plugin.
 
-If you need to customize the compiler flags used in development mode, add a configuration section to the plugin block and set the compilerArgs property just as you would when configuring maven-compiler-plugin. You can also set source, target, and jvmArgs. For example, to pass --enable-preview to both the JVM and javac:
+If you need to customize the compiler flags used in development mode, add a configuration section to the plugin block and set the compilerArgs property just as you would when configuring maven-compiler-plugin. You can also set source, target, and jvmArgs. For example, to pass `--enable-preview` to both the JVM and javac:
 
 ```xml
 <plugin>
@@ -145,8 +135,8 @@ In development mode, Quarkus starts by default with debug mode enabled, listenin
 This behavior can be changed by giving the debug system property one of the following values:
 
 * false - the JVM will start with debug mode disabled
-* true - The JVM is started in debug mode and will be listening on port 5005
-* client - the JVM will start in client mode and attempt to connect to localhost:5005
+* true - The JVM is started in debug mode and will be listening on port `5005`
+* client - the JVM will start in client mode and attempt to connect to `localhost:5005`
 * {port} - The JVM is started in debug mode and will be listening on {port}
 
 An additional system property suspend can be used to suspend the JVM, when launched in debug mode. suspend supports the following values:
