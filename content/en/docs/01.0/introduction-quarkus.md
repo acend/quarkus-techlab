@@ -7,7 +7,7 @@ description: >
   Introduction to Quarkus
 ---
 
-## Task {{% param sectionnumber %}}.1: Quarkus
+## {{% param sectionnumber %}}.1: Quarkus
 
 "Quarkus is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK
 HotSpot, crafted from the best of breed Java libraries and standards. Also
