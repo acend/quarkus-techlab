@@ -1,6 +1,8 @@
 baseurl = "/"
 title = "Quarkus Training"
 
+quarkusVersion = "1.12.0.Final"
+
 enableGitInfo = true
 
 theme = ["docsy-puzzle", "docsy-plus", "docsy"]
