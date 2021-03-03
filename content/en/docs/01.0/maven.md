@@ -12,7 +12,7 @@ The preferrable software management tool for building Quarkus applications is ei
 To create a new Quarkus project with Maven simply use the following command:
 
 ```s
-mvn io.quarkus:quarkus-maven-plugin:{{% param quarkusVersion%}}:create \
+mvn io.quarkus:quarkus-maven-plugin:{{ .quarkusVersion }}:create \
     -DprojectGroupId=my-groupId \
     -DprojectArtifactId=my-artifactId \
     -DprojectVersion=my-version \
