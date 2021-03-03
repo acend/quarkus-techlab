@@ -92,9 +92,9 @@ This allows you to develop in the same environment you will actually run your ap
 To do this you must build a mutable application, using the mutable-jar format. Set the following properties in application.xml:
 
 ```text
-quarkus.package.type=mutable-jar 
-quarkus.live-reload.password=changeit 
-quarkus.live-reload.url=http://my.cluster.host.com:8080 
+quarkus.package.type=mutable-jar
+quarkus.live-reload.password=changeit
+quarkus.live-reload.url=http://my.cluster.host.com:8080
 ```
 
 Before you start Quarkus on the remote host set the environment variable QUARKUS_LAUNCH_DEVMODE=true. If you are on bare metal you can just set this via the export QUARKUS_LAUNCH_DEVMODE=true command, if you are running using docker start the image with -e QUARKUS_LAUNCH_DEVMODE=true. When the application starts you should now see the following line in the logs: Profile dev activated. Live Coding activated.
