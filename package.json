@@ -7,18 +7,14 @@
     "url": "git+https://github.com/puzzle/quarkus-techlab.git"
   },
   "author": "Puzzle ITC",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run mdlint"
-    }
-  },
   "dependencies": {
     "autoprefixer": "^10.0.0",
     "husky": "^5.0.0",
     "postcss-cli": "^8.0.0"
   },
   "scripts": {
-    "mdlint": "markdownlint --config .markdownlint.json content *.md"
+    "mdlint": "markdownlint --config .markdownlint.json content *.md",
+    "prepare": "husky install"
   },
   "bugs": {
     "url": "https://github.com/puzzle/quarkus-techlab/issues"
