@@ -1,4 +1,4 @@
-FROM codercom/code-server:3.4.1
+FROM codercom/code-server:3.9.1
 
 ARG HELM_CLI=https://mirror.openshift.com/pub/openshift-v4/clients/helm/latest/helm-linux-amd64
 ARG KUBECTL=https://storage.googleapis.com/kubernetes-release/release/
