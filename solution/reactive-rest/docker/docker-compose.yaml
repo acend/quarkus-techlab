@@ -15,6 +15,32 @@ services:
     ports:
       - 5432:5432
 
+  producer:
+    image: reactive-rest-producer:latest
+    hostname: producer
+    container_name: producer
+    networks:
+      - quarkus
+    environment:
+      - QUARKUS_DATASOURCE_USERNAME=admin
+      - QUARKUS_DATASOURCE_PASSWORD=1234
+      - QUARKUS_DATASOURCE_REACTIVE_URL=postgresql://quarkus-db:5432/admin
+      - MYAPP_SCHEMA_CREATE=true
+    ports:
+      - 8080:8080
+
+  consumer:
+    image: reactive-rest-consumer:latest
+    hostname: consumer
+    container_name: consumer
+    networks:
+      - quarkus
+    environment:
+      - QUARKUS_HTTP_PORT=8080
+      - DATA_SERVICE_MP_REST_URL=http://producer:8080
+    ports:
+      - 8081:8080
+
 networks:
   quarkus:
     driver: bridge
