@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  quarkus-db:
+    image: docker.io/postgres:11.11
+    hostname: quarkus-db
+    container_name: quarkus-db
+    volumes:
+      - quarkus-db:/var/lib/postgresql/data/
+    networks:
+      - quarkus
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - 5432:5432
+
+networks:
+  quarkus:
+    driver: bridge
+    ipam:
+      driver: default
+
+volumes:
+  quarkus-db:
