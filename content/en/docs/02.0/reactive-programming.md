@@ -237,7 +237,7 @@ public SensorMeasurement(Row row) {
 
 ```
 
-In our `DataResource` we have to inject a `io.vertx.mutiny.pgclient.PgPool`. Alter your default `@GET` annotated function to return all `SensorMeasurement` objects in the database as a `Multi`.
+In our `DataResource` we have to inject a `io.vertx.mutiny.pgclient.PgPool`. Alter your default `@GET` annotated function to return all `SensorMeasurement` objects in the database as a `Uni<List<...>>`.
 
 {{% details title="Hint" %}}
 ```java
@@ -253,8 +253,8 @@ public class DataResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Multi<SensorMeasurement> findAll() {
-        return SensorMeasurement.findAll(client);
+    public Uni<List<SensorMeasurement>> findAll() {
+        return SensorMeasurement.findAll(client).collect().asList();
     }
 
 }
@@ -334,6 +334,14 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -Dproj
 
 {{% /details %}}
 
+Change the default port of the consumer application in the application.properties, so we can have both up and running.
+
+```s
+
+quarkus.http.port=8081
+
+```
+
 We will duplicate the `SensorMeasurement` class without the Active Record pattern functions.
 
 ```java
@@ -355,3 +363,183 @@ public class SensorMeasurement {
 }
 
 ```
+
+To consume the producer's REST API we create a `@RestClient`. Create a new interface `..consumer.boundary.DataService` and annotate it with:
+
+```java
+
+@Path("/data")
+@RegisterRestClient(configKey = "data-service")
+public interface DataService {
+  [...]
+}
+
+```
+
+Define the producers API method headers and you have your service ready to go.
+
+{{% details title="Hint" %}}
+
+```java
+
+@Path("/data")
+@RegisterRestClient(configKey = "data-service")
+public interface DataService {
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<SensorMeasurement> findById(@PathParam("id") Long id);
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Uni<SensorMeasurement> create(SensorMeasurement sensorMeasurement);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<List<SensorMeasurement>> findAll();
+}
+
+```
+
+{{% /details %}}
+
+We configure the rest client in our application properties.
+
+```s
+
+quarkus.http.port=8081
+
+data-service/mp-rest/url=http://localhost:8080
+data-service/mp-rest/scope=javax.inject.Singleton
+
+```
+
+Let's create another REST API resource to tunnel the requests and consume the produced events. Duplicate the definition of the producer's `DataResource` into a new class in the consumer. Inject the defined `DataService` as a `@RestClient` into the created resource and use it to tunnel the requests to the producer's API.
+
+{{% details title="Hint" %}}
+
+```java
+
+@Path("/data")
+public class DataResource {
+
+    @Inject
+    @RestClient
+    DataService dataService;
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni<Response> findAll() {
+        return dataService.findAll()
+                .onItem().transform(list -> list != null ? Response.ok(list) : Response.serverError())
+                .onItem().transform(Response.ResponseBuilder::build);
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni<Response> findById(@PathParam(value = "id") Long id) {
+        return dataService.findById(id)
+                .onItem().transform(item -> id != null ? Response.ok(item) : Response.status(Response.Status.NOT_FOUND))
+                .onItem().transform(Response.ResponseBuilder::build);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni<SensorMeasurement> create(SensorMeasurement sensorMeasurement) {
+        return dataService.create(sensorMeasurement);
+    }
+}
+
+```
+
+{{% /details %}}
+
+
+### Task {{% param sectionnumber %}}.3: Streaming data
+
+We learned how to implement a reactive REST API. Now let's stream some data as `SERVER_SENT_EVENTS`. We will create two endpoints in our producer's API:
+
+* `/latest` - to stream the latest persisted data
+* `/average` - to stream a current average of our data
+
+Start by creating the endpoint for receiving the latest `SensorMeasurement`. Create a `@GET` endpoint with the path `/latest` which produces a `MediaType.SERVER_SENT_EVENTS`. Extend your `SensorMeasurement` class with a function which provides you a `Uni<SensorMeasurement>` and select the measurement with the latest `Instant time`. To emit the latest measurement periodically we will use the `Multi.createFrom().ticks().every(Duration.ofSeconds(2))...` feature. The `...ticks().every(Duration.ofSeconds(2))` emits an event every two seconds. Use this to transform it into the latest measurement. To ensure your `SERVER_SENT_EVENTS` will get converted to a JSON you can use the annotation `@RestSseElementType(MediaType.APPLICATION_JSON)`.
+
+{{% details title="Hint" %}}
+
+...producer.boundary.DataResource:
+```java
+
+    [...]
+
+    @GET
+    @Path("/latest")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @RestSseElementType(MediaType.APPLICATION_JSON)
+    public Multi<SensorMeasurement> latest() {
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
+                .onItem().transform(i -> SensorMeasurement.getLatest(client).await().indefinitely());
+    }
+
+    [...]
+
+```
+
+...producer.entity.SensorMeasurement
+```java
+
+    [...]
+
+    public static Uni<SensorMeasurement> getLatest(PgPool client) {
+        return client.query("SELECT id, data, time from sensormeasurements where time = (SELECT max(time) from sensormeasurements) limit 1").execute()
+                .onItem().transform(RowSet::iterator)
+                .onItem().transform(iterator -> iterator.hasNext() ? new SensorMeasurement(iterator.next()) : null);
+    }
+
+    [...]
+
+```
+
+{{% /details %}}
+
+Test your API with `curl -N localhost:8080/data/average`.
+
+Can you implement the similar API endpoint for calculating the average?
+
+{{% details title="Hint" %}}
+
+...producer.boundary.DataResource:
+```java
+
+    [...]
+
+    @GET
+    @Path("/average")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @RestSseElementType(MediaType.APPLICATION_JSON)
+    public Multi<SensorMeasurement> average() {
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
+                .onItem().transform(i -> SensorMeasurement.getAverage(client).await().indefinitely());
+    }
+
+    [...]
+
+```
+
+...producer.entity.SensorMeasurement
+```java
+
+    [...]
+
+    public static Uni<SensorMeasurement> getAverage(PgPool client) {
+        return client.query("SELECT 0 as id, avg(data) as data, NOW() as time from sensormeasurements").execute()
+                .onItem().transform(RowSet::iterator)
+                .onItem().transform(iterator -> iterator.hasNext() ? new SensorMeasurement(iterator.next()) : null);
+    }
+
+```
+
+{{% /details %}}
