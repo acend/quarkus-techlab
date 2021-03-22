@@ -1,1 +1,20 @@
+POST http://localhost:8081/data
+Content-Type: application/json
+
+{
+  "data": 0.1,
+  "time": "2021-03-11T02:00:00Z"
+}
+
+###
+
 GET http://localhost:8081/data
+
+###
+
+GET http://localhost:8081/data/1
+
+###
+
+GET http://localhost:8081/data/dummy
+

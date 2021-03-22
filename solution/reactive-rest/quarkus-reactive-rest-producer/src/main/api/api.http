@@ -13,3 +13,12 @@ GET http://localhost:8080/data
 ###
 
 GET http://localhost:8080/data/1
+
+###
+
+GET http://localhost:8080/data/dummy
+
+###
+
+
+

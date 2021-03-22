@@ -1,15 +1,12 @@
 package ch.puzzle.consumer.boundary;
 
 import ch.puzzle.consumer.entity.SensorMeasurement;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/data")
 @RegisterRestClient(configKey = "data-service")
@@ -19,4 +16,18 @@ public interface DataService {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     Uni<SensorMeasurement> findById(@PathParam("id") Long id);
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Uni<SensorMeasurement> create(SensorMeasurement sensorMeasurement);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<List<SensorMeasurement>> findAll();
+
+    @GET
+    @Path("/latest")
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<SensorMeasurement> getLatest();
 }

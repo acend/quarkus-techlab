@@ -34,6 +34,18 @@ public class SensorMeasurement {
                 .onItem().transform(iterator -> iterator.hasNext() ? new SensorMeasurement(iterator.next()) : null);
     }
 
+    public static Uni<SensorMeasurement> getLatest(PgPool client) {
+        return client.query("SELECT id, data, time from sensormeasurements where time = (SELECT max(time) from sensormeasurements) limit 1").execute()
+                .onItem().transform(RowSet::iterator)
+                .onItem().transform(iterator -> iterator.hasNext() ? new SensorMeasurement(iterator.next()) : null);
+    }
+
+    public static Uni<SensorMeasurement> getAverage(PgPool client) {
+        return client.query("SELECT 0 as id, avg(data) as data, NOW() as time from sensormeasurements").execute()
+                .onItem().transform(RowSet::iterator)
+                .onItem().transform(iterator -> iterator.hasNext() ? new SensorMeasurement(iterator.next()) : null);
+    }
+
     public Uni<SensorMeasurement> save(PgPool client) {
         return client.preparedQuery("INSERT INTO sensormeasurements (data, time) VALUES ($1, $2) RETURNING (id, data, time)")
                 .execute(Tuple.of(data, time.atOffset(ZoneOffset.UTC)))

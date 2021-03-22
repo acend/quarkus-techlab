@@ -1,6 +1,7 @@
-package ch.puzzle.producer.boundary.control;
+package ch.puzzle.producer.control;
 
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.scheduler.Scheduled;
 import io.vertx.mutiny.pgclient.PgPool;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -34,6 +35,12 @@ public class DBInit {
                 .flatMap(r -> client.query("INSERT INTO sensormeasurements (data) VALUES (0.2)").execute())
                 .flatMap(r -> client.query("INSERT INTO sensormeasurements (data) VALUES (0.3)").execute())
                 .flatMap(r -> client.query("INSERT INTO sensormeasurements (data) VALUES (0.4)").execute())
+                .await().indefinitely();
+    }
+
+    @Scheduled(every = "2s")
+    public void createData() {
+        client.query("INSERT INTO sensormeasurements (data) VALUES (" + Math.random() + ")").execute()
                 .await().indefinitely();
     }
 }
