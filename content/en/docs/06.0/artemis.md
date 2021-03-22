@@ -9,7 +9,7 @@ description: >
 
 ## {{% param sectionnumber %}}.1: ActiveMQ Artemis
 
-In order to make our microservices to communicate through messaging we need to setup a message broker first. In this first example we are going to use [Artemis ActiveM](https://activemq.apache.org/components/artemis/) as our message broker. Artemis provides us a simple message broker which comes with a few handy features which we are going to make use of.
+In order to make our microservices to communicate through messaging we need to setup a message broker first. In this first example we are going to use [Artemis ActiveMQ](https://activemq.apache.org/components/artemis/) as our message broker. Artemis provides us a simple message broker which comes with a few handy features which we are going to make use of.
 
 To setup our Artemis ActiveMQ instance we are going to use a docker image and run it locally:
 
@@ -24,14 +24,40 @@ If you have your container up and running you can log into the web UI on [http:/
 
 ## {{% param sectionnumber %}}.2: Microservices
 
-In order to use messaging instead of REST calls we do need to change our implementation. If you like you can leave the entire REST implementation and just create a new package `artemis` inside your application.
+Create two new microservices 'quarkus-jms-producer' and 'quarkus-jms-consumer' and create the `SensorMeasurement` class in both microservices:
 
-In order to use messaging we are going to use the Quarkus extension "quarkus-artemis-jms", add this extension to your producer and consumer project.
+```java
+
+public class SensorMeasurement {
+
+    public Double data;
+    public Instant time;
+
+    public SensorMeasurement() {
+        this.data = Math.random();
+        this.time = Instant.now();
+    }
+
+    public SensorMeasurement(Double data, Instant time) {
+        this.data = data;
+        this.time = time;
+    }
+}
+
+
+```
+
+Add the 'quarkus-artemis-jms' and 'quarkus-jsonb' extensions to your projects.
+
+To ensure the connection to the message broker add the following config to your application.properties file:
 
 ```s
 
-./quarkus-techlab-data-consumer/mvnw quarkus:add-extension -Dextensions="quarkus-artemis-jms"
-./quarkus-techlab-data-producer/mvnw quarkus:add-extension -Dextensions="quarkus-artemis-jms"
+# Configures the Artemis JMS properties.
+quarkus.artemis.url=tcp://artemis-activemq:61616
+%dev.quarkus.artemis.url=tcp://localhost:61616
+quarkus.artemis.username=quarkus
+quarkus.artemis.password=quarkus
 
 ```
 
@@ -40,7 +66,7 @@ Let's start with producing data to a Queue:
 
 ### {{% param sectionnumber %}}.2.1: Producing data
 
-We are going to implement a new Class called DataProducer `ch.puzzle.quarkustechlab.jmsproducer.boundary.JmsDataProducer` which implements the Interface Runnable. We setup a simple Scheduler which triggers the production of a Message every five seconds with a random SensorMeasurement.
+We are going to implement a new class called DataProducer `...producer.boundary.JmsDataProducer` which implements the interface Runnable. We setup a simple scheduler which triggers the production of a message every five seconds with a random SensorMeasurement.
 
 ```java
 
@@ -70,22 +96,12 @@ public class JmsDataProducer implements Runnable {
 
 ```
 
-We need to setup the ConnectionFactory so our microservices know how to communicate with our Artemis message broker. We add the following properties to our `application.properties` files in both microservices:
-
-```yaml
-
-# Configures the Qpid JMS properties.
-quarkus.artemis.url=tcp://artemis-activemq:61616
-%dev.quarkus.artemis.url=tcp://localhost:61616
-quarkus.artemis.username=quarkus
-quarkus.artemis.password=quarkus
-
-```
+In the `run` method we create a new context with our `ConnectionFactory` and create a producer which  sends a message to the `data-inbound` message queue.
 
 
 ### {{% param sectionnumber %}}.2.2: Consuming data
 
-On the consumer side we create a new Class `ch.puzzle.quarkustechlab.jmsconsumer.boundary.JmsDataConsumer` which also implements the Interface Runnable:
+On the consumer side we create a new Class `...consumer.boundary.JmsDataConsumer` which also implements the Interface Runnable:
 
 ```java
 
@@ -129,23 +145,6 @@ public class JmsDataConsumer implements Runnable {
 
 ```
 
-Let's create a REST resource to see the lastData property consumed:
+If you run both applications you will see that the consumer receives an Message every five seconds with new data from the message broker. If you check the Artemis UI you can see under 'Diagram' your Queue with an active consumer connected to it. When you head over to the 'Queues' tab you can read or manipulate your Queues manually.
 
-```java
-
-@Path("/jms/data")
-public class JmsDataResource {
-
-    @Inject
-    JmsDataConsumer consumer;
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public SensorMeasurement getData() {
-        return consumer.getLastData();
-    }
-}
-
-```
-
-If you run both applications you will see that the consumer receives an Message every five seconds with new data from the message broker. If you check the Artemis UI you can see under 'Diagram' your Queue with an active consumer connected to it. When you head over to the 'Queues' tab you can read or manipulate your Queues manually. You can also use your defined REST resource to check the data.
+Feel free to dive and explore the JMS interface a bit more. If you have seen enought, head over to the next chapter where we will get reactive again!
