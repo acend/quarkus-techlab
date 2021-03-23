@@ -4,7 +4,6 @@ import ch.puzzle.consumer.entity.SensorMeasurement;
 import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.jboss.resteasy.reactive.RestSseElementType;
-import org.reactivestreams.Publisher;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
