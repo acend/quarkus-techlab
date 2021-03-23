@@ -132,80 +132,97 @@ docker-compose -f quarkus-techlab-infrastructure/src/main/docker/kafka/docker-co
 
 ```
 
+Create again two Quarkus projects 'quarkus-reactive-messaging-consumer' and 'quarkus-reactive-messaging-producer'. Add the extension 'smallrye-reactive-messaging-kafka' and 'quarkus-jsonb' to your project. Create the `SensorMeasurement` class again in both projects.
 
-### {{% param sectionnumber %}}.2: Producing messages
+```java
 
-In order to use reactive messaging with kafka in our microservices we will add another extension to them:
+public class SensorMeasurement {
 
-```s
+    public Double data;
+    public Instant time;
 
-./quarkus-techlab-data-producer/mvnw quarkus:add-extension -Dextensions="smallrye-reactive-messaging-kafka"
-./quarkus-techlab-data-consumer/mvnw quarkus:add-extension -Dextensions="smallrye-reactive-messaging-kafka"
+    public SensorMeasurement() {
+    }
+
+    public SensorMeasurement(Double data, Instant time) {
+        this.data = data;
+        this.time = time;
+    }
+}
 
 ```
 
-Let's start by creating a reactive producer which is going to do the same thing he always does: Produce random SensorMeasurements.
 
+### {{% param sectionnumber %}}.2: Producing messages
+
+Let's start by creating a reactive producer which is going to do the same thing he always does: Produce random SensorMeasurements. Create a `@ApplicationScoped` class `ReactiveDataProducer`. Inside the class define a function which returns a `Multi<SensorMeasurement>`. Inside the function use the already known routine to periodically emit a new SensorMeasurement. Finally annotate the function with `@Outgoing("data-inbound")` to create a connector to your message broker.
+
+
+{{% details title="Hint" %}}
 
 ```java
-// ch.puzzle.quarkustechlab.reactiveproducer.boundary.ReactiveDataProducer.java
+// ...producer.boundary.ReactiveDataProducer.java
 
 @ApplicationScoped
 public class ReactiveDataProducer {
 
-    @Outgoing("data-inbound-reactive")
-    public Flowable<SensorMeasurement> generateStream() {
-        return Flowable.interval(5, TimeUnit.SECONDS)
-                .map(tick -> new SensorMeasurement());
+    @Outgoing("data-inbound")
+    public Multi<SensorMeasurement> produceData() {
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(2))
+                .onItem().transform(i -> new SensorMeasurement());
     }
 }
 
 ```
 
-As you can see we create a Flowable of SensorMeasurement which you can imagine as a stream of data sent to the channel "data-inbound-reactive". After setting up the data producer we need to connect the Connectors to our Kafka cluster.
+{{% /details %}}
 
-```yaml
+To ensure the connection from the connector to your message broker we need some configuration.
+
+```s
 #application.properties
 
-[...]
+kafka.bootstrap.servers=localhost:9092
 
-# Configure the SmallRye Kafka connector
-kafka.bootstrap.servers=quarkus-techlab-kafka-bootstrap:9092
-%dev.kafka.bootstrap.servers=localhost:9092
-
-# Configure the Kafka sink
-mp.messaging.outgoing.data-inbound-reactive.connector=smallrye-kafka
-mp.messaging.outgoing.data-inbound-reactive.topic=manual
-mp.messaging.outgoing.data-inbound-reactive.value.serializer=io.quarkus.kafka.client.serialization.JsonbSerializer
+mp.messaging.outgoing.data-inbound.connector=smallrye-kafka
+mp.messaging.outgoing.data-inbound.topic=manual
+mp.messaging.outgoing.data-inbound.value.serializer=io.quarkus.kafka.client.serialization.JsonbSerializer
 
 ```
+
+We define the connector which we are going to use to communicate, the topic in which the data will be sent to and the serializer for the value.
 
 
 ### {{% param sectionnumber %}}.3: Consuming messages
 
-On the other side we want to consume the data we just produced in the Kafka `manual` Topic.
-Let's create a ReactiveDataConsumer class:
+On the other side of the system we want to consume the messages and stream them again to a REST API. Create a class `..consumer.boundary.ReactiveDataConsumer` and similar to the producer create a function which takes a `SensorMeasurement` as parameter and returns a `SensorMeasurement`. For simplicity reasons the function will only return the received measurement again. Annotate your created function with the connectors `@Incoming("inbound-data")` and `@Outgoing("in-memory-stream")`. Additionally we can annotate the function with `@Acknowledgment(Acknowledgment.Strategy.POST_PROCESSING)` to ensure the acknowledgement of the messages received.
+
+{{% details title="Hint" %}}
 
 ```java
-// ch.puzzle.quarkustechlab.reactiveconsumer.boundary.ReactiveDataConsumer.java
+// ...producer.boundary.ReactiveDataProducer.java
 
 @ApplicationScoped
 public class ReactiveDataConsumer {
 
-    private final Logger logger = Logger.getLogger(ReactiveDataConsumer.class.getName());
+    private static final Logger log = Logger.getLogger(ReactiveDataConsumer.class.getName());
 
-    @Incoming("data")
-    public void consumeStream(SensorMeasurement sensorMeasurement) {
-        logger.info("Received reactive message: " + JsonbBuilder.create().toJson(sensorMeasurement));
+    @Incoming("data-inbound")
+    @Outgoing("in-memory-stream")
+    @Acknowledgment(Acknowledgment.Strategy.POST_PROCESSING)
+    public SensorMeasurement consume(SensorMeasurement sensorMeasurement) {
+        return sensorMeasurement;
     }
 }
 
 ```
 
-To receive and deserialize our messages we need to impelement a SensorMeasurementDeserializer which inherits from the JsonbDeserializer:
+{{% /details %}}
+
+To receive and deserialize our messages we need to impelement a SensorMeasurementDeserializer which extends the JsonbDeserializer:
 
 ```java
-// ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
+// ..producer.boundary.SensorMeasurementDeserializer
 
 
 public class SensorMeasurementDeserializer extends JsonbDeserializer<SensorMeasurement> {
@@ -219,19 +236,54 @@ public class SensorMeasurementDeserializer extends JsonbDeserializer<SensorMeasu
 
 After creating the deserializer we need to setup the connectors for the consumer to connect to our Kafka cluster:
 
-```yaml
+```s
+quarkus.http.port=8081
+kafka.bootstrap.servers=localhost:9092
 
-[...]
-
-# Configure the SmallRye Kafka connector
-kafka.bootstrap.servers=quarkus-techlab-kafka-bootstrap:9092
-%dev.kafka.bootstrap.servers=localhost:9092
-
-# Configure the Kafka sink
-mp.messaging.incoming.data.connector=smallrye-kafka
-mp.messaging.incoming.data.topic=manual
-mp.messaging.incoming.data.value.deserializer=ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
+mp.messaging.incoming.data-inbound.connector=smallrye-kafka
+mp.messaging.incoming.data-inbound.topic=manual
+mp.messaging.incoming.data-inbound.value.deserializer=ch.puzzle.consumer.boundary.SensorMeasurementDeserializer
 
 ```
 
-When you are finished, test your applications first locally. If they work and deliver the desired output, commit your changes, push them and release them with your pipelines!
+As you might have noticed, we defined a `@Outgoing("in-memory-stream")` which does not have any connectors defined in the `application.properties`. This is an in-memory stream and we are going to use it to produce the data in our REST API.
+
+Create or update your `..consumer.boundary.DataResource` to expose an endpoint `/data`. Create a `@GET` annotated endpoint to emit a `Multi<SensorMeasurement>` as a stream of data. To read the data from the in-memory stream create an injected field `@Channel(in-memory-stream") Multi<SensorMeasurement> channel` and simply return this channel in your API. Set up the annotations for your reactive rest-easy endpoint to convert the data to JSON.
+
+{{% details title="Hint" %}}
+
+```java
+
+@Path("/data")
+public class DataResource {
+
+    @Inject
+    @Channel("in-memory-stream")
+    Multi<SensorMeasurement> channel;
+
+    @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @RestSseElementType(MediaType.APPLICATION_JSON)
+    public Multi<SensorMeasurement> stream() {
+        return channel;
+    }
+}
+
+```
+
+{{% /details %}}
+
+Start up your kafka cluster with the created docker-compose file and your two microservices and test your API.
+
+The result should look similar to this:
+
+```s
+$ curl -N localhost:8081/data
+
+data:{"data":0.838331984637051,"time":"2021-03-23T10:52:11.563830Z"}
+
+data:{"data":0.21252592222197708,"time":"2021-03-23T10:52:13.563800Z"}
+
+data:{"data":0.2170284442342123,"time":"2021-03-23T10:52:15.563695Z"}
+
+```
