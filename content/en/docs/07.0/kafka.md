@@ -192,6 +192,18 @@ mp.messaging.outgoing.data-inbound.value.serializer=io.quarkus.kafka.client.seri
 
 We define the connector which we are going to use to communicate, the topic in which the data will be sent to and the serializer for the value.
 
+To check if your producer is producing data correctly, you can use the kafka-container with it's console utilities! Inside the kafka container you can use the script `bin/kafka-console-consumer.sh` with the parameters `--bootstrap-server localhost:9092 --topic manual --from-beginning` to read the messages inside the 'manual' topic.
+
+{{% details title="Hint" %}}
+
+```s
+
+docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual --from-beginning
+
+```
+
+{{% /details %}}
+
 
 ### {{% param sectionnumber %}}.3: Consuming messages
 
