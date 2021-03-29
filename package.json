@@ -9,7 +9,7 @@
   "author": "Puzzle ITC",
   "dependencies": {
     "autoprefixer": "^10.0.0",
-    "husky": "^5.0.0",
+    "husky": "^6.0.0",
     "postcss-cli": "^8.0.0"
   },
   "scripts": {
