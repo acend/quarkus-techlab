@@ -329,7 +329,7 @@ Create another Quarkus project with the following extensions: "quarkus-resteasy-
 {{% details title="Hint" %}}
 
 ```s
-mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -DprojectGroupId=ch.puzzle -DprojectArtifactId=quarkus-reactive-rest-producer -Dextensions="quarkus-resteasy-reactive,quarkus-jsonb,quarkus-resteasy-reactive-jsonb,quarkus-rest-client-mutiny,quarkus-rest-client-jsonb" -DprojectVersion=1.0.0 -DclassName="ch.puzzle.producer.boundary.DataResource"
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -DprojectGroupId=ch.puzzle -DprojectArtifactId=quarkus-reactive-rest-consumer -Dextensions="quarkus-resteasy-reactive,quarkus-jsonb,quarkus-resteasy-reactive-jsonb,quarkus-rest-client-mutiny,quarkus-rest-client-jsonb" -DprojectVersion=1.0.0 -DclassName="ch.puzzle.producer.boundary.DataResource"
 ```
 
 {{% /details %}}
