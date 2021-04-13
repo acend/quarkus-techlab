@@ -43,7 +43,7 @@ To see the available extensions you can use:
 
 ```
 
-You are also able to just add the new dependency to your `pom.yml` manually.
+You are also able to just add the new dependency to your `pom.xml` manually.
 
 In the generated DataResource edit the `@GET` endpoint to return a simple double and change the `@Produces` type to `MediaType.APPLICATION_JSON`.
 
