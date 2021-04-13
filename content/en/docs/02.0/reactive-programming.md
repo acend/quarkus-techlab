@@ -505,7 +505,7 @@ Start by creating the endpoint for receiving the latest `SensorMeasurement`. Cre
 
 {{% /details %}}
 
-Test your API with `curl -N localhost:8080/data/average`.
+Test your API with `curl -N localhost:8080/data/latest`.
 
 Can you implement the similar API endpoint for calculating the average?
 
