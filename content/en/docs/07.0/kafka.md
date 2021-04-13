@@ -23,10 +23,12 @@ In this techlab you are going to set up your own Kafka cluster which will handle
 apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
-  name: quarkus-techlab-user
+  name: quarkus-techlab
+  labels:
+    application: quarkus-techlab
 spec:
   kafka:
-    version: 2.5.0
+    version: 2.6.0
     replicas: 1
     listeners:
       plain: {}
@@ -36,7 +38,14 @@ spec:
       offsets.topic.replication.factor: 1
       transaction.state.log.replication.factor: 1
       transaction.state.log.min.isr: 1
-      log.message.format.version: "2.5"
+      log.message.format.version: "2.6"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: "50m"
+      limits:
+        memory: 4Gi
+        cpu: "2"
     storage:
       type: jbod
       volumes:
@@ -46,6 +55,13 @@ spec:
         deleteClaim: false
   zookeeper:
     replicas: 1
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: "50m"
+      limits:
+        memory: 4Gi
+        cpu: "2"
     storage:
       type: persistent-claim
       size: 2Gi
