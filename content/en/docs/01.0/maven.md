@@ -79,7 +79,7 @@ It is possible to use development mode remotely, so that you can run Quarkus in 
 
 This allows you to develop in the same environment you will actually run your app in, and with access to the same services. Do not use this in production. This should only be used in a development environment. You should not run production application in dev mode.
 
-To do this you must build a mutable application, using the mutable-jar format. Set the following properties in application.xml:
+To do this you must build a mutable application, using the mutable-jar format. Set the following properties in application.properties:
 
 ```text
 quarkus.package.type=mutable-jar
