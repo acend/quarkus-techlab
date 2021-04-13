@@ -42,13 +42,13 @@ spec:
       volumes:
       - id: 0
         type: persistent-claim
-        size: 10Gi
+        size: 2Gi
         deleteClaim: false
   zookeeper:
     replicas: 1
     storage:
       type: persistent-claim
-      size: 10Gi
+      size: 2Gi
       deleteClaim: false
   entityOperator:
     topicOperator: {}
