@@ -18,7 +18,7 @@ Create a new Quarkus application like shown before called 'data-producer'. The a
 
 ```bash
 
-mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=data-producer \
     -DclassName="ch.puzzle.quarkustechlab.restproducer.boundary.DataResource" \
@@ -100,7 +100,7 @@ With another microservice we would like to consume the data served by our data-p
 
 ```bash
 
-mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=data-consumer \
     -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumer" \

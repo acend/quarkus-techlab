@@ -19,7 +19,7 @@ command:
 
 ```bash
 
-mvn io.quarkus:quarkus-maven-plugin:1.7.0.Final:create \
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=getting-started \
     -DclassName="ch.puzzle.quarkustechlab.GreetingResource" \
