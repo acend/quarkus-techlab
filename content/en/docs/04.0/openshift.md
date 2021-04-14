@@ -120,7 +120,7 @@ To continue we will log into our cluster:
 
 ```s
 
-oc login --server=https://${OCP_URL}>:${OCP_PORT}
+oc login --server=https://${OCP_URL}:${OCP_PORT}
 
 ```
 
@@ -153,7 +153,7 @@ Due to the fact that we defined an trigger on ImageChange in the DeploymentConfi
 docker tag data-producer:native $REGISTRY/$OPENSHIFT_PROJECT/data-producer:latest
 docker tag data-consumer:native $REGISTRY/$OPENSHIFT_PROJECT/data-consumer:latest
 
-// TODO: Insert correct registry link
+// Login to preferred registry
 docker login -u $USERNAME $REGISTRY -p $(oc whoami -t)
 
 // Push images
