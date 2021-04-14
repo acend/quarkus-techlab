@@ -7,5 +7,4 @@ description: >
     Tracing powered by Jaeger in Quarkus.
 ---
 
-## {{% param sectionnumber %}}.1: Jaeger
-
+## {{% param sectionnumber %}}.1: OpenTracing with Jaeger

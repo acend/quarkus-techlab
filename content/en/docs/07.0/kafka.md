@@ -112,10 +112,10 @@ version: '2'
 services:
 
   zookeeper:
-    image: strimzi/kafka:0.11.3-kafka-2.1.0
+    image: quay.io/strimzi/kafka:0.22.1-kafka-2.6.0
     command: [
-      "sh", "-c",
-      "bin/zookeeper-server-start.sh config/zookeeper.properties"
+        "sh", "-c",
+        "bin/zookeeper-server-start.sh config/zookeeper.properties"
     ]
     ports:
       - "2181:2181"
@@ -123,10 +123,10 @@ services:
       LOG_DIR: /tmp/logs
 
   kafka:
-    image: strimzi/kafka:0.11.3-kafka-2.1.0
+    image: quay.io/strimzi/kafka:0.22.1-kafka-2.6.0
     command: [
-      "sh", "-c",
-      "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
+        "sh", "-c",
+        "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
     ]
     depends_on:
       - zookeeper
