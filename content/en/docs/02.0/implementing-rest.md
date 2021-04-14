@@ -9,12 +9,14 @@ description: >
 
 ## {{% param sectionnumber %}}.1: Implementing REST Services
 
-In this section we learn how microservices can communicate through REST. In this example we want to build a microservice which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes it on ot's own endpoint.
+In this section we learn how microservices can communicate through REST. In this example we want to build a microservice which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes it on it's own endpoint.
 
 
 ### {{% param sectionnumber %}}.2: Producing Data
 
-Create a new Quarkus application like shown before called 'data-producer'. The application should expose a `DataResource` on the path "/data" which provides the user with a randomly generated double when requested.
+Create a new Quarkus application like shown before called 'data-producer'. The application should expose a `DataResource` on the path "/data" which provides the user with a SensorMeasurement holding a random double when requested.
+
+{{% details title="Hint" %}}
 
 ```bash
 
@@ -24,6 +26,8 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DclassName="ch.puzzle.quarkustechlab.restproducer.boundary.DataResource" \
     -Dpath="/data"
 ```
+
+{{% /details %}}
 
 To write better APIs and share data over our defined resources, we need the 'resteasy-jsonb' extension which provides us with
 JSON-B functionalities for our REST interfaces.
@@ -43,19 +47,7 @@ To see the available extensions you can use:
 
 ```
 
-You are also able to just add the new dependency to your `pom.xml` manually.
-
-In the generated DataResource edit the `@GET` endpoint to return a simple double and change the `@Produces` type to `MediaType.APPLICATION_JSON`.
-
-```java
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public double produceData() {
-        return Math.random() * 10;
-    }
-
-```
+Alternatively you could just add the new dependency to your `pom.xml` manually.
 
 In our lab we want to transfer sensor measurements between our microservices. Create a new class `SensorMeasurement` with a single public field called data which holds a Double. In the constructor assign the data field a random generated Double. Edit your REST resource to return a new `SensorMeasurement` whenever it's called.
 
@@ -74,6 +66,8 @@ public class SensorMeasurement {
 
 ```
 
+In the generated DataResource edit the `@GET` endpoint to return a new SensorMeasurement and change the `@Produces` type to `MediaType.APPLICATION_JSON`.
+
 ```java
 
 @Path("/data")
@@ -90,6 +84,7 @@ public class DataResource {
 
 Please update or delete the generated tests which Quarkus provides when generating a project. They will not be needed any further and only have demonstration purposes.
 
+Start up your API and test your endpoint manually. If your data-producer works, let's continue consuming the data we just provided.
 
 For more information about writing REST APIs with Quarkus see the [documentation](https://quarkus.io/guides/rest-json)
 
@@ -98,18 +93,22 @@ For more information about writing REST APIs with Quarkus see the [documentation
 
 With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called 'data-consumer' with the follwing extensions: "rest-client, resteasy-jsonb".
 
+{{% details title="Hint" %}}
+
 ```bash
 
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=data-consumer \
-    -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumer" \
+    -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumerResource" \
     -Dpath="/data" \
     -Dextensions="rest-client, resteasy-jsonb"
 
 ```
 
-In the data-consumer microservice we will have another resource on the path "/data" which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST Client.
+{{% /details %}}
+
+In the data-consumer microservice we will have another resource on the path "/data" which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
 
 ```java
 
@@ -127,6 +126,21 @@ public interface DataProducerService {
 ```
 
 Implement the same POJO as in the producer again for the data-consumer project.
+
+{{% details title="Hint" %}}
+
+```java
+
+public class SensorMeasurement {
+
+    public Double data;
+
+    public SensorMeasurement() {}
+}
+
+```
+
+{{% /details %}}
 
 To access the defined interface as a RestClient we need to configure it properly. To configure the rest client we can edit our `application.properties`.
 We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean.
