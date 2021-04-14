@@ -75,7 +75,7 @@ url = "https://www.puzzle.ch"
 
 [params]
 
-quarkusVersion = "1.12.0.Final"
+quarkusVersion = "1.13.1.Final"
 
 copyright = "Puzzle ITC GmbH"
 github_repo = "https://github.com/puzzle/quarkus-techlab"
