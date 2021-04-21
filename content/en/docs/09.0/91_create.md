@@ -59,7 +59,7 @@ metadata:
 You may wonder what these fields are used for:
 
 * keywords. Used by [code.quarkus.io](https://code.quarkus.io) for searching
-* categories. Used by [code.quarkus.io](https://code.quarkus.io) to categorize the extensions 
+* categories. Used by [code.quarkus.io](https://code.quarkus.io) to categorize the extensions
   * Used: `web`, `data`, `messaging`, `core`, `reactive`, `cloud`, `observability`, `security`, `serialization`, `miscellaneous`, `compatibility`, `alt-languages`, `integration`, `business-automation`
 * name. describes your extension. Shown in Quarkus Dev-UI.
 * description. describes your extension. Shown in Quarkus Dev-UI.

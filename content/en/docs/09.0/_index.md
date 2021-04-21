@@ -24,7 +24,7 @@ The bootstrapping of a Quarkus application takes place in three distinct bootstr
 
 {{% alert color="primary" %}}
 
-* **Augmentation.** During the build time, the Quarkus extensions will load and scan your application’s bytecode 
+* **Augmentation.** During the build time, the Quarkus extensions will load and scan your application’s bytecode
 (including the dependencies) and configuration. At this stage, the extension can read configuration files, scan classes
 for specific annotations, etc. Once all the metadata has been collected, the extensions can pre-process the libraries
 bootstrap actions like your ORM, DI or REST controllers configurations. The result of the bootstrap is directly recorded
