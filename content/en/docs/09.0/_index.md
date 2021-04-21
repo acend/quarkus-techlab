@@ -17,11 +17,13 @@ this information will be wrapped in a quarkus extension. The extension will also
 This extension will be used in another application as dependency to show its functionality. This application is fully 
 provided in the `{{% param "solution_code_basedir" %}}`
 
+
 ## Quarkus Application Bootstrap
 
 The bootstrapping of a Quarkus application takes place in three distinct bootstrap phases:
 
 {{% alert color="primary" %}}
+
 * **Augmentation.** During the build time, the Quarkus extensions will load and scan your application’s bytecode 
 (including the dependencies) and configuration. At this stage, the extension can read configuration files, scan classes 
 for specific annotations, etc. Once all the metadata has been collected, the extensions can pre-process the libraries 
