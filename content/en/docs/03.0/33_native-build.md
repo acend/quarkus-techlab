@@ -1,7 +1,7 @@
 ---
 title: "3.3 Native Build"
 linkTitle: "3.3 Native Build"
-weight: 31
+weight: 330
 sectionnumber: 3.3
 description: >
    Test Native builds for Quarkus.

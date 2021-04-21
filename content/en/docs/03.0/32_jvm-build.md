@@ -1,7 +1,7 @@
 ---
 title: "3.2 JVM Build"
 linkTitle: "3.2 JVM Build"
-weight: 31
+weight: 320
 sectionnumber: 3.2
 description: >
    Test JVM builds for Quarkus.

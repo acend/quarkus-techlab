@@ -1,7 +1,7 @@
 ---
 title: "4.1 Configuration"
 linkTitle: "4.1 Configuration"
-weight: 31
+weight: 410
 sectionnumber: 4.1
 description: >
    Configurate our microservices to be cloud ready.

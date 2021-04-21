@@ -1,8 +1,8 @@
 ---
-title: "1.3 Introduction to Quarkus"
-linkTitle: "1.3 Introduction to Quarkus"
-weight: 130
-sectionnumber: 1.3
+title: "1.2 Introduction to Quarkus"
+linkTitle: "1.2 Introduction to Quarkus"
+weight: 120
+sectionnumber: 1.2
 description: >
   Introduction to Quarkus
 ---

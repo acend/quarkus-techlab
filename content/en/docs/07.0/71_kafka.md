@@ -1,7 +1,7 @@
 ---
 title: "7.1 Reactive messaging with Kafka"
 linkTitle: "7.1 Reactive messaging with Kafka"
-weight: 31
+weight: 710
 sectionnumber: 7.1
 description: >
    Messaging with Apache Kafka in Quarkus.

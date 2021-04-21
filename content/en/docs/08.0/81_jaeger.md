@@ -1,7 +1,7 @@
 ---
 title: "8.1 Tracing powered by Jaeger"
 linkTitle: "8.1 Tracing powered by Jaeger"
-weight: 31
+weight: 810
 sectionnumber: 8.1
 description: >
     Tracing powered by Jaeger in Quarkus.

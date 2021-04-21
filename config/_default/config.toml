@@ -75,7 +75,11 @@ url = "https://www.puzzle.ch"
 
 [params]
 
-quarkusVersion = "1.13.1.Final"
+lab_code_basedir = "/code/"
+solution_code_basedir = "/solution/"
+quarkusVersion = "1.13.2.Final"
+
+folder_extension = "appinfo"
 
 copyright = "Puzzle ITC GmbH"
 github_repo = "https://github.com/puzzle/quarkus-techlab"
