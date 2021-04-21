@@ -1,6 +1,6 @@
 ---
 title: "9.1. Creating the Extension"
-weight: 91
+weight: 910
 sectionnumber: 9.1
 description: >
   Initialize the extension with maven.
@@ -35,4 +35,51 @@ Source: [quarkus.io](https://quarkus.io/guides/building-my-first-extension)
 
 ## Configuring the basic extension details
 
-The extension
+The maven Mojo generated the two modules `runtime` and `deployment` modules and the parent pom. A quarkus extension
+provides some meta information about the extension in an extension description file located at
+`runtime/src/main/resources/META-INF/quarkus-extension.yaml`
+
+
+### Task {{% param sectionnumber %}}.2 - Describe your Extension
+
+Open the `quarkus-extension.yaml` and complete the missing information
+
+```yaml
+name: Appinfo    
+#description: Appinfo ...    
+metadata:    
+#  keywords:    
+#    - appinfo    
+#  guide: ...    
+#  categories:    
+#    - "miscellaneous"    
+#  status: "preview"     
+```
+
+You may wonder what these fields are used for:
+
+* keywords. Used by [code.quarkus.io](https://code.quarkus.io) for searching
+* categories. Used by [code.quarkus.io](https://code.quarkus.io) to categorize the extensions 
+  * Used: `web`, `data`, `messaging`, `core`, `reactive`, `cloud`, `observability`, `security`, `serialization`, `miscellaneous`, `compatibility`, `alt-languages`, `integration`, `business-automation`
+* name. describes your extension. Shown in Quarkus Dev-UI.
+* description. describes your extension. Shown in Quarkus Dev-UI.
+* guide. Link to an extension guide. Shown in Quarkus Dev-UI.
+* status. Describes the extension majority. This is also shown on [code.quarkus.io](https://code.quarkus.io) and on the Quarkus Dev-UI.
+  * Used: `stable`, `preview`, `experimental`
+  
+Keywords and categories are not really used for custom extension. However, we recommend to set them with reasonable values as well.
+
+{{% details title="Sample description hint" %}}
+```yaml
+name: Appinfo
+description: Simple Appinfo Extension
+metadata:
+  keywords:
+    - appinfo
+  guide: http://www.puzzle.ch
+  categories:
+    - "miscellaneous"
+  status: "experimental"
+```
+{{% /details %}}
+

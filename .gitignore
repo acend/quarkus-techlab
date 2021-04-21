@@ -13,3 +13,5 @@ resources
 .idea/
 tmp/*
 .feedbacks
+.vscode
+code/appinfo

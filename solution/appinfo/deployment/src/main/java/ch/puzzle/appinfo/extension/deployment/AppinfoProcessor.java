@@ -2,7 +2,6 @@ package ch.puzzle.appinfo.extension.deployment;
 
 import ch.puzzle.quarkus.training.extension.appinfo.*;
 
-import com.sun.org.apache.bcel.internal.classfile.Synthetic;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -19,11 +18,11 @@ import java.time.Instant;
 
 import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
 
-class AppInfoProcessor {
+class AppinfoProcessor {
 
-    private static Logger logger = LoggerFactory.getLogger(AppInfoProcessor.class);
+    private static Logger logger = LoggerFactory.getLogger(AppinfoProcessor.class);
 
-    private static final String FEATURE = AppInfoNames.EXTENSION_NAME;
+    private static final String FEATURE = AppinfoNames.EXTENSION_NAME;
 
     @BuildStep
     FeatureBuildItem feature() {
@@ -32,10 +31,10 @@ class AppInfoProcessor {
 
     @BuildStep
     @Record(STATIC_INIT)
-    void syntheticBean(AppInfoConfig appInfoConfig,
-                                         LaunchModeBuildItem launchMode,
-                                         AppInfoRecorder recorder,
-                                         BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
+    void syntheticBean(AppinfoConfig appInfoConfig,
+                       LaunchModeBuildItem launchMode,
+                       AppinfoRecorder recorder,
+                       BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
 
         if(shouldInclude(launchMode, appInfoConfig)) {
             String buildTime = appInfoConfig.recordBuildTime ? Instant.now().toString() : null;
@@ -51,7 +50,7 @@ class AppInfoProcessor {
     }
 
     @BuildStep
-    void registerAdditionalBeans(AppInfoConfig appInfoConfig,
+    void registerAdditionalBeans(AppinfoConfig appInfoConfig,
                                  LaunchModeBuildItem launchMode,
                                  BuildProducer<AdditionalBeanBuildItem> additionalBean) {
 
@@ -60,14 +59,14 @@ class AppInfoProcessor {
             // Add AppInfoService as AdditionalBean - else it is not available at runtime.
             additionalBean.produce(AdditionalBeanBuildItem.builder()
                     .setUnremovable()
-                    .addBeanClass(AppInfoService.class)
+                    .addBeanClass(AppinfoService.class)
                     .build());
         }
     }
 
     @BuildStep
     void createServlet(LaunchModeBuildItem launchMode,
-                                   AppInfoConfig appInfoConfig,
+                                   AppinfoConfig appInfoConfig,
                                    BuildProducer<ServletBuildItem> additionalBean) {
 
         if(shouldInclude(launchMode, appInfoConfig)) {
@@ -78,13 +77,13 @@ class AppInfoProcessor {
 
             logger.info("Adding AppInfoServlet /"+basePath);
 
-            additionalBean.produce(ServletBuildItem.builder(basePath, AppInfoServlet.class.getName())
+            additionalBean.produce(ServletBuildItem.builder(basePath, AppinfoServlet.class.getName())
                     .addMapping("/"+basePath)
                     .build());
         }
     }
 
-    private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppInfoConfig appInfoConfig) {
+    private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConfig appInfoConfig) {
         return launchMode.getLaunchMode().isDevOrTest() || appInfoConfig.alwaysInclude;
     }
 }

@@ -1,6 +1,6 @@
 package ch.puzzle.quarkus.training.extension.appinfo;
 
-public class AppInfo {
+public class Appinfo {
 
     private String buildTime;
     private String builtFor;

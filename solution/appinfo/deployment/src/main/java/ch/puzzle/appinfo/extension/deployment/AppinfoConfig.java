@@ -1,12 +1,12 @@
 package ch.puzzle.appinfo.extension.deployment;
 
-import ch.puzzle.quarkus.training.extension.appinfo.AppInfoNames;
+import ch.puzzle.quarkus.training.extension.appinfo.AppinfoNames;
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 
-@ConfigRoot(name = AppInfoNames.EXTENSION_NAME, phase = ConfigPhase.BUILD_TIME)
-public class AppInfoConfig {
+@ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.BUILD_TIME)
+public class AppinfoConfig {
 
     /**
      * Simple build information string
@@ -30,6 +30,6 @@ public class AppInfoConfig {
     /**
      * Specify basePath for extension endpoint
      */
-    @ConfigItem(defaultValue = AppInfoNames.EXTENSION_NAME)
+    @ConfigItem(defaultValue = AppinfoNames.EXTENSION_NAME)
     String basePath;
 }

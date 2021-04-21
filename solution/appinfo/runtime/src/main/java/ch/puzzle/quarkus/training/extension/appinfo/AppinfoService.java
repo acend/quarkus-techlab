@@ -3,7 +3,6 @@ package ch.puzzle.quarkus.training.extension.appinfo;
 import io.quarkus.runtime.StartupEvent;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.config.spi.ConfigSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +14,15 @@ import java.time.Instant;
 import java.util.Map;
 
 @Singleton
-public class AppInfoService {
+public class AppinfoService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AppInfoService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppinfoService.class);
 
     private final Config config;
     private final String createTime;
     private String startupTime;
 
-    public AppInfoService() {
+    public AppinfoService() {
         this.createTime = Instant.now().toString();
         this.config = ConfigProvider.getConfig();
     }
@@ -33,8 +32,8 @@ public class AppInfoService {
         this.startupTime = Instant.now().toString();
     }
 
-    public AppInfo getAppInfo() {
-        AppInfo ai = new AppInfo();
+    public Appinfo getAppInfo() {
+        Appinfo ai = new Appinfo();
 
         ai.setBuildTime(this.getBuildTimeInfo().getTime());
         ai.setBuiltFor(this.getBuildTimeInfo().getBuiltFor());
@@ -55,7 +54,7 @@ public class AppInfoService {
     }
 
     private <T> T getConfig(String propertyName, Class<T> propertyType) {
-        return config.getValue(AppInfoNames.CONFIG_PREFIX+"."+propertyName, propertyType);
+        return config.getValue(AppinfoNames.CONFIG_PREFIX+"."+propertyName, propertyType);
     }
 
     private String collectProperties() {

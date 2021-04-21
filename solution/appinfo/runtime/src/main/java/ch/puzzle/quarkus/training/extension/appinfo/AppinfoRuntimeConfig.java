@@ -4,8 +4,8 @@ import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 
-@ConfigRoot(name = AppInfoNames.EXTENSION_NAME, phase = ConfigPhase.RUN_TIME)
-public class AppInfoRuntimeConfig {
+@ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.RUN_TIME)
+public class AppinfoRuntimeConfig {
 
     /**
      * Simple build information string
