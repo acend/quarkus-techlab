@@ -28,8 +28,12 @@ public class AppinfoService {
     }
 
     void onStart(@Observes StartupEvent ev) {
-        logger.info("AppInfoService Startup: "+Instant.now());
+        logger.info("AppinfoService Startup: "+Instant.now());
         this.startupTime = Instant.now().toString();
+    }
+
+    private BuildInfo getBuildTimeInfo() {
+        return CDI.current().select(BuildInfo.class).get();
     }
 
     public Appinfo getAppInfo() {
@@ -47,10 +51,6 @@ public class AppinfoService {
         ai.setPropertiesString(collectProperties());
 
         return ai;
-    }
-
-    private BuildInfo getBuildTimeInfo() {
-        return CDI.current().select(BuildInfo.class).get();
     }
 
     private <T> T getConfig(String propertyName, Class<T> propertyType) {

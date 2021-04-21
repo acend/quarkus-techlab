@@ -1,5 +1,5 @@
 ---
-title: "9. Building Quarkus Extensions"
+title: "9. Quarkus Extensions"
 weight: 9
 sectionnumber: 9
 description: >
@@ -15,7 +15,7 @@ The simple extension provides a very basic servlet to expose some application in
 this information will be wrapped in a quarkus extension. The extension will also provide an integration in the Quarkus Dev UI.
 
 This extension will be used in another application as dependency to show its functionality. This application is fully
-provided in the `{{% param "solution_code_basedir" %}}`
+provided in the `{{% param "solution_code_basedir" %}}` folder.
 
 
 ## Quarkus Application Bootstrap

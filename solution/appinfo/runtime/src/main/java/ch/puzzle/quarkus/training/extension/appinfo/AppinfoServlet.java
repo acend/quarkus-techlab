@@ -12,12 +12,10 @@ public class AppinfoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Appinfo ai = getAppInfoService().getAppInfo();
-        resp.getWriter().write("Hello. \n\n" +
-                ai.asHumanReadableString());
+        resp.getWriter().write(getAppinfoService().getAppInfo().asHumanReadableString());
     }
 
-    AppinfoService getAppInfoService() {
+    AppinfoService getAppinfoService() {
         return CDI.current().select(AppinfoService.class).get();
     }
 }

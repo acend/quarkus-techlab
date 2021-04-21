@@ -15,7 +15,7 @@ public class AppinfoConfig {
     String builtFor;
 
     /**
-     * Include feature in build
+     * Include build time collection feature in build
      */
     @ConfigItem(defaultValue = "true")
     boolean recordBuildTime;

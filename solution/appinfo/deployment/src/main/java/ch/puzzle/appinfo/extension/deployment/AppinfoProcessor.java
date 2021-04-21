@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Singleton;
 import java.time.Instant;
 
+import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
 import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
 
 class AppinfoProcessor {
@@ -31,16 +32,16 @@ class AppinfoProcessor {
 
     @BuildStep
     @Record(STATIC_INIT)
-    void syntheticBean(AppinfoConfig appInfoConfig,
+    void syntheticBean(AppinfoConfig appinfoConfig,
                        LaunchModeBuildItem launchMode,
                        AppinfoRecorder recorder,
                        BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
 
-        if(shouldInclude(launchMode, appInfoConfig)) {
-            String buildTime = appInfoConfig.recordBuildTime ? Instant.now().toString() : null;
-            String builtFor = appInfoConfig.builtFor;
+        if(shouldInclude(launchMode, appinfoConfig)) {
+            String buildTime = appinfoConfig.recordBuildTime ? Instant.now().toString() : null;
+            String builtFor = appinfoConfig.builtFor;
 
-            logger.info("Adding BuildInfo. RecordBuildTime="+appInfoConfig.recordBuildTime+", BuiltFor="+builtFor);
+            logger.info("Adding BuildInfo. RecordBuildTime="+appinfoConfig.recordBuildTime+", BuiltFor="+builtFor);
 
             syntheticBeans.produce(SyntheticBeanBuildItem.configure(BuildInfo.class).scope(Singleton.class)
                     .runtimeValue(recorder.createBuildInfo(buildTime, builtFor))
@@ -50,12 +51,12 @@ class AppinfoProcessor {
     }
 
     @BuildStep
-    void registerAdditionalBeans(AppinfoConfig appInfoConfig,
+    void registerAdditionalBeans(AppinfoConfig appinfoConfig,
                                  LaunchModeBuildItem launchMode,
                                  BuildProducer<AdditionalBeanBuildItem> additionalBean) {
 
-        if(shouldInclude(launchMode, appInfoConfig)) {
-            logger.info("Adding AppInfoService");
+        if(shouldInclude(launchMode, appinfoConfig)) {
+            logger.info("Adding AppinfoService");
             // Add AppInfoService as AdditionalBean - else it is not available at runtime.
             additionalBean.produce(AdditionalBeanBuildItem.builder()
                     .setUnremovable()
@@ -66,16 +67,16 @@ class AppinfoProcessor {
 
     @BuildStep
     void createServlet(LaunchModeBuildItem launchMode,
-                                   AppinfoConfig appInfoConfig,
-                                   BuildProducer<ServletBuildItem> additionalBean) {
+                       AppinfoConfig appinfoConfig,
+                       BuildProducer<ServletBuildItem> additionalBean) {
 
-        if(shouldInclude(launchMode, appInfoConfig)) {
-            String basePath = appInfoConfig.basePath;
-            if(appInfoConfig.basePath.startsWith("/")) {
-                basePath = appInfoConfig.basePath.replaceFirst("/", "");
+        if(shouldInclude(launchMode, appinfoConfig)) {
+            String basePath = appinfoConfig.basePath;
+            if(appinfoConfig.basePath.startsWith("/")) {
+                basePath = appinfoConfig.basePath.replaceFirst("/", "");
             }
 
-            logger.info("Adding AppInfoServlet /"+basePath);
+            logger.info("Adding AppinfoServlet /"+basePath);
 
             additionalBean.produce(ServletBuildItem.builder(basePath, AppinfoServlet.class.getName())
                     .addMapping("/"+basePath)

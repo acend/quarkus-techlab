@@ -2,19 +2,15 @@ package ch.puzzle.quarkus.training.extension.appinfo;
 
 public class Appinfo {
 
-    private String buildTime;
-    private String builtFor;
-
-    private String runBy;
-
-    private String createTime;
-    private String startupTime;
-    private String currentTime;
-
-    private String applicationName;
-    private String applicationVersion;
-
-    private String propertiesString;
+    String buildTime;
+    String builtFor;
+    String runBy;
+    String createTime;
+    String startupTime;
+    String currentTime;
+    String applicationName;
+    String applicationVersion;
+    String propertiesString;
 
     public String getBuildTime() {
         return buildTime;
