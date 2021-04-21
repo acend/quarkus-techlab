@@ -1,9 +1,9 @@
 ---
-title: "9. Building a Quarkus Extension"
+title: "9. Building Quarkus Extensions"
 weight: 9
 sectionnumber: 9
 description: >
-  Writing your Onw Quarkus Extension.
+  Writing your own Quarkus Extension.
 ---
 
 
@@ -18,5 +18,4 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extens
     -DextensionId=appinfo-extension \  
     -DwithoutTests 
 ```
-
 
