@@ -1,4 +1,4 @@
-package ch.puzzle.quarkus.training.extension.appinfo;
+package ch.puzzle.quarkustechlab.appinfo;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,7 @@ public class AppinfoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().write(getAppinfoService().getAppInfo().asHumanReadableString());
+        resp.getWriter().write(getAppinfoService().getAppinfo().asHumanReadableString());
     }
 
     AppinfoService getAppinfoService() {

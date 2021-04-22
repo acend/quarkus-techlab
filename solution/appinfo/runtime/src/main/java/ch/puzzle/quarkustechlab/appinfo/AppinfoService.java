@@ -1,4 +1,4 @@
-package ch.puzzle.quarkus.training.extension.appinfo;
+package ch.puzzle.quarkustechlab.appinfo;
 
 import io.quarkus.runtime.StartupEvent;
 import org.eclipse.microprofile.config.Config;
@@ -36,7 +36,7 @@ public class AppinfoService {
         return CDI.current().select(BuildInfo.class).get();
     }
 
-    public Appinfo getAppInfo() {
+    public Appinfo getAppinfo() {
         Appinfo ai = new Appinfo();
 
         ai.setBuildTime(this.getBuildTimeInfo().getTime());

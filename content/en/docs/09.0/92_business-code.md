@@ -15,7 +15,7 @@ application.
 Our extension should provide an endpoint returning some application details. The application is supposed to expose the
 following information:
 
-Information      | Source
+Information      | Description
 -----------------|--------------------------------------------
 `Build time`     | Collected at build time
 `Create time`    | Collected at specific instance creation
@@ -33,10 +33,11 @@ Information      | Source
 For our endpoint we will use the `quarkus-undertow` extension. This extension provides a straight forward way to create
 a simple endpoint based on the undertow web server[^1].
 
-Add the `quarkus-undertow` extension to your runtime `pom.xml`.
+* Add the `quarkus-undertow` extension to your runtime `pom.xml`.
+* Add the `quarkus-undertow-deployment` extension to your deployment `pom.xml`.
 
-{{% details title="Task hint" %}}
-Your dependency block in the pom.xml should look like this:
+{{% details title="Task hint Runtime Module" %}}
+Your dependency block in the runtime `pom.xml` should look like this:
 
 ```xml
   <dependencies>
@@ -47,6 +48,39 @@ Your dependency block in the pom.xml should look like this:
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-undertow</artifactId>
+    </dependency>
+  </dependencies>
+```
+{{% /details %}}
+
+
+{{% details title="Task hint Deployment Module" %}}
+Your dependency block in the deplyoment `pom.xml` should look like this:
+
+```xml
+  <dependencies>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc-deployment</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.puzzle</groupId>
+      <artifactId>appinfo</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-undertow-deployment</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-internal</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 ```
@@ -177,7 +211,7 @@ public class AppinfoService {
         // TODO: Programmatically access the CDI context to get the BuildInfo object
     }
 
-    public Appinfo getAppInfo() {
+    public Appinfo getAppinfo() {
         Appinfo ai = new Appinfo();
         // TODO: 1. Fill build information like buildTime, builtFor
         // TODO: 2. Fill runtime information like runBy, startupTime, createTime, currentTime, applicationName, applicationVersion
@@ -243,7 +277,7 @@ public class AppinfoService {
         return CDI.current().select(BuildInfo.class).get();
     }
 
-    public Appinfo getAppInfo() {
+    public Appinfo getAppinfo() {
         Appinfo ai = new Appinfo();
 
         ai.setBuildTime(this.getBuildTimeInfo().getTime());
@@ -309,7 +343,7 @@ public class AppinfoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().write(getAppinfoService().getAppInfo().asHumanReadableString());
+        resp.getWriter().write(getAppinfoService().getAppinfo().asHumanReadableString());
     }
 
     AppinfoService getAppinfoService() {

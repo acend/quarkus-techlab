@@ -1,4 +1,4 @@
-package ch.puzzle.quarkus.training.extension.appinfo;
+package ch.puzzle.quarkustechlab.appinfo;
 
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
@@ -8,7 +8,7 @@ import io.quarkus.runtime.annotations.ConfigRoot;
 public class AppinfoRuntimeConfig {
 
     /**
-     * Simple build information string
+     * Simple runBy information string
      */
     @ConfigItem
     String runBy;

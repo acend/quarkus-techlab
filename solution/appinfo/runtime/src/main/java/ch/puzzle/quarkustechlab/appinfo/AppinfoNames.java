@@ -1,4 +1,4 @@
-package ch.puzzle.quarkus.training.extension.appinfo;
+package ch.puzzle.quarkustechlab.appinfo;
 
 public class AppinfoNames {
     public static final String EXTENSION_NAME = "appinfo";

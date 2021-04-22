@@ -1,4 +1,4 @@
-package ch.puzzle.quarkus.training.extension.appinfo;
+package ch.puzzle.quarkustechlab.appinfo;
 
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;

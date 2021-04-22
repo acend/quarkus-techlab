@@ -1,7 +1,6 @@
-package ch.puzzle.appinfo.extension.deployment;
+package ch.puzzle.quarkustechlab.appinfo.deployment;
 
-import ch.puzzle.quarkus.training.extension.appinfo.*;
-
+import ch.puzzle.quarkustechlab.appinfo.*;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Singleton;
 import java.time.Instant;
 
-import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
 import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
 
 class AppinfoProcessor {
@@ -41,7 +39,7 @@ class AppinfoProcessor {
             String buildTime = appinfoConfig.recordBuildTime ? Instant.now().toString() : null;
             String builtFor = appinfoConfig.builtFor;
 
-            logger.info("Adding BuildInfo. RecordBuildTime="+appinfoConfig.recordBuildTime+", BuiltFor="+builtFor);
+            logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime, builtFor);
 
             syntheticBeans.produce(SyntheticBeanBuildItem.configure(BuildInfo.class).scope(Singleton.class)
                     .runtimeValue(recorder.createBuildInfo(buildTime, builtFor))
@@ -72,11 +70,11 @@ class AppinfoProcessor {
 
         if(shouldInclude(launchMode, appinfoConfig)) {
             String basePath = appinfoConfig.basePath;
-            if(appinfoConfig.basePath.startsWith("/")) {
-                basePath = appinfoConfig.basePath.replaceFirst("/", "");
+            if(basePath.startsWith("/")) {
+                basePath = basePath.replaceFirst("/", "");
             }
 
-            logger.info("Adding AppinfoServlet /"+basePath);
+            logger.info("Adding AppinfoServlet /{}", basePath);
 
             additionalBean.produce(ServletBuildItem.builder(basePath, AppinfoServlet.class.getName())
                     .addMapping("/"+basePath)
@@ -84,7 +82,7 @@ class AppinfoProcessor {
         }
     }
 
-    private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConfig appInfoConfig) {
-        return launchMode.getLaunchMode().isDevOrTest() || appInfoConfig.alwaysInclude;
+    private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConfig appinfoConfig) {
+        return launchMode.getLaunchMode().isDevOrTest() || appinfoConfig.alwaysInclude;
     }
 }

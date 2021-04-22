@@ -1,105 +1,27 @@
 ---
-title: "9.3. Collect BuildInfo"
-weight: 930
-sectionnumber: 9.3
+title: "9.4. Build Steps"
+weight: 940
+sectionnumber: 9.4
 description: >
-  Collection the information for our BuildInfo object
+  Complete our build processor with build steps.
 ---
 
-In the previous section you accessed the `BuildInfo` object. However, at this time this information is not yet collected.
+In the previous section we created our extension configuration. Earlier we have written our runtime code which accesses
+the `BuildInfo` object. However, at this time this information has not yet been collected.
 
-In this section we will:
+In this section we will complete our `AppinfoProcessor`:
 
-* Define the build-time configuration
 * Collect the information `buildTime`
 * Read and store the `builtFor` configuration value
 * Create our BuildInfo object
 * Conditionally disable the collection of the values above
+* Write build steps for our undertow web servlet
+* Instruct Quarkus ArC to include an additional bean
 
 {{% alert title="Code Location" color="warning" %}}
 If not stated otherwise, all classes in this section belong to `deployment/src/main/java/ch/puzzle/quarkustechlab/appinfo/deployment/`.
 There should already be the generated `AppinfoProcessor` class in this folder.
 {{% /alert %}}
-
-
-## Configuration
-
-Quarkus uses different configuration phases. The most important are:
-
-Phase                         | Description
-------------------------------|--------------------------------------------
-`BUILD_TIME`                  | Only available at build time
-`BUILD_AND_RUN_TIME_FIXED`    | Read at build time and exposed but not changeable at run time.
-`RUN_TIME`                    | Available at run time
-
-For more details have a look at [Configuration Root Phases](https://quarkus.io/guides/writing-extensions#configuration-root-phases)
-
-
-### Task {{% param sectionnumber %}}.1 - Defining configuration
-
-We will define our built-time configuration to contain the following properties:
-
-* **builtFor:** Simple string
-* **recordBuildTime:** Boolean whether the collection of information at build time should run or not
-* **alwaysInclude:** Boolean if the extension should always be included or only for prod and test profile.
-
-Use the template below for creating the `AppinfoConfig.java` and complete the TODOs:
-
-* Annotate the class with the `@ConfigRoot` annotation
-  * Set the correct value for name (hint: extension name)
-  * Set correct and phase (hint: have a look at the `ConfigPhase` class)
-* Define config items from the list above
-
-```java
-// TODO: annotate class
-public class AppinfoConfig {
-
-    /**
-     * Simple builtFor information string
-     */
-    // TODO: define builtFor as config item
-
-    /**
-     * Include build time collection feature in build
-     */
-    // TODO: define recordBuildTime as config item with reasonable default
-
-    /**
-     * Always include this. By default this will only be included in dev and test.
-     * Setting this to true will also include this in Prod
-     */
-    // TODO: define alwaysInclude as config item with reasonable default
-}
-```
-
-{{% details title="Task hint" %}}
-The built-time configuration looks like this:
-
-```java
-@ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.BUILD_TIME)
-public class AppinfoConfig {
-
-    /**
-     * Simple builtFor information string
-     */
-    @ConfigItem
-    String builtFor;
-
-    /**
-     * Include build time collection feature in build
-     */
-    @ConfigItem(defaultValue = "true")
-    boolean recordBuildTime;
-
-    /**
-     * Always include this. By default this will only be included in dev and test.
-     * Setting this to true will also include this in Prod
-     */
-    @ConfigItem(defaultValue = "false")
-    boolean alwaysInclude;
-}
-```
-{{% /details %}}
 
 
 ## Bootstrapping a Quarkus application
@@ -115,9 +37,7 @@ The work in this phase is done with build steps handled by the Build Step Proces
 
 A build step can produce and consume build items and may therefore depend on each other. Think about a build step which
 is consuming a build item produced by an earlier stage. For example build steps are able to access the Jandex annotation
-information and search for specific annotations in code and act accordingly.
-
-The output of these build steps is recorded bytecode `@Record(STATIC_INIT)` or `@Record(RUNTIME_INIT)`.
+information and search for specific annotations in code and act accordingly.  
 
 
 ### Static Init
@@ -141,7 +61,7 @@ Generally you should move as much code as possible to the STATIC_INIT phase as t
 native image.
 
 
-### Task {{% param sectionnumber %}}.2 - Collection Build Information
+### Task {{% param sectionnumber %}}.3 - Collection Build Information
 
 In this task we create a build step which reads the build configuration and collects the build time. This information
 will be recorded as BuildInfo which is then available at runtime.
@@ -197,11 +117,14 @@ The build step does the following:
   * The `AppinfoRecorder` to record the invocation
   * A `BuildProducer<SyntheticBeanBuildItem>` object
 * Is a `STATIC_INIT` recording
-* Do not forget to annotate the `BuildStep`
+
+For a complete list of all Build items have a look at [All BuildItems](https://quarkus.io/guides/all-builditems)
 
 Use this template as starting point:
 
 ```java
+private static final Logger logger = LoggerFactory.getLogger(AppinfoProcessor.class);
+
 // TODO: annotations for build step and record
 void syntheticBean(/* TODO: method arguments */) {
 
@@ -211,7 +134,7 @@ void syntheticBean(/* TODO: method arguments */) {
         String buildTime = appinfoConfig.recordBuildTime ? Instant.now().toString() : null;
         String builtFor = appinfoConfig.builtFor;
 
-        logger.info("Adding BuildInfo. RecordBuildTime="+appinfoConfig.recordBuildTime+", BuiltFor="+builtFor);
+        logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime, builtFor);
 
         syntheticBeans.produce(SyntheticBeanBuildItem.configure(/* TODO: destination class */).scope(Singleton.class)
                 .runtimeValue(/* TODO: call the recorder */)
@@ -232,18 +155,20 @@ private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConf
 Your code may look like this:
 
 ```java
+private static final Logger logger = LoggerFactory.getLogger(AppinfoProcessor.class);
+
 @BuildStep
 @Record(STATIC_INIT)
-void syntheticBean(AppinfoConfig appInfoConfig,
+void syntheticBean(AppinfoConfig appinfoConfig,
                    LaunchModeBuildItem launchMode,
                    AppinfoRecorder recorder,
                    BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
 
-    if(shouldInclude(launchMode, appInfoConfig)) {
-        String buildTime = appInfoConfig.recordBuildTime ? Instant.now().toString() : null;
-        String builtFor = appInfoConfig.builtFor;
+    if(shouldInclude(launchMode, appinfoConfig)) {
+        String buildTime = appinfoConfig.recordBuildTime ? Instant.now().toString() : null;
+        String builtFor = appinfoConfig.builtFor;
 
-        logger.info("Adding BuildInfo. RecordBuildTime="+appInfoConfig.recordBuildTime+", BuiltFor="+builtFor);
+        logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime, builtFor);
 
         syntheticBeans.produce(SyntheticBeanBuildItem.configure(BuildInfo.class).scope(Singleton.class)
                 .runtimeValue(recorder.createBuildInfo(buildTime, builtFor))
@@ -257,3 +182,84 @@ private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConf
 }
 ```
 {{% /details %}}
+
+
+## Undertow Servlet
+
+Our extension provides an undertow servlet as an endpoint. We have already written the servlet code `AppinfoServlet`  
+in a previous section. Quarkus provides a `ServletBuildItem` which will be used to add our undertow servlet.
+
+
+### Task {{% param sectionnumber %}}.1 - Undertow BuildStep
+
+Open the `AppinfoProcessor` and create a new BuildStep which produces a `ServletBuildItem`. As the collection of the build
+information this step should also use the `shouldInclude` method to conditionally exclude it.
+
+Some details what the implementation should do
+
+* Produce a `ServletBuildItem` (hint: `ServletBuildItem.builder(...)`)
+* BasePath should be configurable (hint: you have to add a new build-config `basePath`)
+* Should use the `shouldInclude` method to conditionally exclude it
+
+{{% details title="Task hint" %}}
+The additional build configuration in `AppinfoConfig` looks like this:
+```java
+/**
+ * Specify basePath for extension endpoint
+ */
+@ConfigItem(defaultValue = AppinfoNames.EXTENSION_NAME)
+String basePath;
+```
+
+The code in the `AppinfoProcessor` should look like this:
+
+```java
+@BuildStep
+void createServlet(LaunchModeBuildItem launchMode,
+                   AppinfoConfig appinfoConfig,
+                   BuildProducer<ServletBuildItem> additionalBean) {
+
+    if(shouldInclude(launchMode, appinfoConfig)) {
+        String basePath = appinfoConfig.basePath;
+        if(basePath.startsWith("/")) {
+            basePath = basePath.replaceFirst("/", "");
+        }
+
+        logger.info("Adding AppinfoServlet /{}", basePath);
+
+        additionalBean.produce(ServletBuildItem.builder(basePath, AppinfoServlet.class.getName())
+                .addMapping("/"+basePath)
+                .build());
+    }
+}
+```
+{{% /details %}}
+
+
+### Task {{% param sectionnumber %}}.2 - Additional Beans
+
+Beside the `AppinfoServlet` our extension also depends on the `AppinfoService`. We have to instruct the build processor
+to analyze and register this additional class. This ensures that the `AppinfoService` will be available for the Quarkus
+container.
+
+The `AdditionalBeanBuildItem` is a build item from Quarkus ArC (the Quarkus Dependency Injection). For a complete list of
+build items have a look at [All BuildItems](https://quarkus.io/guides/all-builditems).
+
+Use this build step below to add the additional bean:
+
+```java
+@BuildStep
+void registerAdditionalBeans(AppinfoConfig appinfoConfig,
+                             LaunchModeBuildItem launchMode,
+                             BuildProducer<AdditionalBeanBuildItem> additionalBean) {
+
+    if(shouldInclude(launchMode, appinfoConfig)) {
+        logger.info("Adding AppinfoService");
+        // Add AppInfoService as AdditionalBean - else it is not available at runtime.
+        additionalBean.produce(AdditionalBeanBuildItem.builder()
+                .setUnremovable()
+                .addBeanClass(AppinfoService.class)
+                .build());
+    }
+}
+```

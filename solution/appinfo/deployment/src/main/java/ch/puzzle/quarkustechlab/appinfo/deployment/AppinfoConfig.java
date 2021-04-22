@@ -1,6 +1,6 @@
-package ch.puzzle.appinfo.extension.deployment;
+package ch.puzzle.quarkustechlab.appinfo.deployment;
 
-import ch.puzzle.quarkus.training.extension.appinfo.AppinfoNames;
+import ch.puzzle.quarkustechlab.appinfo.AppinfoNames;
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
