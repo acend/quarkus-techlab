@@ -125,3 +125,5 @@ public class DataService {
 ```
 
 {{% /details %}}
+
+In the Jaeger UI you should see your measurement as the baggage item in the trace.
