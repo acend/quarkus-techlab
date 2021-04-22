@@ -1,0 +1,19 @@
+<span class="badge badge-light">
+    <i class="fa fa-cogs fa-fw"></i> Build Time <span class="badge badge-light">{info:data.appinfo.buildTime}</span>
+</span>
+<br />
+<span class="badge badge-light">
+    <i class="fa fa-clock fa-fw"></i> Start Time <span class="badge badge-light">{info:data.appinfo.startupTime}</span>
+</span>
+<br />
+<span class="badge badge-light">
+    <i class="fa fa-compass fa-fw"></i> Built for <span class="badge badge-light">{info:data.appinfo.builtFor} </span>
+</span>
+<span class="badge badge-light">
+    <i class="fa fa-child fa-fw"></i> Run by <span class="badge badge-light">{info:data.appinfo.runBy} </span>
+</span>
+<br />
+<br />
+<a href="/{config:property('quarkus.appinfo.base-path')}" class="badge badge-light">
+    <i class="fa fa-map-signs fa-fw"></i> Endpoint <span class="badge badge-light">{config:property('quarkus.appinfo.base-path')}</span>
+</a>

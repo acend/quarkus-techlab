@@ -1,0 +1,9 @@
+name: Appinfo
+description: Simple Appinfo Extension
+metadata:
+  keywords:
+    - appinfo
+  guide: http://puzzle.ch
+  categories:
+    - "miscellaneous"
+  status: "experimental"
