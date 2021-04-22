@@ -126,7 +126,7 @@ which refers to the `AppinfoService`. Your may navigate to the information with 
 {{% /details %}}
 
 
-### Task {{% param sectionnumber %}}.2 - Rebuild extension
+### Task {{% param sectionnumber %}}.3 - Rebuild extension
 
 Since you changed the extension code you have to rebuild the extension. Head over to the previous section
 to find the instructions. You also have to restart the `appinfo-app` service to pickup the new dependency.
