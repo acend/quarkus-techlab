@@ -55,7 +55,7 @@ cannot annotate them.
 
 For this to achieve we could create a simple extension:
 
-```shell script
+```s
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extension -N -DgroupId=ch.puzzle.quarkustechlab -DextensionId=message-converter-as-beans -DwithoutTests
 ```
 
@@ -105,19 +105,19 @@ That is a very simple example how an extension could help to adapt a dependency 
 Quarkus extensions provide your project with several useful dependencies.
 From inside a Quarkus project, you can obtain a list of the available extensions with:
 
-```shell script
+```s
 ./mvnw quarkus:list-extensions
 ```
 
 Adding extensions to your project is as simple as:
 
-```shell script
+```s
 ./mvnw quarkus:add-extension -Dextensions="hibernate-validator"
 ```
 
 Extensions are passed using a comma-seperated list. They can also be installed with matching patterns:
 
-```shell script
+```s
 ./mvnw quarkus:add-extension -Dextensions="hibernate-*"
 ```
 

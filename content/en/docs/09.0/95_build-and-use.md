@@ -18,7 +18,7 @@ Since we are working locally we need to build our extension locally and add it t
 
 Run the following command from the extension root folder:
 
-```shell script
+```s
 mvn clean package install
 ```
 
@@ -56,7 +56,7 @@ quarkus.appinfo.run-by=Puzzle ITC GmbH
 
 Enter the `{{% param "solution_code_basedir" %}}appinfo-app` folder and run the following command:
 
-```shell script
+```s
 ./mvnw clean compile quarkus:dev
 ```
 
