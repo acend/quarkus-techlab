@@ -35,6 +35,7 @@ extensions | [] | The list of extensions to add to the project (comma-separated)
 
 You will receive a generated project including the java source code files and Dockerfiles generated for you.
 
+
 ### {{% param sectionnumber %}}.4: Creating native executables
 
 Native executables make Quarkus applications ideal for containers and serverless workloads.
