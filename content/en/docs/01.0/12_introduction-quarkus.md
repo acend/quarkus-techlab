@@ -158,7 +158,9 @@ For example you may change the Debug port with the following command
 ./mvnw compile quarkus:dev -Ddebug=5000 
 ```
 
+
 ## Quarkus Dev UI
+
 In the development mode `mvn quarkus:dev`, quarkus provides a development ui.
 
 ![Quarkus Dev UI](../dev-ui-overview.png)

@@ -57,8 +57,8 @@ Extensions are passed using a comma-seperated list. They can also be installed w
 ./mvnw quarkus:add-extension -Dextensions="hibernate-*"
 ```
 
-### {{% param sectionnumber %}}.4: Creating native executables
 
+### {{% param sectionnumber %}}.4: Creating native executables
 
 Native executables make Quarkus applications ideal for containers and serverless workloads.
 
