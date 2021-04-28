@@ -35,29 +35,6 @@ extensions | [] | The list of extensions to add to the project (comma-separated)
 
 You will receive a generated project including the java source code files and Dockerfiles generated for you.
 
-
-## {{% param sectionnumber %}}.1: Extensions
-
-Quarkus extensions provide your project with several useful dependencies.
-From inside a Quarkus project, you can obtain a list of the available extensions with:
-
-```s
-./mvnw quarkus:list-extensions
-```
-
-Adding extensions to your project is as simple as:
-
-```s
-./mvnw quarkus:add-extension -Dextensions="hibernate-validator"
-```
-
-Extensions are passed using a comma-seperated list. They can also be installed with matching patterns:
-
-```s
-./mvnw quarkus:add-extension -Dextensions="hibernate-*"
-```
-
-
 ### {{% param sectionnumber %}}.4: Creating native executables
 
 Native executables make Quarkus applications ideal for containers and serverless workloads.

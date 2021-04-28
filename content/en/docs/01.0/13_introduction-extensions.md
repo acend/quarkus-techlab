@@ -1,10 +1,10 @@
 ---
-title: "1.3 Introduction to Extensions"
+title: "1.3 Introduction to Extension"
 linkTitle: "1.3 Introduction to Extensions"
 weight: 130
 sectionnumber: 1.3
 description: >
-  Introduction to Quarkus Extensions
+  Introduction to Quarkus extensions
 ---
 
 ## Quarkus Extensions
@@ -98,5 +98,27 @@ This achieves that all non-abstract classes from `my.dependency.package` ending 
 as a `@ApplicationScoped` CDI bean.
 
 That is a very simple example how an extension could help to adapt a dependency to the Quarkus world.
+
+
+### Listing and adding extensions
+
+Quarkus extensions provide your project with several useful dependencies.
+From inside a Quarkus project, you can obtain a list of the available extensions with:
+
+```shell script
+./mvnw quarkus:list-extensions
+```
+
+Adding extensions to your project is as simple as:
+
+```shell script
+./mvnw quarkus:add-extension -Dextensions="hibernate-validator"
+```
+
+Extensions are passed using a comma-seperated list. They can also be installed with matching patterns:
+
+```shell script
+./mvnw quarkus:add-extension -Dextensions="hibernate-*"
+```
 
 [^1]: [Jandex is a space efficient Java annotation indexer and offline reflection library](https://github.com/wildfly/jandex)
