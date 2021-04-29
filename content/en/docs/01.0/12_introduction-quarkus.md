@@ -187,6 +187,42 @@ In summary:
 * Adaption of a framework or technology to this build-time approach is usually done within extensions.
 
 
+## Configuration Phases
+
+Since a lot of tasks in Quarkus are run at build time, this also affects the configuration. In Quarkus there are
+multiple configuration phases.
+
+Phase name       | Read & avail. at build time | Avail. at run time | Read during static init | Re-read during startup (native executable) | Notes
+-----------------|-----------------------------|--------------------|-------------------------|--------------------------------------------|------
+`BUILD_TIME`     | Yes | No | No | No | Appropriate for things which affect build.
+`BUILD_AND_RUN_TIME_FIXED`   | Yes | Yes | No | No | Appropriate for things which affect build and must be visible for run time code. Not read from config at run time.
+`BOOTSTRAP`      | No | Yes | No | Yes | Used when runtime configuration needs to be obtained from an external system (like `Consul`), but details of that system need to be configurable (for example Consul's URL). The high level way this works is by using the standard Quarkus config sources (such as properties files, system properties, etc.) and producing `ConfigSourceProvider` objects which are subsequently taken into account by Quarkus when creating the final runtime `Config` object.
+`RUN_TIME`       | No | Yes | Yes | Yes | Not available at build, read at start in all modes.
+
+Source and more details [Configuration Root Phases](https://quarkus.io/guides/writing-extensions#configuration-root-phases)
+
+We will use configuration contexts in the &laquo;Quarkus Extension Lab&raquo;.
+
+
+### Example
+
+Let us have a look at an example. You want to use the Apicurio Registry[^1] as your Schema Registry for your Kafka Avro[^2]
+Schemas and as well for your API designs. Apicurio provides different storage implementations and you like to have
+stored the data in a oracle database. There is also an official docker-image `apicurio/apicurio-registry-sql` available.
+
+However, is this image usable for our case? Unfortunately not. The image is built for postgres. The needed configuration
+for your runtime environment is easily overridable using environment variables like
+`QUARKUS_DATASOURCE_USERNAME`.
+
+These are typical properties which must be overridable at runtime. However, properties like JDBC driver are fixed at build-time
+even if the database driver would be included we would not be able to override the `QUARKUS_DATASOURCE_JDBC_DRIVER` property.
+
+![Configuration Properties](../configuration-properties.png)
+
+We can also see this in the [All Configuration Overview](https://quarkus.io/guides/all-config). Properties with the lock
+symbol are fixed at build time. Changing these strictly requires rebuilding the application.
+
+
 ## Development Mode
 
 Quarkus comes with a built-in development mode. Run your application with:
@@ -319,3 +355,6 @@ With the provided Configuration tool, you are able to change the runtime config 
 without having to restart the Quarkus application. There is also a console showing the log output.
 
 ![Quarkus Dev UI](../config-ui.png)
+
+[^1]: [Apicurio Registry](https://www.apicur.io/registry/)
+[^2]: [Apache Avro](https://avro.apache.org/)
