@@ -340,7 +340,7 @@ For example you may change the Debug port with the following command
 
 ## Quarkus Dev UI
 
-In the development mode `mvn quarkus:dev`, quarkus provides a development ui.
+In the development mode Quarkus provides a development ui available at `/q/dev`.
 
 ![Quarkus Dev UI](../dev-ui-overview.png)
 
