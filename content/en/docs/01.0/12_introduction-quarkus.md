@@ -217,7 +217,7 @@ for your runtime environment is easily overridable using environment variables l
 These are typical properties which must be overridable at runtime. However, properties like JDBC driver are fixed at build-time
 even if the database driver would be included we would not be able to override the `QUARKUS_DATASOURCE_JDBC_DRIVER` property.
 
-![Configuration Properties](../configuration-properties.png)
+![Configuration Properties](../config-properties.png)
 
 We can also see this in the [All Configuration Overview](https://quarkus.io/guides/all-config). Properties with the lock
 symbol are fixed at build time. Changing these strictly requires rebuilding the application.
