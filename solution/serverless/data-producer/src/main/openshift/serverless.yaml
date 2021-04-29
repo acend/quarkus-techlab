@@ -1,0 +1,11 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: data-producer-serverless
+spec:
+  template:
+    spec:
+      containers:
+        - image: quay.io/puzzle/quarkus-serverless-producer:rest
+          ports:
+            - containerPort: 8080
