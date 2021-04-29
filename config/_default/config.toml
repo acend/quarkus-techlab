@@ -77,7 +77,7 @@ url = "https://www.puzzle.ch"
 
 lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
-quarkusVersion = "1.13.2.Final"
+quarkusVersion = "1.13.3.Final"
 
 folder_extension = "appinfo"
 
