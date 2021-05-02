@@ -1,9 +1,9 @@
 ---
-title: "8. Tracing"
+title: "8. Observability"
 weight: 8
 sectionnumber: 8
 description: >
-  Tracing in distrubuted systems with Jaeger
+  Metrics and Tracing in distributed systems
 ---
 
 

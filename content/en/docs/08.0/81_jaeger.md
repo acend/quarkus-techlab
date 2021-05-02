@@ -1,6 +1,6 @@
 ---
-title: "8.1 Tracing powered by Jaeger"
-linkTitle: "8.1 Tracing powered by Jaeger"
+title: "8.1 Tracing with Jaeger"
+linkTitle: "8.1 Tracing with Jaeger"
 weight: 810
 sectionnumber: 8.1
 description: >
