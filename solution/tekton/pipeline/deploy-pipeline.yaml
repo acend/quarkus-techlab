@@ -1,0 +1,69 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-and-deploy
+spec:
+  params:
+    - name: git-url
+      type: string
+      description: git repo url
+    - name: git-revision
+      type: string
+      description: git repo revision
+    - name: deployment-name
+      type: string
+      description: name of the deployment to be patched
+    - name: docker-file
+      description: Path to the Dockerfile
+      default: 'src/main/docker/Dockerfile.binary'
+    - name: image-name
+      description: name of the resulting image (inclusive registry)
+    - name: manifest-dir
+      description: location of the OpenShift templates
+      default: 'src/main/openshift/templates'
+  tasks:
+    - name: git-checkout
+      params:
+        - name: deleteExisting
+          value: 'true'
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source-workspace
+    - name: build-image
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      params:
+        - name: TLSVERIFY
+          value: 'false'
+        - name: DOCKERFILE
+          value: $(params.docker-file)
+        - name: IMAGE
+          value: $(params.image-name)
+        - name: CONTEXT
+          value: solution/rest/$(params.deployment-name)/.
+      runAfter:
+        - git-checkout
+      workspaces:
+        - name: source
+          workspace: source-workspace
+    - name: apply-manifests
+      taskRef:
+        name: apply-manifests
+      params:
+        - name: manifest-dir
+          value: $(params.manifest-dir)
+      runAfter:
+        - build-image
+      workspaces:
+        - name: source
+          workspace: source-workspace
+  workspaces:
+    - name: source-workspace
