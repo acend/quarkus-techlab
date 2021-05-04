@@ -33,7 +33,7 @@ items:
           containers:
             - env:
                 - name: QUARKUS_HTTP_PORT
-                  value: 8080
+                  value: "8080"
               image: data-consumer
               imagePullPolicy: Always
               livenessProbe:
