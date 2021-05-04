@@ -1,1 +1,0 @@
-# quarkus-techlab-infrastructure
