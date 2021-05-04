@@ -1,10 +1,10 @@
 ---
-title: "5.2 Defining pipelines"
-linkTitle: "5.2 Defining pipelines"
-weight: 520
-sectionnumber: 5.2
+title: "5.1 Tekton"
+linkTitle: "5.1 Tekton"
+weight: 510
+sectionnumber: 5.1
 description: >
-   Defining pipelines for our microservices.
+   Tekton basics.
 ---
 
 Tekton is a Kubernetes-native, continuous integration and delivery (CI/CD) framework that enables you to create containerized, composable, and configurable workloads declaratively through CRDs.
