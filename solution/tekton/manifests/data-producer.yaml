@@ -1,5 +1,3 @@
--- data-consumer.yml
-
 apiVersion: v1
 kind: List
 metadata:
@@ -12,28 +10,28 @@ items:
     metadata:
       labels:
         application: quarkus-techlab
-      name: data-consumer
+      name: data-producer
   
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
       labels:
         application: quarkus-techlab
-      name: data-consumer
+      name: data-producer
     spec:
       replicas: 1
       selector:
-        deploymentConfig: data-consumer
+        deploymentConfig: data-producer
       strategy:
         type: Recreate
       template:
         metadata:
           labels:
             application: quarkus-techlab
-            deploymentConfig: data-consumer
+            deploymentConfig: data-producer
         spec:
           containers:
-            - image: data-consumer
+            - image: data-producer
               imagePullPolicy: Always
               livenessProbe:
                 failureThreshold: 5
@@ -55,7 +53,7 @@ items:
                 periodSeconds: 20
                 successThreshold: 1
                 timeoutSeconds: 15
-              name: data-consumer
+              name: data-producer
               port:
                 - containerPort: 8080
                   name: http
@@ -71,10 +69,10 @@ items:
         - imageChangeParams:
             automatic: true
             containerNames:
-              - data-consumer
+              - data-producer
             from:
               kind: ImageStreamTag
-              name: data-consumer:latest
+              name: data-producer:latest
           type: ImageChange
         - type: ConfigChange
   
@@ -83,14 +81,14 @@ items:
     metadata:
       labels:
         application: quarkus-techlab
-      name: data-consumer
+      name: data-producer
     spec:
       ports:
-        - name: data-consumer-http
+        - name: data-producer-http
           port: 8080
           protocol: TCP
           targetPort: 8080
       selector:
-        deploymentConfig: data-consumer
+        deploymentConfig: data-producer
       sessionAffinity: None
       type: ClusterIP
