@@ -1,8 +1,8 @@
 ---
-title: "5.1 Defining pipelines"
-linkTitle: "5.1 Defining pipelines"
-weight: 510
-sectionnumber: 5.1
+title: "5.2 Defining pipelines"
+linkTitle: "5.2 Defining pipelines"
+weight: 520
+sectionnumber: 5.2
 description: >
    Defining pipelines for our microservices.
 ---
