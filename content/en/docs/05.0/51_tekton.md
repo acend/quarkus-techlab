@@ -54,8 +54,8 @@ A Trigger captures an external event, such as a Git pull request and processes t
 
 A Condition refers to a validation or check, which is executed before a Task is run in your Pipeline. Conditions are like if statements which perform logical tests, with a return value of True or False. A Task is executed if all Conditions return True, but if any of the Conditions fail, the Task and all subsequent Tasks are skipped. You can use Conditions in your Pipeline to create complex workflows covering multiple scenarios.
 
-![Static Pipeline Definition](pipeline-static-definition.png)
+![Static Pipeline Definition](../pipeline-static-definition.png)
 *Static definition of a Pipeline*
 
-![Pipeline Runtime View](pipeline-runtime-view.png)
+![Pipeline Runtime View](../pipeline-runtime-view.png)
 *Runtime view of a Pipeline showing mapping to pods and containers*
