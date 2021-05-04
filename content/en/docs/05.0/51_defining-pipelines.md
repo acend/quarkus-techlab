@@ -195,10 +195,10 @@ To run your newly defined Pipeline you will use the Tekton binary (`tkn`). Simpl
 First add a multistage Dockerfile for JVM builds to your two repositories:
 
 ```Dockerfile
-# quarkus-techlab-data-consumer/src/main/docker/Dockerfile.multistage.jvm
+# Dockerfile.multistage
 
 ## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/centos-quarkus-maven:20.1.0-java11 AS build
+FROM quay.io/quarkus/centos-quarkus-maven:21.0.0-java11 AS build
 COPY pom.xml /usr/src/app/
 RUN mvn -f /usr/src/app/pom.xml -B de.qaware.maven:go-offline-maven-plugin:1.2.5:resolve-dependencies
 COPY src /usr/src/app/src
@@ -208,13 +208,11 @@ USER quarkus
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 ## Stage 2 : create the docker final image
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.1
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3 
 
 ARG JAVA_PACKAGE=java-11-openjdk-headless
 ARG RUN_JAVA_VERSION=1.3.8
-
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
-
 # Install java and the run-java script
 # Also set up permissions for user `1001`
 RUN microdnf install curl ca-certificates ${JAVA_PACKAGE} \
@@ -231,9 +229,11 @@ RUN microdnf install curl ca-certificates ${JAVA_PACKAGE} \
 
 # Configure the JAVA_OPTIONS, you can add -XshowSettings:vm to also display the heap size.
 ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
-
-COPY --from=build /usr/src/app/target/lib/* /deployments/lib/
-COPY --from=build /usr/src/app/target/*-runner.jar /deployments/app.jar
+# We make four distinct layers so if there are application changes the library layers can be re-used
+COPY --from=build --chown=1001 /usr/src/app/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=build --chown=1001 /usr/src/app/target/quarkus-app/*.jar /deployments/
+COPY --from=build --chown=1001 /usr/src/app/target/quarkus-app/app/ /deployments/app/
+COPY --from=build --chown=1001 /usr/src/app/target/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8080
 USER 1001
