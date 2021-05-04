@@ -7,7 +7,18 @@ description: >
    Test Native builds for Quarkus.
 ---
 
-## {{% param sectionnumber %}}.1
+{{% alert color="primary" %}}
+Be aware, a generated Quarkus project contains a `.dockerignore` file. This file limits the scope of the files sent
+to the docker deamon for building a docker container (similar concept as the `.gitignore` files). If you encounter
+errors like the following you may tweak your `.dockerignore` file or for simplicity delete it.
+
+```
+COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such file or directory
+```
+{{% /alert %}}
+
+
+## {{% param sectionnumber %}}.1 Creating Docker Container
 
 As the name says, native builds will run the Quarkus application as a native executable. The executable will get optimized and prepared in the ahead-of-time compilation process. As you would expect the compilation and build of a native executable takes a ridiculous amount of memory and time. Native executables are built by the GraalVM or the upstream community project Mandrel. If you want to read further about native executables in Quarkus head over to the official [Documentation](https://quarkus.io/guides/building-native-image).
 

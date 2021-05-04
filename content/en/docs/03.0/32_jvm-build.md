@@ -19,7 +19,7 @@ COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such f
 {{% /alert %}}
 
 
-## {{% param sectionnumber %}}.1 Creating Docker Containers
+## {{% param sectionnumber %}}.1 Creating Docker Container
 
 To build a Quarkus application to be run with the JVM you can use the provided Dockerfile `Dockerfile.jvm`.
 
