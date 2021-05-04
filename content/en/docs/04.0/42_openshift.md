@@ -150,15 +150,15 @@ Due to the fact that we defined an trigger on ImageChange in the DeploymentConfi
 
 ```s
 // Tag images
-docker tag data-producer:native $REGISTRY/$OPENSHIFT_PROJECT/data-producer:latest
-docker tag data-consumer:native $REGISTRY/$OPENSHIFT_PROJECT/data-consumer:latest
+docker tag data-producer:native {{% param "registry_url" %}}/$OPENSHIFT_PROJECT/data-producer:latest
+docker tag data-consumer:native {{% param "registry_url" %}}/$OPENSHIFT_PROJECT/data-consumer:latest
 
 // Login to preferred registry
-docker login -u $USERNAME $REGISTRY -p $(oc whoami -t)
+docker login -u $USERNAME {{% param "registry_url" %}} -p $(oc whoami -t)
 
 // Push images
-docker push $REGISTRY/$OPENSHIFT_PROJECT/data-producer:latest
-docker push $REGISTRY/$OPENSHIFT_PROJECT/data-consumer:latest
+docker push {{% param "registry_url" %}}/$OPENSHIFT_PROJECT/data-producer:latest
+docker push {{% param "registry_url" %}}/$OPENSHIFT_PROJECT/data-consumer:latest
 
 ```
 
