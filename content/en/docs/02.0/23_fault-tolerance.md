@@ -61,7 +61,7 @@ In our data-consumer project we will add the retry mechanism. Add the extension 
 public interface DataProducerService {
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 10)
     SensorMeasurement getSensorMeasurement();
 }
@@ -106,7 +106,7 @@ Then update the DataProducerService of our data-consumer to time out after 500ms
 public interface DataProducerService {
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Timeout(500)
     SensorMeasurement getSensorMeasurement();
 }
@@ -129,7 +129,7 @@ Let's update the example from before to use a fallback if it takes longer than t
 public interface DataProducerService {
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Timeout(500)
     @Fallback(fallbackMethod = "getDefaultMeasurement")
     SensorMeasurement getSensorMeasurement();

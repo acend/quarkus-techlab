@@ -119,7 +119,7 @@ In the data-consumer microservice we will have another resource on the path "/da
 public interface DataProducerService {
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     SensorMeasurement getSensorMeasurement();
 }
 
