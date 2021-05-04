@@ -128,8 +128,8 @@ We then create a new project
 
 ```s
 
-oc new-project quarkus-techlab-userXY
-oc project quarkus-techlab-userXY
+oc new-project {{% param "k8s_user_name" %}}
+oc project {{% param "k8s_user_name" %}}
 
 ```
 

@@ -15,7 +15,7 @@ Create the artemis resources:
 
 parameters:
   - name: METADATA_LABELS_APPLICATION
-    value: quarkus-techlab-user
+    value: {{% param "k8s_user_name" %}}
   - name: METADATA_LABELS_TEMPLATE
     value: quarkus-techlab-template
   - name: ARTEMIS_SERVICE_NAME

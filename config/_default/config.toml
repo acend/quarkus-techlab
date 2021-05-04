@@ -79,6 +79,8 @@ lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
 quarkusVersion = "1.13.3.Final"
 
+k8s_user_name = "userXY"
+
 folder_extension = "appinfo"
 
 copyright = "Puzzle ITC GmbH"
