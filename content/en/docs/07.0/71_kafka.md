@@ -81,7 +81,7 @@ kind: KafkaTopic
 metadata:
   name: manual
   labels:
-    strimzi.io/cluster: {{% param "k8s_user_name" %}}
+    strimzi.io/cluster: quarkus-techlab
 spec:
   partitions: 1
   replicas: 1
