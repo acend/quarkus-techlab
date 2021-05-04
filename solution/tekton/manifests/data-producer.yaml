@@ -31,7 +31,10 @@ items:
             deploymentConfig: data-producer
         spec:
           containers:
-            - image: data-producer
+            - env:
+                - name: QUARKUS_HTTP_PORT
+                  value: 8080
+              image: data-producer
               imagePullPolicy: Always
               livenessProbe:
                 failureThreshold: 5
