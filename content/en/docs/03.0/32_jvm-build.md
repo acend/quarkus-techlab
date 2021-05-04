@@ -7,7 +7,19 @@ description: >
    Test JVM builds for Quarkus.
 ---
 
-## {{% param sectionnumber %}}.1
+
+{{% alert color="primary" %}}
+Be aware, a generated Quarkus project contains a `.dockerignore` file. This file limits the scope of the files sent
+to the docker deamon for building a docker container (similar concept as the `.gitignore` files). If you encounter
+errors like the following you may tweak your `.dockerignore` file or for simplicity delete it.
+
+```
+COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such file or directory
+```
+{{% /alert %}}
+
+
+## {{% param sectionnumber %}}.1 Creating Docker Containers
 
 To build a Quarkus application to be run with the JVM you can use the provided Dockerfile `Dockerfile.jvm`.
 
