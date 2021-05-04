@@ -80,7 +80,7 @@ solution_code_basedir = "/solution/"
 quarkusVersion = "1.13.3.Final"
 
 k8s_user_name = "userXY"
-registry_url = "registry.$CLUSTER_URL"
+registry_url = "default-route-openshift-image-registry.$CLUSTER_URL"
 
 folder_extension = "appinfo"
 

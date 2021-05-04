@@ -184,10 +184,19 @@ Now test your data-consumer application with:
 
 ```s
 
- curl http://$(oc get route data-consumer -o go-template --template='{{.spec.host}}')/data
+curl http://$(oc get route data-consumer -o go-template --template='{{.spec.host}}')/data
 
 ```
 
 You should see the response given from the application in the expected format.
 
-Nice, our application now runs in the clouds!
+Nice, our application now runs in the clouds.
+
+And that gets even better, have a look at the resource usage (example with native images used).
+
+```s
+oc adm top pods                                                                                                 
+NAME                    CPU(cores)   MEMORY(bytes)   
+data-consumer-1-jsvm2   0m           19Mi            
+data-producer-1-56ltq   0m           13Mi
+```
