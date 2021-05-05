@@ -15,17 +15,17 @@ objects:
   spec:
     params:
     - name: deployment-name
-      value: data-transformer
+      value: data-consumer
     - name: docker-file
-      value: src/main/docker/Dockerfile.binary
+      value: src/main/docker/Dockerfile.multistage.jvm
     - name: git-revision
       value: master
     - name: git-url
-      value: https://github.com/puzzle/quarkus-techlab-data-transformer.git
+      value: https://github.com/puzzle/quarkus-techlab.git
     - name: image-name
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-transformer:latest
+      value: image-registry.openshift-image-registry.svc:5000/$(oc project -q)/data-consumer:latest
     - name: manifest-dir
-      value: src/main/openshift/templates
+      value: solution/tekton/manifests/data-consumer.yaml
     pipelineRef:
       name: build-and-deploy
     serviceAccountName: pipeline
