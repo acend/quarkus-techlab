@@ -286,34 +286,6 @@ URL. In this mode the command will continuously rebuild the local application, s
 as odo or rsync to sync to the remote application.
 
 
-### Configuring Development Mode
-
-By default, the Maven plugin picks up compiler flags to pass to javac from maven-compiler-plugin.
-
-If you need to customize the compiler flags used in development mode, add a configuration section to the plugin block
-and set the compilerArgs property just as you would when configuring maven-compiler-plugin. You can also set source,
-target, and jvmArgs. For example, to pass `--enable-preview` to both the JVM and javac:
-
-```xml
-<plugin>
-  <groupId>io.quarkus</groupId>
-  <artifactId>quarkus-maven-plugin</artifactId>
-  <version>${quarkus-plugin.version}</version>
-
-  <configuration>
-    <source>${maven.compiler.source}</source>
-    <target>${maven.compiler.target}</target>
-    <compilerArgs>
-      <arg>--enable-preview</arg>
-    </compilerArgs>
-    <jvmArgs>--enable-preview</jvmArgs>
-  </configuration>
-
-  ...
-</plugin>
-```
-
-
 ### Debugging
 
 In development mode, Quarkus starts by default with debug mode enabled, listening to port 5005 without suspending
