@@ -1,8 +1,8 @@
 ---
-title: "7.1 Reactive messaging with Kafka"
-linkTitle: "7.1 Reactive messaging with Kafka"
-weight: 710
-sectionnumber: 7.1
+title: "7.2 Reactive messaging with Kafka"
+linkTitle: "7.2 Reactive messaging with Kafka"
+weight: 720
+sectionnumber: 7.2
 description: >
    Messaging with Apache Kafka in Quarkus.
 ---
@@ -16,7 +16,7 @@ In this chapter we want to use Apache Kafka as our message oriented middleware. 
 
 ### {{% param sectionnumber %}}.1: Define Kafka Cluster
 
-In this techlab you are going to set up your own Kafka cluster which will handle your messages. Add the following resource definition to your infrastructure project under `quarkus-techlab-infrastructure/src/main/openshift/kafka`:
+In this techlab you are going to set up your own Kafka cluster which will handle your messages. Add the following resource definition to your infrastructure project under `solution/kafka/openshift`:
 
 ```yaml
 
@@ -95,7 +95,7 @@ If you apply these manifests you can see the Kafka cluster appear in your OpenSh
 
 ```s
 
-oc apply -f quarkus-techlab-infrastructure/src/main/openshift/kafka
+oc apply -f solution/kafka/openshift
 
 ```
 
@@ -103,7 +103,7 @@ You will see that OpenShift will deploy a single node Kafka cluster into your na
 
 For local development we will create a small docker-compose file to start a Kafka cluster:
 
-quarkus-techlab-infrastructure/src/main/docker/kafka/docker-compose.yml
+solution/kafka/docker/docker-compose.yml
 
 ```yaml
 
@@ -144,7 +144,7 @@ Start your cluster with:
 
 ```s
 
-docker-compose -f quarkus-techlab-infrastructure/src/main/docker/kafka/docker-compose.yml up -d
+docker-compose -f solution/kafka/docker/docker-compose.yml up -d
 
 ```
 
