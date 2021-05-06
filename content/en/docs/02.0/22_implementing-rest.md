@@ -1,6 +1,6 @@
 ---
-title: "2.2 Impelementing REST Services"
-linkTitle: "2.2 Impelementing REST Services"
+title: "2.2 Implementing REST Services"
+linkTitle: "2.2 Implementing REST Services"
 weight: 220
 sectionnumber: 2.2
 description: >

@@ -7,13 +7,21 @@ description: >
    Test Native builds for Quarkus.
 ---
 
-{{% alert color="primary" %}}
+{{% alert color="primary" title="Docker build context and native build resources" %}}
 Be aware, a generated Quarkus project contains a `.dockerignore` file. This file limits the scope of the files sent
-to the docker deamon for building a docker container (similar concept as the `.gitignore` files). If you encounter
+to the docker daemon for building a docker container (similar concept as the `.gitignore` files). If you encounter
 errors like the following you may tweak your `.dockerignore` file or for simplicity delete it.
 
 ```
 COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such file or directory
+```
+
+Quarkus native builds are taking a lot of memory resources. Docker installations on windows and mac os are known to set
+limits for your docker environment. Remember to also check these limits.
+
+You can specify the following property to your `mvn package` build to limit the resources:
+```
+-Dquarkus.native.native-image-xmx=2G
 ```
 {{% /alert %}}
 
