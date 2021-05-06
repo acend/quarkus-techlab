@@ -104,7 +104,7 @@ You will see that OpenShift will deploy a single node Kafka cluster into your na
 
 ### {{% param sectionnumber %}}.2: Local Development
 
-For local development we will create a small docker-compose file `solution/reactive-messaging/docker/docker-compose.yml`
+For local development we will use a small docker-compose file `solution/kafka/docker/docker-compose.yml`
 to start a Kafka cluster:
 
 ```yaml
@@ -146,7 +146,7 @@ Start your cluster with:
 
 ```s
 
-docker-compose -f solution/reactive-messaging/docker/docker-compose.yml up -d
+docker-compose -f solution/kafka/docker/docker-compose.yml up -d
 
 ```
 
