@@ -1,7 +1,6 @@
 version: '2'
 
 services:
-
       zookeeper:
             image: quay.io/strimzi/kafka:0.22.1-kafka-2.6.0
             command: [

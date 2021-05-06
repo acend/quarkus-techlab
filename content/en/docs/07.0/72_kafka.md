@@ -101,9 +101,11 @@ oc apply -f solution/kafka/openshift
 
 You will see that OpenShift will deploy a single node Kafka cluster into your namespace.
 
-For local development we will create a small docker-compose file to start a Kafka cluster:
 
-solution/kafka/docker/docker-compose.yml
+### {{% param sectionnumber %}}.2: Local Development
+
+For local development we will create a small docker-compose file `solution/reactive-messaging/docker/docker-compose.yml`
+to start a Kafka cluster:
 
 ```yaml
 
@@ -144,11 +146,13 @@ Start your cluster with:
 
 ```s
 
-docker-compose -f solution/kafka/docker/docker-compose.yml up -d
+docker-compose -f solution/reactive-messaging/docker/docker-compose.yml up -d
 
 ```
 
-Create again two Quarkus projects 'quarkus-reactive-messaging-consumer' and 'quarkus-reactive-messaging-producer'. Add the extension 'smallrye-reactive-messaging-kafka' and 'quarkus-jsonb' to your project. Create the `SensorMeasurement` class again in both projects.
+Create again two Quarkus projects 'quarkus-reactive-messaging-consumer' and 'quarkus-reactive-messaging-producer'.
+Add the extension 'smallrye-reactive-messaging-kafka' and 'quarkus-jsonb' to your project. Create the `SensorMeasurement`
+class again in both projects.
 
 ```java
 
@@ -169,7 +173,7 @@ public class SensorMeasurement {
 ```
 
 
-### {{% param sectionnumber %}}.2: Producing messages
+### {{% param sectionnumber %}}.3: Producing messages
 
 Let's start by creating a reactive producer which is going to do the same thing he always does: Produce random SensorMeasurements. Create a `@ApplicationScoped` class `ReactiveDataProducer`. Inside the class define a function which returns a `Multi<SensorMeasurement>`. Inside the function use the already known routine to periodically emit a new SensorMeasurement. Finally annotate the function with `@Outgoing("data-inbound")` to create a connector to your message broker.
 
@@ -221,7 +225,7 @@ docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh --bootstrap-server 
 {{% /details %}}
 
 
-### {{% param sectionnumber %}}.3: Consuming messages
+### {{% param sectionnumber %}}.4: Consuming messages
 
 On the other side of the system we want to consume the messages and stream them again to a REST API. Create a class `..consumer.boundary.ReactiveDataConsumer` and similar to the producer create a function which takes a `SensorMeasurement` as parameter and returns a `SensorMeasurement`. For simplicity reasons the function will only return the received measurement again. Annotate your created function with the connectors `@Incoming("inbound-data")` and `@Outgoing("in-memory-stream")`. Additionally we can annotate the function with `@Acknowledgment(Acknowledgment.Strategy.POST_PROCESSING)` to ensure the acknowledgement of the messages received.
 
