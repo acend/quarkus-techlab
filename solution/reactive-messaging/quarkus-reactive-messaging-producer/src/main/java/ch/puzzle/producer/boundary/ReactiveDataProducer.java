@@ -13,6 +13,6 @@ public class ReactiveDataProducer {
     @Outgoing("data-inbound")
     public Multi<SensorMeasurement> produceData() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(2))
-                .onItem().transform(i -> new SensorMeasurement());
+                .onItem().transform(i -> new SensorMeasurement(new Random().nextDouble(), Instant.now()));
     }
 }
