@@ -155,6 +155,40 @@ Create again two Quarkus projects 'quarkus-reactive-messaging-consumer' and 'qua
 For the producer add the extensions 'smallrye-reactive-messaging-kafka' and 'quarkus-jsonb' to your project. For the
 consumer: 'smallrye-reactive-messaging-kafka', 'quarkus-resteasy-reactive-jsonb' and 'quarkus-resteasy-reactive'.
 
+Your dependencies in the consumer pom.xml should look like this.
+```
+<dependencies>
+  <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive-jsonb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
+    </dependency>
+</dependencies>
+```
+
+Next, create the SensorMeasurement in both project.
+
 ```java
 
 public class SensorMeasurement {
