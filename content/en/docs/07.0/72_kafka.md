@@ -156,7 +156,7 @@ For the producer add the extensions 'smallrye-reactive-messaging-kafka' and 'qua
 consumer: 'smallrye-reactive-messaging-kafka', 'quarkus-resteasy-reactive-jsonb' and 'quarkus-resteasy-reactive'.
 
 Your dependencies in the consumer pom.xml should look like this.
-```
+```xml
 <dependencies>
   <dependency>
       <groupId>io.quarkus</groupId>
