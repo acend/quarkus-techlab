@@ -525,4 +525,4 @@ objects:
 
 ```
 
-Apply the template for your message broker and OpenShift will rollout a new instance of Artemis ActiveMQ in your namespace. Commit and push your changes, then deploy your microservices with your pipelines again. Check the logs of the data-consumer and you will see that the messaging works like a charm.
+Apply the template for your message broker and OpenShift will rollout a new instance of Artemis ActiveMQ in your namespace. Tag your images and push your images to the OpenShift registry as shown in the Lab 3. Your deployments should get rolled out automatically!
