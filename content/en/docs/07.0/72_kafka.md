@@ -152,7 +152,7 @@ docker-compose -f solution/kafka/docker/docker-compose.yml up -d
 
 Create again two Quarkus projects 'quarkus-reactive-messaging-consumer' and 'quarkus-reactive-messaging-producer'.
 Add the extension 'smallrye-reactive-messaging-kafka' and 'quarkus-jsonb' to your project. Create the `SensorMeasurement`
-class again in both projects.
+class again in both projects. For the consumer also add the 'resteasy-reactive-common' extension.
 
 ```java
 
