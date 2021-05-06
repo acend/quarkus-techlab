@@ -18,7 +18,7 @@
       <artifactId>quarkus-arc-deployment</artifactId>
     </dependency>
     <dependency>
-      <groupId>ch.puzzle</groupId>
+      <groupId>ch.puzzle.quarkustechlab</groupId>
       <artifactId>appinfo</artifactId>
       <version>${project.version}</version>
     </dependency>
