@@ -27,8 +27,9 @@ After cloning the main repo, you need to initialize the submodule like this:
 git submodule update --init --recursive
 ```
 
-The default configuration uses the puzzle setup from [config/_default](config/_default/config.toml).
-Further, specialized environments can be added in the `config` directory.
+The default configuration uses the Puzzle setup from [config/_default](config/_default/config.toml).
+Alternatively you can use the Mobi setup from [config/mobi](config/mobi/config.toml), which is enabled with
+`--environment mobi`.
 
 
 ### Docsy theme usage
@@ -51,7 +52,7 @@ git submodule update --remote
 Build the image:
 
 ```bash
-docker build -t puzzle/quarkus-techlab:latest .
+docker build <--build-arg TRAINING_HUGO_ENV=...> -t puzzle/quarkus-techlab:latest .
 ```
 
 Run it locally:
@@ -83,25 +84,34 @@ We simply mount the working directory into a running container, where hugo is st
 
 ```bash
 export HUGO_VERSION=$(grep "FROM klakegg/hugo" Dockerfile | sed 's/FROM klakegg\/hugo://g' | sed 's/ AS builder//g')
-docker run \
-  --rm --interactive \
-  --publish 8080:8080 \
-  -v $(pwd):/src \
-  klakegg/hugo:${HUGO_VERSION} \
-  server -p 8080 --bind 0.0.0.0
+docker run --rm --interactive --publish 8080:8080 -v $(pwd):/src klakegg/hugo:${HUGO_VERSION} server -p 8080 --bind 0.0.0.0
+```
+
+use the following command to set the hugo environment
+
+```bash
+export HUGO_VERSION=$(grep "FROM klakegg/hugo" Dockerfile | sed 's/FROM klakegg\/hugo://g' | sed 's/ AS builder//g')
+docker run --rm --interactive --publish 8080:8080 -v $(pwd):/src klakegg/hugo:${HUGO_VERSION} server --environment=<environment> -p 8080 --bind 0.0.0.0
 ```
 
 
-### Linting of Markdown content
+## Linting of Markdown content
 
-Markdown files are linted with [markdownlint](https://github.com/DavidAnson/markdownlint).
-Custom rules are in [markdownlint.json](markdownlint.json).
-There's a GitHub Action [github/workflows/markdownlint.yaml](github/workflows/markdownlint.yaml) for CI.
+Markdown files are linted with <https://github.com/DavidAnson/markdownlint>.
+Custom rules are in `.markdownlint.json`.
+There's a GitHub Action `.github/workflows/markdownlint.yaml` for CI.
 For local checks, you can either use Visual Studio Code with the corresponding extension, or the command line like this:
 
-```bash
+```shell script
 npm install
-node_modules/.bin/markdownlint content
+npm run mdlint
+```
+
+Npm not installed? no problem
+
+```bash
+export HUGO_VERSION=$(grep "FROM klakegg/hugo" Dockerfile | sed 's/FROM klakegg\/hugo://g' | sed 's/ AS builder//g')
+docker run --rm --interactive -v $(pwd):/src klakegg/hugo:${HUGO_VERSION}-ci /bin/bash -c "set -euo pipefail;npm install; npm run mdlint;"
 ```
 
 
