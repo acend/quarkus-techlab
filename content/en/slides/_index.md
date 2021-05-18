@@ -9,8 +9,12 @@ menu:
 
 {{< blocks/section type="section" color="light">}}
 
-{{% blocks/feature icon="fa-chalkboard-teacher" url="{{% param "quarkusVersion" %}}" title="Slides" %}}
-Get the slides for this lab
+{{% onlyWhenNot mobi %}}
+{{% blocks/feature icon="fa-chalkboard-teacher" url="https://drive.google.com/uc?export=download&id=15LAPZHI0-SGavseaEZZOy3PZWmniw6wO" title="Slides" %}}
+{{% /blocks/feature %}}
+
+{{% onlyWhen mobi %}}
+{{% blocks/feature icon="fa-chalkboard-teacher" url="https://drive.google.com/uc?export=download&id=15LAPZHI0-SGavseaEZZOy3PZWmniw6wO" title="Slides" %}}
 {{% /blocks/feature %}}
 
 {{< /blocks/section >}}
