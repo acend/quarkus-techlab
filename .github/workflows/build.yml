@@ -112,5 +112,4 @@ jobs:
           message: |
            PR Environments: 
            * puzzle <https://quarkus-techlab-pr-${{ github.event.pull_request.number }}.k8s.puzzle.ch>
-           * mobi <https://quarkus-techlab-pr-${{ github.event.pull_request.number }}-mobi.k8s.puzzle.ch>
-
+           * mobi <https://quarkus-techlab-mobi-pr-${{ github.event.pull_request.number }}.k8s.puzzle.ch>
