@@ -1,8 +1,8 @@
 ---
-title: "8.3 Metrics with micrometer"
-linkTitle: "8.3 Metrics with micrometer"
-weight: 830
-sectionnumber: 8.3
+title: "9.3 Metrics with micrometer"
+linkTitle: "9.3 Metrics with micrometer"
+weight: 930
+sectionnumber: 9.3
 description: >
     Metrics with micrometer in Quarkus.
 ---

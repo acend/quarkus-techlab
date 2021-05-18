@@ -1,8 +1,8 @@
 ---
-title: "8.2 Tracing with Jaeger"
-linkTitle: "8.2 Tracing with Jaeger"
-weight: 820
-sectionnumber: 8.2
+title: "9.2 Tracing with Jaeger"
+linkTitle: "9.2 Tracing with Jaeger"
+weight: 920
+sectionnumber: 9.2
 description: >
     Tracing powered by Jaeger in Quarkus.
 ---

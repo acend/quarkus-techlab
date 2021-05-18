@@ -1,7 +1,7 @@
 ---
-title: "9.5. Build and use"
-weight: 950
-sectionnumber: 9.5
+title: "10.5. Build and use"
+weight: 1050
+sectionnumber: 10.5
 description: >
   Building and using the extension.
 ---

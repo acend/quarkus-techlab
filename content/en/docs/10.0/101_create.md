@@ -1,7 +1,7 @@
 ---
-title: "9.1. Creating the Extension"
-weight: 910
-sectionnumber: 9.1
+title: "10.1. Creating the Extension"
+weight: 1010
+sectionnumber: 10.1
 description: >
   Initialize the extension with maven.
 ---

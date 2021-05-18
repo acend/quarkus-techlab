@@ -1,8 +1,8 @@
 ---
-title: "4.1 Configuration"
-linkTitle: "4.1 Configuration"
-weight: 410
-sectionnumber: 4.1
+title: "5.1 Configuration"
+linkTitle: "5.1 Configuration"
+weight: 510
+sectionnumber: 5.1
 onlyWhen: openshift
 description: >
    Configurate our microservices to be cloud ready.

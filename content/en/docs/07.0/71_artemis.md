@@ -1,8 +1,8 @@
 ---
-title: "6.1 ActiveMQ Artemis"
-linkTitle: "6.1 ActiveMQ Artemis"
-weight: 610
-sectionnumber: 6.1
+title: "7.1 ActiveMQ Artemis"
+linkTitle: "7.1 ActiveMQ Artemis"
+weight: 710
+sectionnumber: 7.1
 onlyWhen: artemis
 description: >
    Messaging with ActiveMQ Artemis in Quarkus.

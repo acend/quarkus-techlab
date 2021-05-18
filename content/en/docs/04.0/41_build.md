@@ -1,8 +1,8 @@
 ---
-title: "3.1 Build Quarkus applications"
-linkTitle: "3.1 Build Quarkus applications"
-weight: 310
-sectionnumber: 3.1
+title: "4.1 Build Quarkus applications"
+linkTitle: "4.1 Build Quarkus applications"
+weight: 410
+sectionnumber: 4.1
 description: >
    Build Quarkus applications.
 ---

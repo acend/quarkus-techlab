@@ -1,7 +1,7 @@
 ---
-title: "9.6. Development UI"
-weight: 960
-sectionnumber: 9.6
+title: "10.6. Development UI"
+weight: 1060
+sectionnumber: 10.6
 description: >
   Providing extension information for the Dev UI.
 ---

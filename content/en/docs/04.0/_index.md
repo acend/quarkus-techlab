@@ -1,10 +1,8 @@
 ---
-title: "4. OpenShift / Kubernetes"
+title: "4. Build Quarkus applications"
 weight: 4
 sectionnumber: 4
-onlyWhen: openshift
 description: >
-  Deploy applications to the cloud.
+  How to use different build tactics to build our microservices.
 ---
 
-As mentioned before the Quarkus framework is tailored for the cloud environment. Now we will test and see how easy it is to run our Quarkus applications on OpenShift 4. You will need the OpenShift CLI binary `oc` for the next few steps. If you don't have it already installed, log into the OpenShift cluster (console.ocp.aws.puzzle.ch) and download the binary provided in the help tab `?` in the header bar under `Command Line Tools`.

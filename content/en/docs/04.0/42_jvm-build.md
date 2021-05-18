@@ -1,8 +1,8 @@
 ---
-title: "3.2 JVM Build"
-linkTitle: "3.2 JVM Build"
-weight: 320
-sectionnumber: 3.2
+title: "4.2 JVM Build"
+linkTitle: "4.2 JVM Build"
+weight: 420
+sectionnumber: 4.2
 description: >
    Test JVM builds for Quarkus.
 ---

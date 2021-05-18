@@ -1,8 +1,8 @@
 ---
-title: "5.2 Defining pipelines"
-linkTitle: "5.2 Defining pipelines"
-weight: 520
-sectionnumber: 5.2
+title: "6.2 Defining pipelines"
+linkTitle: "6.2 Defining pipelines"
+weight: 620
+sectionnumber: 6.2
 onlyWhen: tekton
 description: >
    Defining pipelines for our microservices.

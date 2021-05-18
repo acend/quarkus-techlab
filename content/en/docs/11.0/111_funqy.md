@@ -1,8 +1,8 @@
 ---
-title: "10.1 Quarkus serverless with Funqy"
-linkTitle: "10.1 Quarkus serverless with Funqy"
-weight: 101
-sectionnumber: 10.1
+title: "11.1 Quarkus serverless with Funqy"
+linkTitle: "11.1 Quarkus serverless with Funqy"
+weight: 1110
+sectionnumber: 11.1
 description: >
     Quarkus serverless with Funqy
 ---

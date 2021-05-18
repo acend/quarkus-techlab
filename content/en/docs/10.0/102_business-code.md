@@ -1,7 +1,7 @@
 ---
-title: "9.2. Main functionality"
-weight: 920
-sectionnumber: 9.2
+title: "10.2. Main functionality"
+weight: 1020
+sectionnumber: 10.2
 description: >
   Write the main extension functionality code.
 ---

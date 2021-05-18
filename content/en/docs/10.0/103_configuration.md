@@ -1,7 +1,7 @@
 ---
-title: "9.3. Configuration"
-weight: 930
-sectionnumber: 9.3
+title: "10.3. Configuration"
+weight: 1030
+sectionnumber: 10.3
 description: >
   Define extension configuration
 ---

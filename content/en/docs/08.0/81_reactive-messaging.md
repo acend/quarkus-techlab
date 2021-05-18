@@ -1,8 +1,8 @@
 ---
-title: "7.1 Reactive messaging"
-linkTitle: "7.1 Reactive messaging"
-weight: 710
-sectionnumber: 7.1
+title: "8.1 Introduction"
+linkTitle: "8.1 Introduction"
+weight: 810
+sectionnumber: 8.1
 description: >
    Introduction to reactive messaging.
 ---

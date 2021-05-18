@@ -1,7 +1,7 @@
 ---
-title: "8. Observability"
+title: "8. Reactive messaging with Apache Kafka"
 weight: 8
 sectionnumber: 8
 description: >
-  Metrics and Tracing in distributed systems
+  Reactive messaging with Apache Kafka.
 ---

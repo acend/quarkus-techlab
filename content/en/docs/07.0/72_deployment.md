@@ -1,8 +1,8 @@
 ---
-title: "6.2 To the cloud"
-linkTitle: "6.2 To the cloud"
-weight: 620
-sectionnumber: 6.2
+title: "7.2 To the cloud"
+linkTitle: "7.2 To the cloud"
+weight: 720
+sectionnumber: 7.2
 onlyWhen: artemis
 description: >
    Deploy our microservices with ActiveMQ Artemis to the cloud.

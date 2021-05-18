@@ -1,8 +1,8 @@
 ---
-title: "10.2 OpenShift Serverless with kn"
-linkTitle: "10.2 OpenShift Serverless with kn"
-weight: 102
-sectionnumber: 10.2
+title: "11.2 OpenShift Serverless with kn"
+linkTitle: "11.2 OpenShift Serverless with kn"
+weight: 1120
+sectionnumber: 11.2
 description: >
     OpenShift Serverless with the kn CLI
 ---

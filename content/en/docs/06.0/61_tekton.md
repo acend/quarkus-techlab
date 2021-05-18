@@ -1,8 +1,8 @@
 ---
-title: "5.1 Tekton"
-linkTitle: "5.1 Tekton"
-weight: 510
-sectionnumber: 5.1
+title: "6.1 Tekton"
+linkTitle: "6.1 Tekton"
+weight: 610
+sectionnumber: 6.1
 onlyWhen: tekton
 description: >
    Tekton basics.

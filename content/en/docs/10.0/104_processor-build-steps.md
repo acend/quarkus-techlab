@@ -1,7 +1,7 @@
 ---
-title: "9.4. Build Steps"
-weight: 940
-sectionnumber: 9.4
+title: "10.4. Build Steps"
+weight: 1040
+sectionnumber: 10.4
 description: >
   Complete our build processor with build steps.
 ---

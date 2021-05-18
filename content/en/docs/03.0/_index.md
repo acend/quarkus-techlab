@@ -1,8 +1,8 @@
 ---
-title: "3. Build Quarkus applications"
+title: "3. Quarkus Testing"
 weight: 3
 sectionnumber: 3
 description: >
-  How to use different build tactics to build our microservices.
+  Quarkus Tests
 ---
 

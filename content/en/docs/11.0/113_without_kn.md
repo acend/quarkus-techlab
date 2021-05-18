@@ -1,8 +1,8 @@
 ---
-title: "10.2 Serverless without kn CLI"
-linkTitle: "10.2 Serverless without kn CLI"
-weight: 102
-sectionnumber: 10.2
+title: "11.3 Serverless without kn CLI"
+linkTitle: "11.3 Serverless without kn CLI"
+weight: 1130
+sectionnumber: 11.3
 description: >
     OpenShift Serverless without kn CLI
 ---

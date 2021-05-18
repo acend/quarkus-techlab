@@ -1,28 +1,44 @@
 ---
-title: "10. Serverless"
+title: "10. Quarkus Extensions"
 weight: 10
 sectionnumber: 10
 description: >
-  Testing the serverless abilities of Quarkus.
+  Writing your own Quarkus Extension.
 ---
 
 
 ## Lab Content
 
-In this lab we are going to test the abilities to write serverless applications with Quarkus.
+In this section we will create our own extension in the `{{% param "lab_code_basedir" %}}` folder from your workspace.
+
+The simple extension provides a very basic servlet to expose some application information. The required code for exposing
+this information will be wrapped in a quarkus extension. The extension will also provide an integration in the Quarkus Dev UI.
+
+This extension will be used in another application as dependency to show its functionality. This application is fully
+provided in the `{{% param "solution_code_basedir" %}}` folder.
 
 
-## {{% param sectionnumber %}}.1: Introduction
+## Quarkus Application Bootstrap
 
-The trend shifting architectural designs more into the event-driven world was pretty fast adopted by the cloud native community. Kubernetes presented a new way of providing applications with their Knative project. Knative allows us to provide event-driven and serverless components built upon the already known and intuitive Kubernetes API.
+The bootstrapping of a Quarkus application takes place in three distinct bootstrap phases:
 
-At the core of Knative there are two components that can be used to provided the wanted functionalities:
+{{% alert color="primary" %}}
 
-* **Knative Serving**: Servings manage stateless services on Kubernetes
-* **Knative Eventing**: Eventings manage the route between on-cluster or off-cluster components by exposing routing as configuration
+* **Augmentation.** During the build time, the Quarkus extensions will load and scan your application’s bytecode
+(including the dependencies) and configuration. At this stage, the extension can read configuration files, scan classes
+for specific annotations, etc. Once all the metadata has been collected, the extensions can pre-process the libraries
+bootstrap actions like your ORM, DI or REST controllers configurations. The result of the bootstrap is directly recorded
+into bytecode and will be part of your final application package.
 
-These two components are delivered as custom resource definitions (CRD). For further and detailed readings check out the official [Knative Documentation](https://knative.dev/docs).
+* **Static Init.** During the run time, Quarkus will execute first a static init method which contains some extensions
+actions/configurations. When you will do your native packaging, this static method will be pre-processed during the
+build time and the objects it has generated will be serialized into the final native executable, so the initialization
+code will not be executed in the native mode (imagine you execute a Fibonacci function during this phase, the result of
+the computation will be directly recorded in the native executable). When running the application in JVM mode, this
+static init phase is executed at the start of the application.
 
-The main goal is to provide event-driven applications which do not need to idle for the time not used. As you can imagine, fast startup times are very crucial for the success of serverless applications. This is where the strenghts of the Quarkus framework come into play. We can develop small lightweight applications starting up almost instantanious.
+* **Runtime Init.** Well nothing fancy here, we do classic run time code execution. So, the more code you run during
+the two phases above, the faster your application will start.
 
-In the following sections we are going to test these functionalities provided by the Knative / OpenShift Serverless project combined with Quarkus!
+Source: [quarkus.io](https://quarkus.io/guides/building-my-first-extension)
+{{% /alert %}}
