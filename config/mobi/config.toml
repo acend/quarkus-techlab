@@ -1,0 +1,6 @@
+title = "Quarkus Kurs"
+languageCode = "en-us"
+
+[params]
+enabledModule = "base mobi"
+slides = "https://drive.google.com/uc?export=download&id=15LAPZHI0-SGavseaEZZOy3PZWmniw6wO"

@@ -3,6 +3,7 @@ title: "4.2 OpenShift"
 linkTitle: "4.2 OpenShift"
 weight: 420
 sectionnumber: 4.2
+onlyWhen: openshift
 description: >
    Bring our microservices to the OpenShift plattform.
 ---

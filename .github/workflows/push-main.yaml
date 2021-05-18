@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.QUAYIO_USERNAME }}
           password: ${{ secrets.QUAYIO_TOKEN }}
       - 
-        name: Build and Push Latest Version
+        name: Build Puzzle Version
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -45,8 +45,17 @@ jobs:
           push: true
           tags: |
             quay.io/puzzle/quarkus-techlab:latest
+      -
+        name: Build Mobi Version
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            quay.io/puzzle/quarkus-techlab:latest-mobi
       - 
-        name: 'Deploy'
+        name: 'Deploy Helm Release'
         uses: 'deliverybot/helm@v1'
         with:
           release: 'latest'
@@ -64,9 +73,16 @@ jobs:
         env:
           KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
       - 
-        name: redeploy puzzle deployment
+        name: Redeploy Puzzle Deployment
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG_BASE64 }}
         with:
           args: rollout restart deployment/latest-quarkus-techlab-puzzle --namespace pitc-quarkus-techlab-prod
+      -
+        name: Redeploy Mobi Deployment
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG_BASE64 }}
+        with:
+          args: rollout restart deployment/latest-quarkus-techlab-mobi --namespace pitc-quarkus-techlab-prod

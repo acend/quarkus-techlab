@@ -3,6 +3,7 @@ title: "6.1 ActiveMQ Artemis"
 linkTitle: "6.1 ActiveMQ Artemis"
 weight: 610
 sectionnumber: 6.1
+onlyWhen: artemis
 description: >
    Messaging with ActiveMQ Artemis in Quarkus.
 ---

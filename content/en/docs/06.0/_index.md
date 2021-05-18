@@ -2,6 +2,7 @@
 title: "6. Messaging with ActiveMQ Artemis"
 weight: 6
 sectionnumber: 6
+onlyWhen: artemis
 description: >
   Messaging in Quarkus with ActiveMQ Artemis.
 ---

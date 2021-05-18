@@ -88,7 +88,8 @@ copyright = "Puzzle ITC GmbH"
 github_repo = "https://github.com/puzzle/quarkus-techlab"
 github_branch = "master"
 
-enabledModule = "base"
+enabledModule = "base tekton artemis openshift"
+slides = "https://drive.google.com/uc?export=download&id=15LAPZHI0-SGavseaEZZOy3PZWmniw6wO"
 
 # Enable Lunr.js offline search
 offlineSearch = true

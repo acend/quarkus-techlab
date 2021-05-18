@@ -3,6 +3,7 @@ title: "5.1 Tekton"
 linkTitle: "5.1 Tekton"
 weight: 510
 sectionnumber: 5.1
+onlyWhen: tekton
 description: >
    Tekton basics.
 ---

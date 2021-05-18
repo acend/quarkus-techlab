@@ -2,6 +2,7 @@
 title: "4. OpenShift / Kubernetes"
 weight: 4
 sectionnumber: 4
+onlyWhen: openshift
 description: >
   Deploy applications to the cloud.
 ---
