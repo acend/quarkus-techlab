@@ -20,7 +20,7 @@ In this techlab you are going to set up your own Kafka cluster which will handle
 
 ```yaml
 
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: quarkus-techlab
@@ -76,7 +76,7 @@ For starters we need a simple Kafka Topic `manual` which we will use as communic
 
 ```yaml
 
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
   name: manual
