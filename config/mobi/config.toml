@@ -1,9 +1,17 @@
+theme = ["docsy-puzzle", "docsy-plus", "docsy"]
 title = "Quarkus Training"
 languageCode = "en-us"
 
 [params]
+copyright = "Puzzle ITC GmbH"
+imagePrefix = "puzzle_"
+
 enabledModule = "base mobi"
 
 [Languages]
 [Languages.en]
 title = "Quarkus Training"
+
+[[Languages.en.menu.main]]
+copyright = "Puzzle ITC GmbH"
+url = "https://www.puzzle.ch"
