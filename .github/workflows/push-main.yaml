@@ -69,7 +69,7 @@ jobs:
           tags: |
             quay.io/puzzle/quarkus-techlab:latest-mobi
       -
-        name: Run vulnerability scanner Puzzle
+        name: Run vulnerability scanner Mobi
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'quay.io/puzzle/quarkus-techlab:latest-mobi'
