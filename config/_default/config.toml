@@ -1,5 +1,5 @@
 baseurl = "/"
-title = "Quarkus Training"
+title = "Quarkus Basics Training"
 
 
 enableGitInfo = true
@@ -49,7 +49,7 @@ anchor = "smart"
 
 [Languages]
 [Languages.en]
-title = "Quarkus Training"
+title = "Quarkus Basics Training"
 languageName = "German"
 weight = 1
 

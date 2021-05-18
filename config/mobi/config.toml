@@ -1,5 +1,9 @@
-title = "Quarkus Kurs"
+title = "Quarkus Training"
 languageCode = "en-us"
 
 [params]
 enabledModule = "base mobi"
+
+[Languages]
+[Languages.en]
+title = "Quarkus Training"
