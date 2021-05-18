@@ -17,18 +17,18 @@ acendTraining:
         domain: k8s.puzzle.ch
     -
       name: mobi
-        replicaCount: 1
-        image:
-          repository: quay.io/puzzle/quarkus-techlab
-          pullPolicy: Always
-          tag: ""
-          tagsuffix: "-mobi"
-        ingress:
-          annotations:
-            kubernetes.io/ingress.class: nginx-public
-          useDefaultSecret: true
-          appname: quarkus-techlab-mobi
-          domain: k8s.puzzle.ch
+      replicaCount: 1
+      image:
+        repository: quay.io/puzzle/quarkus-techlab
+        pullPolicy: Always
+        tag: ""
+        tagsuffix: "-mobi"
+      ingress:
+        annotations:
+          kubernetes.io/ingress.class: nginx-public
+        useDefaultSecret: true
+        appname: quarkus-techlab-mobi
+        domain: k8s.puzzle.ch
 
 
 nameOverride: "quarkus-techlab"
