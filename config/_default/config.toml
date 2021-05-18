@@ -17,7 +17,6 @@ disableSVG = true
 defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
-
 disableKinds = ["taxonomy", "taxonomyTerm"]
 
 # Highlighting config
@@ -46,13 +45,11 @@ resampleFilter = "CatmullRom"
 quality = 75
 anchor = "smart"
 
-
 [Languages]
 [Languages.en]
 title = "Quarkus Basics Training"
 languageName = "German"
 weight = 1
-
 
 # navigation
 [Languages.en.menu]
@@ -74,6 +71,9 @@ url = "https://www.puzzle.ch"
   guessSyntax = "true"
 
 [params]
+copyright = "Puzzle ITC GmbH"
+github_repo = "https://github.com/puzzle/quarkus-techlab"
+github_branch = "master"
 
 lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
@@ -83,10 +83,6 @@ k8s_user_name = "userXY"
 registry_url = "default-route-openshift-image-registry.$CLUSTER_URL"
 
 folder_extension = "appinfo"
-
-copyright = "Puzzle ITC GmbH"
-github_repo = "https://github.com/puzzle/quarkus-techlab"
-github_branch = "master"
 
 enabledModule = "base tekton artemis openshift"
 
@@ -109,14 +105,14 @@ footer_about_disable = true
 [params.links]
 [[params.links.developer]]
 name = "GitHub"
-icon = "fab fa-github" 
+icon = "fab fa-github"
 url = "https://github.com/puzzle/quarkus-techlab"
 
 [[params.links.user]]
 name = "Twitter"
 icon = "fab fa-twitter"
 url = "https://twitter.com/puzzleitc"
-  
+
 [[params.links.user]]
 name = "LinkedIn"
 icon = "fab fa-linkedin-in"
