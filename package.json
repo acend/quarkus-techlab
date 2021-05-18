@@ -9,7 +9,6 @@
   "author": "Puzzle ITC",
   "dependencies": {
     "autoprefixer": "^10.2.4",
-    "husky": "^6.0.0",
     "postcss-cli": "^8.0.0"
   },
   "scripts": {
@@ -21,6 +20,7 @@
   },
   "homepage": "https://github.com/puzzle/quarkus-techlab#readme",
   "devDependencies": {
+    "husky": "6.0.0",
     "markdownlint-cli": "0.27.1"
   },
   "main": "index.js",
