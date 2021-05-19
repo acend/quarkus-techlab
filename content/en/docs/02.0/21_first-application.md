@@ -82,3 +82,99 @@ public class GreetingResource {
 }
 ```
 {{% /details %}}
+
+
+## Exploring the quarkus byte code
+
+In the introduction section we had a brief overview of how quarkus jars may look like. Its not expected that you have
+to do things like this at a regular basis and to get all details is pretty hard. However, it may give you a feeling
+where things came from and how they are wired up.
+
+
+### Task {{% param sectionnumber %}}.2: Exploring the quarkus application deployment
+
+To inspect the generated items proceed like this:
+
+Generate a full package
+```s
+./mvnw clean package
+```
+
+Enter the target directory and extract the `generated-bytecode.jar`.
+```s
+cd target/quarkus-app/quarkus
+jar -xvf generated-bytecode.jar
+```
+
+Now open the file `io/quarkus/runner/ApplicationImpl.class` in your IDE. You may find a static block which looks
+something like this:
+
+```java
+// $FF: synthetic class
+public class ApplicationImpl extends Application {
+
+    /* removed for simplicity */
+
+    static {
+        System.setProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager");
+        System.setProperty("io.netty.allocator.maxOrder", "1");
+        System.setProperty("io.netty.machineId", "e2:dd:dc:62:56:a3:ba:f8");
+        ProfileManager.setLaunchMode(LaunchMode.NORMAL);
+        StepTiming.configureEnabled();
+        Timing.staticInitStarted();
+        Config.ensureInitialized();
+        LOG = Logger.getLogger("io.quarkus.application");
+        StartupContext var0 = new StartupContext();
+        STARTUP_CONTEXT = var0;
+
+        try {
+            StepTiming.configureStart();
+            ((StartupTask)(new setupLoggingStaticInit-1235809433())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new ioThreadDetector-1463825589())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new blockingOP558072755())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new build163995889())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new staticInit-1777814589())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new initStatic1190120725())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new generateResources-1025303321())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new setupResteasyInjection2143006352())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask)(new staticInit-210558872())).deploy(var0);
+            StepTiming.printStepTime(var0);
+        } catch (Throwable var2) {
+            ApplicationStateNotification.notifyStartupFailed(var2);
+            var0.close();
+            throw (Throwable)(new RuntimeException("Failed to start quarkus", var2));
+        }
+    }
+}
+```
+
+Our application contains a RESTEasy endpoint. You may find a line containing `setupResteasyInjection` in the static block.
+Where does this come from? Open the file defining this class from the `io/quarkus/deployment/steps` folder. You may find
+a deploy block something like this:
+
+```java
+// $FF: synthetic class
+public class ResteasyCommonProcessor$setupResteasyInjection2143006352 implements StartupTask {
+
+    /* removed for simplicity */
+
+    public void deploy(StartupContext var1) {
+        var1.setCurrentBuildStepName("ResteasyCommonProcessor.setupResteasyInjection");
+        Object[] var2 = new Object[5];
+        this.deploy_0(var1, var2);
+    }
+}
+```
+
+This leads us to the method `setupResteasyInjection` from the `ResteasyCommonProcessor` which is packed in the resteasy
+extension. To find the resteasy deployment code have a look at the GitHub Quarkus Extensions Source of the [ResteasyCommonProcessor](https://github.com/quarkusio/quarkus/blob/main/extensions/resteasy-classic/resteasy-common/deployment/src/main/java/io/quarkus/resteasy/common/deployment/ResteasyCommonProcessor.java).
+
+
