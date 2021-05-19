@@ -13,5 +13,7 @@ enabledModule = "base mobi"
 title = "Quarkus Training"
 
 [[Languages.en.menu.main]]
+weight = 3
+name = "Puzzle ITC GmbH"
 copyright = "Puzzle ITC GmbH"
 url = "https://www.puzzle.ch"

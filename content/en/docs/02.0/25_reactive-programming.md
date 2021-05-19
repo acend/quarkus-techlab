@@ -1,8 +1,8 @@
 ---
-title: "2.4 Reactive Programming"
-linkTitle: "2.4 Reactive Programming"
-weight: 240
-sectionnumber: 2.4
+title: "2.5 Reactive Programming"
+linkTitle: "2.5 Reactive Programming"
+weight: 250
+sectionnumber: 2.5
 description: >
   Introduction to reactive programming with Quarkus.
 ---
