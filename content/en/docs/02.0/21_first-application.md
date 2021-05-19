@@ -15,6 +15,7 @@ To create your first Quarkus application you have several possibilities:
 * Create your application with the [Quickstart UI code.quarkus.io](https://code.quarkus.io/)
 * Use IntelliJ or eclipse plugins which will assist creating projects (these are usually also based on code.quarkus.io)
 
+
 ### Task {{% param sectionnumber %}}.1: Create your application with maven
 
 To create your application with maven you can execute the following maven
@@ -48,6 +49,7 @@ curl http://localhost:8080/hello
 You should get the 'hello' response in your console. Other RESTeasy functionalities work like they always do.
 For further information on basic REST interaction with Quarkus see [Documentation](https://quarkus.io/guides/rest-json).
 
+
 ### Task {{% param sectionnumber %}}.2: Exploring the dev mode
 
 Now leave the dev mode running and experiment with the dev-ui. After each change, hit the API again and see how Quarkus
@@ -57,7 +59,7 @@ performs the live reload.
 * Add a logger and a log statement to your `GreetingResource`
 * Try changing the log level in the `application.properties` configuration file (quarkus.log.level=DEBUG)
 * Point your browser to the Development UI at [http://localhost:8080/q/dev](http://localhost:8080/q/dev). Explore the
-provided information. 
+provided information.
 * Try to change the log level using the configuration editor in the development ui.
 * Check the invocation trees from the ArC panel. What happens if you invoke your /hello endpoint?
 * When was the application started? (tip: check the fired events)

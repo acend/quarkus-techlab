@@ -7,15 +7,16 @@ description: >
   Using and writing health checks.
 ---
 
-In this section we will add health checks to our microservices. 
+In this section we will add health checks to our microservices.
+
 
 ## Adding Health checks
 
-We will be using the `smallrye-health` quarkus extension which relies on the MicroProfile Health specification. 
+We will be using the `smallrye-health` quarkus extension which relies on the MicroProfile Health specification.
 
 This extension will expose the following REST endpoints:
 
-* `/q/health/live`: is the application up and running? 
+* `/q/health/live`: is the application up and running?
 * `/q/health/ready`: is the application ready to serve requests?
 * `/q/health`: accumulation of all checks
 
@@ -44,6 +45,7 @@ A simple health response may look like this
     ]
 }
 ```
+
 
 ### Task {{% param sectionnumber %}}.1: Adding the dependency
 
@@ -75,6 +77,7 @@ curl localhost:8080/q/health
 ```
 {{% /details %}}
 
+
 ## Custom health check
 
 As a simple example we will write a custom health check observing the last SensorMeasurement fetched from the
@@ -83,6 +86,7 @@ data-producer service. It should switch to failed state if the last fetched Meas
 A health check is usually evaluated based on its http response code. The main target for health checks is providing a
 technical interface used by an underlying platform. Beside the http response code the health check can also provide some
 information in the response body. However, it is not evaluated to determine if the check succeeded or failed.
+
 
 ### Task {{% param sectionnumber %}}.3: Write a custom liveness check
 
@@ -129,10 +133,11 @@ public class DataConsumerResource {
 ```
 {{% /details %}}
 
-Write a `RecentMessageHealthCheck` which implements `HealthCheck`. 
-  * Fail the health check if the last fetched `SensorMeasurement` from the data-producer is older than 60 seconds.
-  * Add the time the last message was fetched to the health check response
-  * Add the age of the last fetched SensorMeasurement to the health check response.
+Write a `RecentMessageHealthCheck` which implements `HealthCheck`.
+
+* Fail the health check if the last fetched `SensorMeasurement` from the data-producer is older than 60 seconds.
+* Add the time the last message was fetched to the health check response
+* Add the age of the last fetched SensorMeasurement to the health check response.
 
 You may start your `RecentMessageHealthCheck` with the following Template:
 
@@ -181,10 +186,10 @@ public class RecentMessageHealthCheck implements HealthCheck {
 ```
 {{% /details %}}
 
+
 ## Health UI
 
 The smallrye-health extension ships with a simple health ui. Point your browser to <http://localhost:8081/q/health-ui/>
 and explore the health ui.
 
 ![Health UI](../health-ui.png)
-
