@@ -4,7 +4,7 @@ linkTitle: "2.1 Your first Quarkus application"
 weight: 210
 sectionnumber: 2.1
 description: >
-  This setion covers initializing a Quarkus application.
+  This section covers creating a Quarkus application and the first steps.
 ---
 
 ## Create your first application
