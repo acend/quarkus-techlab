@@ -9,7 +9,9 @@ description: >
 
 ## {{% param sectionnumber %}}.1: Implementing REST Services
 
-In this section we learn how microservices can communicate through REST. In this example we want to build a microservice which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes it on it's own endpoint.
+In this section we learn how microservices can communicate through REST. In this example we want to build a microservice
+which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes
+it on it's own endpoint.
 
 
 ### {{% param sectionnumber %}}.2: Producing Data
