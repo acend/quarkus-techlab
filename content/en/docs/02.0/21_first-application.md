@@ -176,5 +176,3 @@ public class ResteasyCommonProcessor$setupResteasyInjection2143006352 implements
 
 This leads us to the method `setupResteasyInjection` from the `ResteasyCommonProcessor` which is packed in the resteasy
 extension. To find the resteasy deployment code have a look at the GitHub Quarkus Extensions Source of the [ResteasyCommonProcessor](https://github.com/quarkusio/quarkus/blob/main/extensions/resteasy-classic/resteasy-common/deployment/src/main/java/io/quarkus/resteasy/common/deployment/ResteasyCommonProcessor.java).
-
-
