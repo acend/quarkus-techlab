@@ -8,7 +8,7 @@ description: >
 ---
 
 
-## Task {{% param sectionnumber %}}.1: Testing in a Quarkus application
+## {{% param sectionnumber %}}.1: Testing in a Quarkus application
 
 In the last few chapters you learned how to implement a simple REST API. What would software engineering be without testing. Before starting with writing your first tests make sure you have the following two dependencies in your project:
 
@@ -66,12 +66,12 @@ You can run your tests using Maven:
 ```
 
 
-### Task {{% param sectionnumber %}}.1.1: Multi-module projects or external modules
+### {{% param sectionnumber %}}.1.1: Multi-module projects or external modules
 
 At build time Quarkus relies heavily on [Jandex](https://github.com/wildfly/jandex) to discover classes and annotations. CDI bean discovery is one example of the usage of Jandex at build time. Due to the optimization at build time configuration of this discovery is key. Especially when working with external modules or multi-module projects a bit of preparation is needed.
 
 
-#### Task {{% param sectionnumber %}}.1.1.1: Multi-module projects
+#### {{% param sectionnumber %}}.1.1.1: Multi-module projects
 
 By default Quarkus will not discover any CDI beans inside another module. To enable CDI bean discovery in a multi-module project you can include the `jandex-maven-plugin` in your submodules.
 
@@ -100,15 +100,15 @@ By default Quarkus will not discover any CDI beans inside another module. To ena
 If your parent module already configured the `quarkus-maven-plugin` the CDI bean discovery will work out of the box!
 
 
-#### Task {{% param sectionnumber %}}.1.1.2: External modules
+#### {{% param sectionnumber %}}.1.1.2: External modules
 
 If you're planning to use external modules, you will need to make these modules known to the indexing process at build time. You can do this either by including the Jandex plugin to the external module (obviously only works when you can modify them) or you can use the configuration property `quarkus.index-dependency` inside the application.properties. If you want to dive deeper into the CDI context check out the [documentation](https://quarkus.io/guides/cdi-reference#bean_discovery) of CDI in Quarkus.
 
 
-## Task {{% param sectionnumber %}}.2: Basics
+## {{% param sectionnumber %}}.2: Basics
 
 
-### Task {{% param sectionnumber %}}.2.1: Configuration
+### {{% param sectionnumber %}}.2.1: Configuration
 
 By default Quarkus will listen on port `8080`, when running tests it defaults to `8081`. This allows us to have the application running and run tests in parallel.
 You can configure the test port with the properties `quarkus.http.test-port` for HTTP and `quarkus.http.test-ssl-port` for HTTPS in your application.properties:
@@ -131,7 +131,7 @@ quarkus.http.test-timeout=10s
 ```
 
 
-### Task {{% param sectionnumber %}}.2.2: Injecting an URI
+### {{% param sectionnumber %}}.2.2: Injecting an URI
 
 To use a different client you can directly inject the URL into the test. The `@TestHTTPResource` allows us to inject and create said URLs. Take a look at the following example serving the static HTML file at `src/main/resources/META-INF/resources/index.html`:
 
@@ -181,12 +181,12 @@ public class StaticContentTest {
 The annotation `@TestHTTPResource` allows us to inject either an URI, URL or String representation of the desired URL.
 
 
-## Task {{% param sectionnumber %}}.3: Testing specific endpoints
+## {{% param sectionnumber %}}.3: Testing specific endpoints
 
 Both RESTassured and `@TestHTTPResource` allow us to specify the endpoint class which we want to test, instead of hardcoding a path into our tests.
 
 
-### Task {{% param sectionnumber %}}.3.1: TestHTTPResource
+### {{% param sectionnumber %}}.3.1: TestHTTPResource
 
 You can the use the io.quarkus.test.common.http.TestHTTPEndpoint annotation to specify the endpoint path, and the path will be extracted from the provided endpoint. If you also specify a value for the TestHTTPResource endpoint it will be appended to the end of the endpoint path.
 
@@ -248,7 +248,7 @@ This simple tests injects us an `URL` object pointing to the `DataResource.class
 ```
 
 
-### Task {{% param sectionnumber %}}.3.2: RestAssured
+### {{% param sectionnumber %}}.3.2: RestAssured
 
 When using RestAssured you can similarly control the base path by annotating the test class or method with `TestHTTPEndpoint(...)`. Recreating the test from above would look something like this:
 
@@ -283,12 +283,12 @@ public class RestAssuredDataResourceTest {
 As you can see the RestAssured way is pretty clean and straight forward.
 
 
-## Task {{% param sectionnumber %}}.4: Mock support in Quarkus
+## {{% param sectionnumber %}}.4: Mock support in Quarkus
 
 Quarkus supports mocking CDI beans with two different approaches. You can use the known CDI alternatives to mock classes for all test classes, or you can use the `QuarkusMock` to mock out beans on a per test basis.
 
 
-### Task {{% param sectionnumber %}}.4.1: CDI `@Alternative`
+### {{% param sectionnumber %}}.4.1: CDI `@Alternative`
 
 If you would like to mock with a class from the `src/test/java` source, you can annotate the class with `@Alternative` and `@Priority(1)`. Let's pretend we want to mock the class `DummyService` in the following test:
 
@@ -340,7 +340,7 @@ public class MockDummyService extends DummyService {
 This approach does not work when testing with native images, keep this in mind.
 
 
-### Task {{% param sectionnumber %}}.4.2: Mocking with QuarkusMock
+### {{% param sectionnumber %}}.4.2: Mocking with QuarkusMock
 
 The alternative to using the above mentioned approach, Quarkus provides a class `io.quarkus.test.junit.QuarkusMock` to mock out classes for specific scopes in a test. We can use the class to inject mocks in single `@Test` methods or define the mock in the `@BeforeAll` to make it available for the entire class.
 
@@ -458,7 +458,7 @@ public class MockTestCase {
 You can use the normal Mockito API you're already familiar with. Injecting Spies into a test class is possible with the `@io.quarkus.test.junit.mockito.InjectSpy` annotation provided.
 
 
-### Task {{% param sectionnumber %}}.4.3: Mocking RestClients
+### {{% param sectionnumber %}}.4.3: Mocking RestClients
 
 We are already familiar with the `@RegisterRestClient` annotation from the REST example in the previous chapter. Combining the `@InjectMock` with the `@RestClient` annotation will provide us with a mock rest client available for testing. The only thing you have to alter is that the registered rest client interface must be within the regular scope, so you might have to annotate your interface with `@ApplicationScoped`.
 

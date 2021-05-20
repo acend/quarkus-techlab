@@ -8,7 +8,7 @@ description: >
 ---
 
 
-## Task {{% param sectionnumber %}}.1: JUnit 5
+## {{% param sectionnumber %}}.1: JUnit 5
 
 In Quarkus application we usually use JUnit 5. Most people are still familiar with version 4 and we will take a short peek at the main differences between JUnit 4 and JUnit 5.
 
@@ -25,10 +25,10 @@ JUnit 5 was designed to tackle these clear drawbacks of JUnit 4. Unlike version 
 * **JUnit Vintage** provides a TestEngine for running JUnit 3 and JUnit 4 based tests on the platform.
 
 
-### Task {{% param sectionnumber %}}.1.1: Differences
+### {{% param sectionnumber %}}.1.1: Differences
 
 
-#### Task {{% param sectionnumber %}}.1.1.1: Annotations
+#### {{% param sectionnumber %}}.1.1.1: Annotations
 
 JUnit 5 changed some annotations in comparison to it's predecessor. One imoprtant change is that we can no longer us the `@Test` annotation to specify expectations:
 
@@ -86,7 +86,7 @@ Some other annotations were renamed for readability reasons:
 * `@Ignore` annotation is renamed to `@Disabled`
 
 
-#### Task {{% param sectionnumber %}}.1.1.2: Assertions
+#### {{% param sectionnumber %}}.1.1.2: Assertions
 
 In JUnit 5 assertions can now be written in a lambda expression:
 
@@ -117,7 +117,7 @@ public void shouldAssertAllTheGroup() {
 ```
 
 
-#### Task {{% param sectionnumber %}}.1.1.3: Display names
+#### {{% param sectionnumber %}}.1.1.3: Display names
 
  With JUnit 5, you can add the `@DisplayName` annotation to classes and methods. The name is used when generating reports, which makes it easier to describe the purpose of tests and track down failures, for example:
 
