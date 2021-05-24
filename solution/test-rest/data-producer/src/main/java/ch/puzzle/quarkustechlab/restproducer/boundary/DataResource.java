@@ -22,10 +22,6 @@ public class DataResource {
     }
 
     @GET
-    @Path("/hello")
-    public String hello() { return "hello"; }
-
-    @GET
     @Path("/dummy")
     public String dummy() {
         return dummyService.dummy();
