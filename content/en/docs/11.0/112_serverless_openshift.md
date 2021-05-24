@@ -20,7 +20,7 @@ We are going to test two ways how to deploy our serverless applications: First w
 
 If you do not already have your Knative client `kn` installed on your machine (you can verify that by testing `$ kn version` in your terminal), download and install the Knative client via your OpenShift GUI.
 
-Start by building a native compiled docker-image of your producer and push the image to your preferred image registry. If you don't have your Dockerhub or Quay account ready you can use our prebuilt image `quay.io/puzzle/quarkus-serverless-producer:rest`.
+Start by building a native compiled docker-image of your producer and push the image to your preferred image registry. If you don't have your Dockerhub or Quay account ready you can use our prebuilt image `g1raffi/funqy-serverless:rest`.
 
 {{% details title="Hint" %}}
 
