@@ -303,14 +303,17 @@ For example you may change the Debug port with the following command
 
 
 ## Quarkus DevServices
+
 If your are running tests or in development mode, quarkus provides a feature called DevSevices. DevServices are a way to
 enhance developer joy by providing required datasources with zero configuration. This is supported for the most common
-databases. 
+databases.
 
 For most types of datasources the zero configuration spin up requires docker to be available on the local environment.
 Under the hood quarkus is using testcontainers for this task.
 
+
 ### Postgres Example
+
 As an example lets have a look at an application requiring a postgresql database. you may find
 the code in the `{{% param solution_code_basedir %}}dev-services` folder. The example additionally uses Flyway to
 provision some data and uses the `hibernate-orm-panache` implementation which we will not cover any further. However,
@@ -391,6 +394,7 @@ following properties:
 * Connection String: `jdbc:postgresql://localhost:5432/default`
 * Username: `quarkus`
 * Password: `quarkus`
+
 
 ## Quarkus Dev UI
 
