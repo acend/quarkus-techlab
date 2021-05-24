@@ -288,27 +288,109 @@ as odo or rsync to sync to the remote application.
 
 ### Debugging
 
-In development mode, Quarkus starts by default with debug mode enabled, listening to port 5005 without suspending
-the JVM.
+In dev mode by default the debug port 5005 is enabled.
 
 This behavior can be changed by giving the `debug` system property one of the following values:
 
 * false - the JVM will start with debug mode disabled
 * true - The JVM is started in debug mode and will be listening on port `5005`
-* client - the JVM will start in client mode and attempt to connect to `localhost:5005`
 * {port} - The JVM is started in debug mode and will be listening on {port}
-
-An additional system property `suspend` can be used to suspend the JVM, when launched in debug mode. suspend supports
-the following values:
-
-* y or true - The debug mode JVM launch is suspended
-* n or false - The debug mode JVM is started without suspending
 
 For example you may change the Debug port with the following command
 ```s
 ./mvnw compile quarkus:dev -Ddebug=5000 
 ```
 
+
+## Quarkus DevServices
+If your are running tests or in development mode, quarkus provides a feature called DevSevices. DevServices are a way to
+enhance developer joy by providing required datasources with zero configuration. This is supported for the most common
+databases. 
+
+For most types of datasources the zero configuration spin up requires docker to be available on the local environment.
+Under the hood quarkus is using testcontainers for this task.
+
+### Postgres Example
+As an example lets have a look at an application requiring a postgresql database. you may find
+the code in the `{{% param solution_code_basedir %}}dev-services` folder. The example additionally uses Flyway to
+provision some data and uses the `hibernate-orm-panache` implementation which we will not cover any further. However,
+this does not change how the devservices work.
+
+Our pom.xml looks like this:
+```xml
+  <dependencies>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-flyway</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm-panache</artifactId>
+    </dependency>
+    <!-- ... -->
+  </dependencies>
+```
+
+In our application properties we have configured the datasource type:
+```properties
+# Datasource
+quarkus.datasource.db-kind=postgresql
+
+# DevServices
+quarkus.datasource.devservices.port=5432
+quarkus.datasource.devservices.image-name=postgres:13.2
+
+# Flyway
+quarkus.flyway.baseline-description=Initial version
+quarkus.flyway.migrate-at-start=true
+%dev.quarkus.flyway.locations=db/migration,db/dev
+```
+
+The absolute required minimal configuration would be:
+```properties
+# Datasource
+quarkus.datasource.db-kind=postgresql
+```
+
+With specifying `quarkus.datasource.devservices.port` we control and fix the port the spinned up datasource will use. If
+we do not specify it quarkus will us a random port. With `quarkus.datasource.devservices.image-name` we can control the
+database image quarkus will use.
+
+We further have an entity Employee (view source) and some database initialize scripts (view db folder) to add some data.
+
+If we start the application we will see that Quarkus connects to our docker daemon an uses testcontainers to spin up the
+database.
+
+```text
+INFO  [org.tes.doc.DockerClientProviderStrategy] (build-25) Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+INFO  [org.tes.DockerClientFactory] (build-25) Docker host IP address is localhost
+INFO  [org.tes.DockerClientFactory] (build-25) Connected to docker: 
+  Server Version: 19.03.13
+  API Version: 1.40
+  Operating System: Ubuntu 20.04.2 LTS
+  Total Memory: 23709 MB
+INFO  [org.tes.uti.ImageNameSubstitutor] (build-25) Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+INFO  [org.tes.DockerClientFactory] (build-25) Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+INFO  [org.tes.DockerClientFactory] (build-25) Checking the system...
+INFO  [org.tes.DockerClientFactory] (build-25) ✔︎ Docker server version should be at least 1.6.0
+INFO  [org.tes.DockerClientFactory] (build-25) ✔︎ Docker environment should have more than 2GB free disk space
+INFO  [🐳 .2]] (build-25) Creating container for image: postgres:13.2
+INFO  [🐳 .2]] (build-25) Starting container with ID: 8ced042125623cb84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
+INFO  [🐳 .2]] (build-25) Container postgres:13.2 is starting: 8ced042125623cb84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
+INFO  [🐳 .2]] (build-25) Container postgres:13.2 started in PT1.575032S
+```
+
+We may also see the docker container using the docker command line tools. The database will us the port `5432` as
+specified in the `application.properties`. If you want to connect to the database using your favourite tool use the
+following properties:
+
+* Connection String: `jdbc:postgresql://localhost:5432/default`
+* Username: `quarkus`
+* Password: `quarkus`
 
 ## Quarkus Dev UI
 
