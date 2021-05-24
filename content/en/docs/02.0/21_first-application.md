@@ -12,7 +12,7 @@ description: >
 To create your first Quarkus application you have several possibilities:
 
 * Create your application with maven
-* Create your application with the [Quickstart UI code.quarkus.io](https://code.quarkus.io/)
+* Create your application with the Quickstart UI [code.quarkus.io](https://code.quarkus.io/)
 * Use IntelliJ or eclipse plugins which will assist creating projects (these are usually also based on code.quarkus.io)
 
 
