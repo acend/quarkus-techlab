@@ -2,6 +2,7 @@
 title: "11.3 Serverless without kn CLI"
 linkTitle: "11.3 Serverless without kn CLI"
 weight: 1130
+onlyWhenNot: mobi
 sectionnumber: 11.3
 description: >
     OpenShift Serverless without kn CLI

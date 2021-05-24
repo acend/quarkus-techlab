@@ -13,6 +13,8 @@ We have defined our requirements for our new microservices which we want to have
 
 In this chapter we want to use Apache Kafka as our message oriented middleware. Kafka has some own concepts and introduces a ton of other functionality. But for starters were going to use it as a simple message broker.
 
+{{% onlyWhenNot mobi %}}
+
 
 ### {{% param sectionnumber %}}.1: Define Kafka Cluster
 
@@ -100,6 +102,8 @@ oc apply -f solution/kafka/openshift
 ```
 
 You will see that OpenShift will deploy a single node Kafka cluster into your namespace.
+
+{{% /onlyWhenNot %}}
 
 
 ### {{% param sectionnumber %}}.2: Local Development
