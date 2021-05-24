@@ -183,6 +183,12 @@ INFO  [🐳 .2]] (build-25) Creating container for image: postgres:13.2
 INFO  [🐳 .2]] (build-25) Starting container with ID: 8ced042125623cb84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
 INFO  [🐳 .2]] (build-25) Container postgres:13.2 is starting: 8ced042125623cb84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
 INFO  [🐳 .2]] (build-25) Container postgres:13.2 started in PT1.575032S
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+INFO  [org.fly.cor.int.lic.VersionPrinter] (Quarkus Main Thread) Flyway Community Edition 7.7.3 by Redgate
+INFO  [org.fly.cor.int.dat.bas.DatabaseType] (Quarkus Main Thread) Database: jdbc:postgresql://localhost:5432/default (PostgreSQL 13.2)
 ```
 
 We may also see the docker container using the docker command line tools. The database will us the port `5432` as
@@ -204,6 +210,7 @@ Each extension is able to provide custom information shown on the dev ui. Extens
 
 * Runtime information
 * Custom pages with or without actions to interact the application
+  * If you are using Flyway you may for example clean and migrate your database using the Dev UI
 
 ![Quarkus Dev UI](../dev-ui-monkeys.png)
 
