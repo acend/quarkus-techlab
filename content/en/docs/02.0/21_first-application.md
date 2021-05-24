@@ -65,6 +65,9 @@ provided information.
 * When was the application started? (tip: check the fired events)
 * Check the details about your runtime environment (environment variables and system properties) in the configuration
 editor.
+* Try overriding your configuration (e.g. log level) from command line (environment variable or system property)
+* Try starting with a different profile activated
+
 
 {{% details title="GreetingResource Hint" %}}
 ```java
