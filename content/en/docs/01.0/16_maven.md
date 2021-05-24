@@ -1,8 +1,8 @@
 ---
-title: "1.5 Quarkus with Maven"
-linkTitle: "1.5 Quarkus with Maven"
-weight: 150
-sectionnumber: 1.5
+title: "1.6 Quarkus with Maven"
+linkTitle: "1.6 Quarkus with Maven"
+weight: 160
+sectionnumber: 1.6
 description: >
   Quarkus with Maven
 ---

@@ -1,8 +1,8 @@
 ---
-title: "1.4 Introduction to Vert.x"
-linkTitle: "1.4 Introduction to Vert.x"
-weight: 140
-sectionnumber: 1.4
+title: "1.5 Vert.x"
+linkTitle: "1.5 Vert.x"
+weight: 150
+sectionnumber: 1.5
 description: >
   Introduction to Vert.x
 ---

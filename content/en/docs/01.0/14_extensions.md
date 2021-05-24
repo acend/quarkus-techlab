@@ -1,8 +1,8 @@
 ---
-title: "1.3 Introduction to Extension"
-linkTitle: "1.3 Introduction to Extensions"
-weight: 130
-sectionnumber: 1.3
+title: "1.4 Extension"
+linkTitle: "1.4 Extensions"
+weight: 140
+sectionnumber: 1.4
 description: >
   Introduction to Quarkus extensions
 ---

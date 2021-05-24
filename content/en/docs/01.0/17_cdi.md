@@ -1,8 +1,8 @@
 ---
-title: "1.6 Context and dependency injection"
-linkTitle: "1.6 Context and dependency injection"
-weight: 160
-sectionnumber: 1.6
+title: "1.7 Context and dependency injection"
+linkTitle: "1.7 Context and dependency injection"
+weight: 170
+sectionnumber: 1.7
 description: >
    Context and dependency injection in Quarkus
 ---
