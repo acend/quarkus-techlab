@@ -15,7 +15,7 @@ menu:
 {{% /onlyWhenNot %}}
 
 {{% onlyWhen mobi %}}
-{{% blocks/feature icon="fa-chalkboard-teacher" url="https://drive.google.com/uc?export=download&id=1vJVhfMMHKjaeRpLoJOPpCPrbxhMs0Q9S" title="Slides" %}}
+{{% blocks/feature icon="fa-chalkboard-teacher" url="slides_mobi.pdf" title="Slides" %}}
 {{% /blocks/feature %}}
 {{% /onlyWhen %}}
 
