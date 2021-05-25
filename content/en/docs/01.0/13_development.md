@@ -49,7 +49,7 @@ quarkus.live-reload.url=http://my.cluster.host.com:8080
 
 Before you start Quarkus on the remote host set the environment variable `QUARKUS_LAUNCH_DEVMODE=true`. If you are on
 bare metal you can just set this via the export `QUARKUS_LAUNCH_DEVMODE=true` command, if you are running using docker
-start the image with `-e QUARKUS_LAUNCH_DEVMODE=true`. 
+start the image with `-e QUARKUS_LAUNCH_DEVMODE=true`.
 
 On command line, use the following command:
 ```s
@@ -73,7 +73,7 @@ Now every time you refresh the browser you should see any changes you have made 
 remote app. This is done via a HTTP based long polling transport, that will synchronize your local workspace and the
 remote application via HTTP calls.
 
-You can use the following docker file to build a remote debug enabled container: 
+You can use the following docker file to build a remote debug enabled container:
 
 ```Dockerfile
 # Dockerfile for remote-dev-mode
@@ -95,6 +95,7 @@ CMD ["java", "-jar", \
   "-Dquarkus.live-reload.password=changeit", \
   "/deployments/quarkus-run.jar"]
 ```
+
 
 ### Debugging
 
