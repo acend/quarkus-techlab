@@ -49,7 +49,14 @@ quarkus.live-reload.url=http://my.cluster.host.com:8080
 
 Before you start Quarkus on the remote host set the environment variable `QUARKUS_LAUNCH_DEVMODE=true`. If you are on
 bare metal you can just set this via the export `QUARKUS_LAUNCH_DEVMODE=true` command, if you are running using docker
-start the image with `-e QUARKUS_LAUNCH_DEVMODE=true`. When the application starts you should now see the following
+start the image with `-e QUARKUS_LAUNCH_DEVMODE=true`. 
+
+On command line, use the following command:
+```s
+JAVA_ENABLE_DEBUG=true QUARKUS_LAUNCH_DEVMODE=true java -jar target/quarkus-app/quarkus-run.jar -Dquarkus.package.type=mutable-jar
+```
+
+When the application starts you should now see the following
 line in the logs: Profile dev activated. Live Coding activated.
 
 The remote side does not need to include Maven or any other development tools. The normal fast-jar Dockerfile that
@@ -59,17 +66,35 @@ jar, do not attempt to run normal devmode.
 Now you need to connect your local agent to the remote host, using the `remote-dev` command:
 
 ```s
-./mvnw quarkus:remote-dev -Dquarkus.live-reload.url=http://my-remote-host:8080
+./mvnw quarkus:remote-dev -Ddebug=false -Dquarkus.package.type=mutable-jar -Dquarkus.live-reload.url=http://my-remote-host:8080 -Dquarkus.live-reload.password=changeit
 ```
 
 Now every time you refresh the browser you should see any changes you have made locally immediately visible in the
 remote app. This is done via a HTTP based long polling transport, that will synchronize your local workspace and the
 remote application via HTTP calls.
 
-If you do not want to use the HTTP feature then you can simply run the `remote-dev` command without specifying the
-URL. In this mode the command will continuously rebuild the local application, so you can use an external tool such
-as odo or rsync to sync to the remote application.
+You can use the following docker file to build a remote debug enabled container: 
 
+```Dockerfile
+# Dockerfile for remote-dev-mode
+FROM adoptopenjdk/openjdk14-openj9:x86_64-alpine-jre-14_36.1_openj9-0.19.0
+RUN apk add curl
+
+ENV QUARKUS_LAUNCH_DEVMODE=true \
+    JAVA_ENABLE_DEBUG=true
+
+COPY target/quarkus-app/lib/ /deployments/lib/
+COPY target/quarkus-app/*.jar /deployments/
+COPY target/quarkus-app/app/ /deployments/app/
+COPY target/quarkus-app/quarkus/ /deployments/quarkus/
+
+CMD ["java", "-jar", \
+  "-Dquarkus.http.host=0.0.0.0", \
+  "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", \
+  "-Dquarkus.package.type=mutable-jar", \
+  "-Dquarkus.live-reload.password=changeit", \
+  "/deployments/quarkus-run.jar"]
+```
 
 ### Debugging
 
