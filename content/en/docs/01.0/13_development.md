@@ -187,7 +187,7 @@ With specifying `quarkus.datasource.devservices.port` we control and fix the por
 we do not specify it quarkus will us a random port. With `quarkus.datasource.devservices.image-name` we can control the
 database image quarkus will use.
 
-We further have an entity Employee (view source) and some database initialize scripts (view db folder) to add some data.
+We further have an entity Employee ([view source](https://github.com/puzzle/quarkus-techlab/blob/master/solution/dev-services/src/main/java/ch/puzzle/quarkustechlab/entity/Employee.java)) and some database initialize scripts ([view db folder](https://github.com/puzzle/quarkus-techlab/tree/master/solution/dev-services/src/main/resources/db)) to add some data.
 
 If we start the application we will see that Quarkus connects to our docker daemon an uses testcontainers to spin up the
 database.
