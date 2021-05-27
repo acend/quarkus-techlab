@@ -26,7 +26,7 @@ An extension named `appinfo` will have the configuration prefix `quarkus.appinfo
 
 ### Task {{% param sectionnumber %}}.1 - Defining built time configuration
 
-We will define our built-time configuration to contain the following properties:
+We will define our build-time configuration to contain the following properties:
 
 * **builtFor:** Simple string
 * **recordBuildTime:** Boolean whether the collection of information at build time should run or not
