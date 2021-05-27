@@ -58,13 +58,13 @@ metadata:
 
 You may wonder what these fields are used for:
 
-* keywords. Used by [code.quarkus.io](https://code.quarkus.io) for searching
-* categories. Used by [code.quarkus.io](https://code.quarkus.io) to categorize the extensions
+* keywords: Used by [code.quarkus.io](https://code.quarkus.io) for searching
+* categories: Used by [code.quarkus.io](https://code.quarkus.io) to categorize the extensions
   * Used: `web`, `data`, `messaging`, `core`, `reactive`, `cloud`, `observability`, `security`, `serialization`, `miscellaneous`, `compatibility`, `alt-languages`, `integration`, `business-automation`
-* name. describes your extension. Shown in Quarkus Dev-UI.
-* description. describes your extension. Shown in Quarkus Dev-UI.
-* guide. Link to an extension guide. Shown in Quarkus Dev-UI.
-* status. Describes the extension majority. This is also shown on [code.quarkus.io](https://code.quarkus.io) and on the Quarkus Dev-UI.
+* name: describes your extension. Shown in Quarkus Dev-UI.
+* description: describes your extension. Shown in Quarkus Dev-UI.
+* guide: Link to an extension guide. Shown in Quarkus Dev-UI.
+* status: Describes the extension maturity. This is also shown on [code.quarkus.io](https://code.quarkus.io) and on the Quarkus Dev-UI.
   * Used: `stable`, `preview`, `experimental`
   
 Keywords and categories are not really used for custom extension. However, we recommend to set them with reasonable values as well.
