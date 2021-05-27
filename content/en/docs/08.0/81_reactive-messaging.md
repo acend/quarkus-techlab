@@ -16,10 +16,10 @@ Old fashioned applications - often built as monoliths - struggle to meet the req
 
 [The Reactive Manifesto](https://www.reactivemanifesto.org/) defines that reactive systems are:
 
-    * Responsive
-    * Resilient
-    * Elastic
-    * Message Driven
+* Responsive
+* Resilient
+* Elastic
+* Message Driven
 
 We have already learned basics of messaging in a microservice architecture. Time to take a next step and make our messaging reactive. The approach we have seen in the chapter before is completely legitimate and there is nothing wrong with this approach.
 
@@ -29,17 +29,11 @@ We have already learned basics of messaging in a microservice architecture. Time
 In the last chapter we learned about basic messaging concepts and how two microservices can communicate with a message broker. In reactive messaging we connect channels directly to components. Instead of having a Thread running manually, we can annotate functions to bind them to events sent in a specific channel or data stream. This makes our code more readable and act in a reactive manner. Let's look at an example:
 
 ```java
-
-/* [...] */
-
 @Incoming("data-inbound-reactive")
 @Outgoing("data-outbound-reactive")
 public String streamProcess(String value) {
     return value.toUpperCase();
 }
-
-/* [...] */
-
 ```
 
 
@@ -50,27 +44,27 @@ If you read this example it's pretty clear what is happening. We are connecting 
 
 Connector can:
 
-    * retrieve messages from a remote broker (inbound)
-    * send messages to a remove broker (outbound)
+* retrieve messages from a remote broker (inbound)
+* send messages to a remove broker (outbound)
 
 A connector can, of course, implement both directions.
 
 Inbound connectors are responsible for:
 
-    * Getting messages from the remote broker,
-    * Creating a Reactive Messaging Message associated with the retrieved message.
-    * Potentially associating technical metadata with the message. This includes unmarshalling the payload.
-    * Associating a acknowledgement callback to acknowledge the incoming message when the Reactive Messaging message is acknowledged.
+* Getting messages from the remote broker,
+* Creating a Reactive Messaging Message associated with the retrieved message.
+* Potentially associating technical metadata with the message. This includes unmarshalling the payload.
+* Associating a acknowledgement callback to acknowledge the incoming message when the Reactive Messaging message is acknowledged.
 
 Important:
 Reactive matters! The first step should follow the reactive streams principle: uses non-blocking technology, respects downstream requests.
 
 Outbound connectors are responsible for:
 
-    * Receiving Reactive Messaging Message and transform it into a structure understand by the remote broker. This includes marshalling the payload.
-    * If the Message contains outbound metadata (metadata set during the processing to influence the outbound structure and routing), taking them into account.
-    * Sending the message to the remote broker.
-    * Acknowledging the Reactive Messaging Message when the broker has accepted / acknowledged the message.
+* Receiving Reactive Messaging Message and transform it into a structure understand by the remote broker. This includes marshalling the payload.
+* If the Message contains outbound metadata (metadata set during the processing to influence the outbound structure and routing), taking them into account.
+* Sending the message to the remote broker.
+* Acknowledging the Reactive Messaging Message when the broker has accepted / acknowledged the message.
 
 
 ### {{% param sectionnumber %}}.2.2: Connectors Event Driven Architecture
