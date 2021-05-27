@@ -28,19 +28,19 @@ We have already learned basics of messaging in a microservice architecture. Time
 
 In the last chapter we learned about basic messaging concepts and how two microservices can communicate with a message broker. In reactive messaging we connect channels directly to components. Instead of having a Thread running manually, we can annotate functions to bind them to events sent in a specific channel or data stream. This makes our code more readable and act in a reactive manner. Let's look at an example:
 
-    ```java
+```java
 
-        /* [...] */
+    /* [...] */
 
-        @Incoming("data-inbound-reactive")
-        @Outgoing("data-outbound-reactive")
-        public String streamProcess(String value) {
-            return value.toUpperCase();
-        }
+    @Incoming("data-inbound-reactive")
+    @Outgoing("data-outbound-reactive")
+    public String streamProcess(String value) {
+        return value.toUpperCase();
+    }
 
-        /* [...] */
+    /* [...] */
 
-    ```
+```
 
 
 If you read this example it's pretty clear what is happening. We are connecting with a Connector to a Channel (Queue or Topic) we call "data-inbound-reactive" and define it as the inbound connector for this method. On the other side we connect the outcome of this method to the "data-outbound-reactive" stream. Whenever the "data-inobund-reactive" stream sends an message we perform a transformation to uppercase and return the value into the "data-outbound-reactive" channel. Simple as that!
