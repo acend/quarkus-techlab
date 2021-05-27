@@ -64,7 +64,7 @@ public class AppinfoConfig {
 ```
 
 {{% details title="Task hint" %}}
-The built-time configuration looks like this:
+The build-time configuration looks like this:
 
 ```java
 @ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.BUILD_TIME)
