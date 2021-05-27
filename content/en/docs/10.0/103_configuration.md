@@ -24,7 +24,7 @@ For more details have a look at [Configuration Root Phases](https://quarkus.io/g
 An extension named `appinfo` will have the configuration prefix `quarkus.appinfo`.
 
 
-### Task {{% param sectionnumber %}}.1 - Defining built time configuration
+### Task {{% param sectionnumber %}}.1 - Defining build time configuration
 
 We will define our build-time configuration to contain the following properties:
 
