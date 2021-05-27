@@ -30,15 +30,15 @@ In the last chapter we learned about basic messaging concepts and how two micros
 
 ```java
 
-    /* [...] */
+/* [...] */
 
-    @Incoming("data-inbound-reactive")
-    @Outgoing("data-outbound-reactive")
-    public String streamProcess(String value) {
-        return value.toUpperCase();
-    }
+@Incoming("data-inbound-reactive")
+@Outgoing("data-outbound-reactive")
+public String streamProcess(String value) {
+    return value.toUpperCase();
+}
 
-    /* [...] */
+/* [...] */
 
 ```
 
