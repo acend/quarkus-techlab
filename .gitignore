@@ -3,7 +3,6 @@ Thumbs.db
 .dist
 .tmp
 .sass-cache
-misc/
 npm-debug.log
 node_modules
 builds
@@ -11,6 +10,7 @@ public
 .env
 /resources
 .idea/
+misc/
 tmp/*
 .feedbacks
 .vscode
