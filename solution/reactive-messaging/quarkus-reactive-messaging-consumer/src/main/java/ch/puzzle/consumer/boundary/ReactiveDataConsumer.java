@@ -1,6 +1,7 @@
 package ch.puzzle.consumer.boundary;
 
 import ch.puzzle.consumer.entity.SensorMeasurement;
+import io.smallrye.reactive.messaging.annotations.Broadcast;
 import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
@@ -15,6 +16,7 @@ public class ReactiveDataConsumer {
 
     @Incoming("data-inbound")
     @Outgoing("in-memory-stream")
+    @Broadcast
     @Acknowledgment(Acknowledgment.Strategy.POST_PROCESSING)
     public SensorMeasurement consume(SensorMeasurement sensorMeasurement) {
         return sensorMeasurement;
