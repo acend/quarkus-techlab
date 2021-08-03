@@ -16,3 +16,4 @@ tmp/*
 .vscode
 code/appinfo
 META-INF
+**.iml

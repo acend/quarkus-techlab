@@ -95,50 +95,12 @@ Response code: 200 (OK); Time: 115ms; Content length: 64 bytes
 
 ### Task {{% param sectionnumber %}}.1.1: Even more reactive
 
-To use the full potential of the reactive world we will need to have our database access reactive as well. Let's start by initializing a database.
-
-Create a `docker-compose.yaml` with a PostgreSQL database exposing the port 5432 to your system.
-
-{{% details title="Hint" %}}
-```yaml
-
-version: '3'
-
-services:
-  quarkus-db:
-    image: docker.io/postgres:11.11
-    hostname: quarkus-db
-    container_name: quarkus-db
-    volumes:
-      - quarkus-db:/var/lib/postgresql/data/
-    networks:
-      - quarkus
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=1234
-    ports:
-      - 5432:5432
-
-networks:
-  quarkus:
-    driver: bridge
-    ipam:
-      driver: default
-
-volumes:
-  quarkus-db:
-
-```
-{{% /details %}}
+To use the full potential of the reactive world we will need to have our database access reactive as well. Let's start by initializing a database. We don't need to worry about creating the database instance ourselves, the quarkus dev services will start our desired database in a container all by itself.
 
 Add the extension 'quarkus-reactive-pg-client' to your project. This will allow you to use a reactive way to connect and query your database. Configure the extension in your `application.properties` with the following content:
 
 ```s
 
-quarkus.datasource.db-kind=postgresql
-quarkus.datasource.username=admin
-quarkus.datasource.password=1234
-quarkus.datasource.reactive.url=postgresql://localhost:5432/admin
 myapp.schema.create=true
 
 ```
