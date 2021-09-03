@@ -31,7 +31,7 @@ Create a `docker-compose.yaml` file and add the following service to it:
 ```yaml
 
   jaeger:
-    image: jaegertracing/all-in-one:1.22.0
+    image: jaegertracing/all-in-one:1.25.0
     hostname: jaeger
     container_name: jaeger
     ports:

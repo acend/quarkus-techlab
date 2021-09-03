@@ -106,7 +106,7 @@ version: '3'
 
 services:
   quarkus-db:
-    image: docker.io/postgres:11.11
+    image: docker.io/postgres:13.4
     hostname: quarkus-db
     container_name: quarkus-db
     volumes:
