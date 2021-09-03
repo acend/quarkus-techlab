@@ -78,6 +78,7 @@ github_branch = "master"
 lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
 quarkusVersion = "1.13.6.Final"
+#quarkusVersion = "2.2.1.Final"
 
 k8s_user_name = "userXY"
 registry_url = "default-route-openshift-image-registry.$CLUSTER_URL"
