@@ -71,7 +71,7 @@ BeanInfo object. At the deployment type the invocations are made on the recorder
 but the invocations do not get executed. They are recorded and they generate bytecode that performs the same actions of
 invocations at runtime. You may understand this as deferred execution (recorded at deployment time but invoked at runtime).
 
-The Recorder class belongs to our runtime module. Create the class `AppinfoRecorder` in the runtime module. Use the
+The Recorder class belongs to our runtime module. Create the class `AppinfoRecorder` in the **runtime** module. Use the
 template below for your class.
 
 The recorder:
