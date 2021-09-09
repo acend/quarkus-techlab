@@ -173,7 +173,7 @@ public class RecentMessageHealthCheck implements HealthCheck {
         Instant lastMessageTime = healthService.getLastMessageTime();
 
         HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Last message check")
-                .state(lastMessageTime == null || ((lastMessageTime.toEpochMilli() + 60000) >= Instant.now().toEpochMilli()));
+                .status(lastMessageTime == null || ((lastMessageTime.toEpochMilli() + 60000) >= Instant.now().toEpochMilli()));
 
         if(lastMessageTime != null) {
             responseBuilder.withData("lastMessageTime", lastMessageTime.toEpochMilli())

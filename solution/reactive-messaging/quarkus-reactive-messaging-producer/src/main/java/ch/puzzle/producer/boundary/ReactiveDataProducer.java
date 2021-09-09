@@ -6,6 +6,8 @@ import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.time.Duration;
+import java.time.Instant;
+import java.util.Random;
 
 @ApplicationScoped
 public class ReactiveDataProducer {

@@ -106,7 +106,7 @@ version: '3'
 
 services:
   quarkus-db:
-    image: docker.io/postgres:13.4
+    image: docker.io/postgres:11.11
     hostname: quarkus-db
     container_name: quarkus-db
     volumes:
@@ -135,10 +135,6 @@ Add the extension 'quarkus-reactive-pg-client' to your project. This will allow 
 
 ```s
 
-quarkus.datasource.db-kind=postgresql
-quarkus.datasource.username=admin
-quarkus.datasource.password=1234
-quarkus.datasource.reactive.url=postgresql://localhost:5432/admin
 myapp.schema.create=true
 
 ```

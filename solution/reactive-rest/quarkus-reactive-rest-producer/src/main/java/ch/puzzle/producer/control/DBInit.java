@@ -1,4 +1,4 @@
-package ch.puzzle.producer.control;qua
+package ch.puzzle.producer.control;
 
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
