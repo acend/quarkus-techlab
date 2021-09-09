@@ -20,7 +20,7 @@ import java.net.http.HttpResponse;
 public class DataResourceTest {
 
     @TestHTTPEndpoint(DataResource.class)
-    @TestHTTPResource("hello")
+    @TestHTTPResource
     URL url;
 
     @Test
@@ -30,6 +30,7 @@ public class DataResourceTest {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
         SensorMeasurement measurement = JsonbBuilder.create().fromJson(response.body(), SensorMeasurement.class);
         Assertions.assertAll(
                 () -> Assertions.assertNotNull(measurement.data),
