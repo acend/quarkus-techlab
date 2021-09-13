@@ -16,7 +16,7 @@ The microprofile 'fault-tolerance' (Quarkus extension: `smallrye-fault-tolerance
 
 If you are manually importing the health extension use the following dependency:
 
-```
+```xml
 <dependency>
   <groupId>io.quarkus</groupId>
   <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
