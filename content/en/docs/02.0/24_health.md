@@ -21,7 +21,7 @@ If you are manually importing the health extension use the following dependency:
   <groupId>io.quarkus</groupId>
   <artifactId>quarkus-smallrye-health</artifactId>
 </dependency>
-``` 
+```
 
 This extension will expose the following REST endpoints:
 
