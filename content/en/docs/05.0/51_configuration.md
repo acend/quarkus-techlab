@@ -18,7 +18,7 @@ For the next chapter we need to prepare our applications to run in a cloud envir
 
 ```
 
-When you restart your applications they both will expose automatically the '/health' endpoint which indicates that the application is up and running.
+When you restart your applications they both will expose automatically the '/q/health' endpoint which indicates that the application is up and running.
 
 Additionally we need to configure the connection from our data-consumer to the data-producer. As for now the data-consumer simply points to the url configured in the `application.properties` which gets injected to the defined RestClient.
 

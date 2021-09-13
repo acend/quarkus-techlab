@@ -26,7 +26,7 @@ We start by copying the rest application and extend it with custom metrics. Add 
 
 {{% /details %}}
 
-Per default the applications will expose all the metrics collected on the endpoint `/metrics`.
+Per default the applications will expose all the metrics collected on the endpoint `/q/metrics`.
 
 The most common metric types used are:
 
@@ -41,7 +41,7 @@ Let's test these impelementations in our producing application.
 
 We start by implementing a timer which tracks the time of our default `/data` endpoint to process a requst. We can simply annotate the function we want the timer to record with `@Timed` and the metric will be collected and exposed. Metrics will allow us to give them custom names, describe them and tag them for better readability. The annotation can be provided with the fields `value, description, extraTags` for this purpose.
 
-Add the annotation to your endpoint and test your endpoint to see the result afterwards exposed to the `/metrics` endpoint.
+Add the annotation to your endpoint and test your endpoint to see the result afterwards exposed to the `/q/metrics` endpoint.
 
 {{% details title="Hint" %}}
 
@@ -63,7 +63,7 @@ Add the annotation to your endpoint and test your endpoint to see the result aft
 
 Create another endpoint to test the counter metric. Let's simply create an endpoint which returns some String and increments it's counter metric by one. To create a counter you can use the annotation `@Counted` which works similar to the `@Timed` annotation. One interesting feature is the field `recordFailuresOnly(): boolean` which allows us to track only failed calls of the annotated function.
 
-Add the endpoint and annotation to your application. Call your API and verify the value of the counter in the `/metrics` endpoint.
+Add the endpoint and annotation to your application. Call your API and verify the value of the counter in the `/q/metrics` endpoint.
 
 {{% details title="Hint" %}}
 
