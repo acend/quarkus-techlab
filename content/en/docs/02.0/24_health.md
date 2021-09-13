@@ -14,15 +14,6 @@ In this section we will add health checks to our microservices.
 
 We will be using the `smallrye-health` quarkus extension which relies on the MicroProfile Health specification.
 
-If you are manually importing the health extension use the following dependency:
-
-```xml
-<dependency>
-  <groupId>io.quarkus</groupId>
-  <artifactId>quarkus-smallrye-health</artifactId>
-</dependency>
-```
-
 This extension will expose the following REST endpoints:
 
 * `/q/health/live`: is the application up and running?
@@ -64,6 +55,15 @@ Add the `smallrye-health` extension to your data-producer and data-consumer serv
 ```s
 ./mvnw -pl data-producer quarkus:add-extension -Dextensions="smallrye-health"
 ./mvnw -pl data-consumer quarkus:add-extension -Dextensions="smallrye-health"
+```
+
+If you are manually importing the health extension use the following dependency:
+
+```xml
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-health</artifactId>
+</dependency>
 ```
 {{% /details %}}
 
