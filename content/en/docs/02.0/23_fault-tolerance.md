@@ -14,6 +14,15 @@ As our application grows in complexity and in horizontal distribution, microserv
 
 The microprofile 'fault-tolerance' (Quarkus extension: `smallrye-fault-tolerance`) comes in very handy to implement simple but effective design patterns to be prepared for said events. Add this extension to both of your microservices!
 
+If you are manually importing the health extension use the following dependency:
+
+```
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+</dependency>
+``` 
+
 Hint: Maybe it's a good time to tag your repositories for the consumer and producer at this point. We are going to intentionally break some code and test fault tolerance which we will revert after each example.
 
 

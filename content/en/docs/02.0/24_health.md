@@ -12,7 +12,16 @@ In this section we will add health checks to our microservices.
 
 ## Adding Health checks
 
-We will be using the `smallrye-health` quarkus extension which relies on the MicroProfile Health specification.
+We will be using the `smallrye-health` quarkus extension which relies on the MicroProfile Health specification. 
+
+If you are manually importing the health extension use the following dependency:
+
+```
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-health</artifactId>
+</dependency>
+``` 
 
 This extension will expose the following REST endpoints:
 
