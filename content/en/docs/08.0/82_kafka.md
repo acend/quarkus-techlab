@@ -109,7 +109,7 @@ You will see that OpenShift will deploy a single node Kafka cluster into your na
 ### {{% param sectionnumber %}}.2: Local Development
 
 For local development we do have the choice to either run our Kafka services via Quarkus Devservices or with docker-compose.
-If you want to use the Quarkus Devservices simply remove in the further configurations of the applications the property `kafka.bootstrap.servers=localhost:9092` from your `application.properties`. This will setup a [Redpanda](https://vectorized.io/redpanda) container for your environment. 
+If you want to use the Quarkus Devservices simply remove in the further configurations of the applications the property `kafka.bootstrap.servers=localhost:9092` from your `application.properties`. This will setup a [Redpanda](https://vectorized.io/redpanda) container for your environment.
 If you choose to test your local services with a Kafka broker you can use a small docker-compose file `solution/kafka/docker/docker-compose.yml`
 to start a Kafka cluster:
 
