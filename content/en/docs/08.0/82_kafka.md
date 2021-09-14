@@ -108,7 +108,9 @@ You will see that OpenShift will deploy a single node Kafka cluster into your na
 
 ### {{% param sectionnumber %}}.2: Local Development
 
-For local development we will use a small docker-compose file `solution/kafka/docker/docker-compose.yml`
+For local development we do have the choice to either run our Kafka services via Quarkus Devservices or with docker-compose.
+If you want to use the Quarkus Devservices simply remove in the further configurations of the applications the property `kafka.bootstrap.servers=localhost:9092` from your `application.properties`. This will setup a [Redpanda](https://vectorized.io/redpanda) container for your environment. 
+If you choose to test your local services with a Kafka broker you can use a small docker-compose file `solution/kafka/docker/docker-compose.yml`
 to start a Kafka cluster:
 
 ```yaml
@@ -241,6 +243,7 @@ To ensure the connection from the connector to your message broker we need some 
 ```s
 #application.properties
 
+# Remove property for Devservices
 kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.outgoing.data-inbound.connector=smallrye-kafka
@@ -309,6 +312,8 @@ After creating the deserializer we need to setup the connectors for the consumer
 
 ```s
 quarkus.http.port=8081
+
+# Remove property for Devservices
 kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.incoming.data-inbound.connector=smallrye-kafka
