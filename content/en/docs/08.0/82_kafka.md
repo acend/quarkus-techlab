@@ -158,6 +158,24 @@ docker-compose -f solution/kafka/docker/docker-compose.yml up -d
 
 Create again two Quarkus projects 'quarkus-reactive-messaging-consumer' and 'quarkus-reactive-messaging-producer'.
 
+
+{{% details title="Hint" %}}
+
+```s
+
+# Create producer application
+
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -DprojectGroupId=ch.puzzle -DprojectArtifactId=quarkus-reactive-messaging-producer -Dextensions="smallrye-reactive-messaging-kafka,quarkus-jsonb" -DprojectVersion=1.0.0
+
+# Create consumer application
+
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -DprojectGroupId=ch.puzzle -DprojectArtifactId=quarkus-reactive-messaging-consumer -Dextensions="smallrye-reactive-messaging-kafka,quarkus-resteasy-reactive-jsonb,quarkus-resteasy-reactive" -DprojectVersion=1.0.0
+
+```
+
+{{% /details %}}
+
+
 For the producer add the extensions 'smallrye-reactive-messaging-kafka' and 'quarkus-jsonb' to your project. For the
 consumer: 'smallrye-reactive-messaging-kafka', 'quarkus-resteasy-reactive-jsonb' and 'quarkus-resteasy-reactive'.
 
