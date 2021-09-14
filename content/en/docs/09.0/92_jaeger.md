@@ -29,7 +29,8 @@ We start by adding the 'quarkus-smallrye-opentracing' extension to the consumer 
 Create a `docker-compose.yaml` file and add the following service to it:
 
 ```yaml
-
+version: '2'
+services:
   jaeger:
     image: jaegertracing/all-in-one:1.25.0
     hostname: jaeger
