@@ -118,7 +118,7 @@ version: '2'
 services:
 
   zookeeper:
-    image: docker.io/strimzi/kafka:0.25.0-kafka-2.8.0
+    image: quay.io/strimzi/kafka:0.25.0-kafka-2.8.0
     command: [
         "sh", "-c",
         "bin/zookeeper-server-start.sh config/zookeeper.properties"
@@ -129,7 +129,7 @@ services:
       LOG_DIR: /tmp/logs
 
   kafka:
-    image: docker.io/strimzi/kafka:0.25.0-kafka-2.8.0
+    image: quay.io/strimzi/kafka:0.25.0-kafka-2.8.0
     command: [
         "sh", "-c",
         "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
