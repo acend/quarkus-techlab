@@ -30,7 +30,9 @@ Create a `docker-compose.yaml` file and add the following service to it:
 
 ```yaml
 version: '2'
+
 services:
+
   jaeger:
     image: jaegertracing/all-in-one:1.25.0
     hostname: jaeger
@@ -44,6 +46,8 @@ services:
       - 16686:16686
       
 ```
+
+Start your docker Jaeger service with `docker-compose -f docker-compose.yaml up -d`.
 
 Configure your microservices to report the traces to your Jaeger instance. Add the following properties to your `application.properties`:
 
