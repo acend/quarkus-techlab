@@ -337,7 +337,7 @@ services:
       - ./config/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
 
   prometheus:
-    image: quay.io/prometheus/prometheus:latest
+    image: docker.io/prom/prometheus:latest
     hostname: prometheus
     container_name: prometheus
     ports:
