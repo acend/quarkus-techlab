@@ -244,3 +244,158 @@ With the provided Configuration tool, you are able to change the runtime config 
 without having to restart the Quarkus application. There is also a console showing the log output.
 
 ![Quarkus Dev UI](../config-ui.png)
+
+
+## Quarkus CLI
+
+With the release of version 2.0 of Quarkus the new quarkus-cli was presented. The CLI will improve interaction with quarkus projects.
+
+Currently the Quarkus CLI is available as a jar installable using jbang.
+
+On Linux, macOS, and Windows (using WSL or bash compatible shell like cygwin or mingw)
+
+```s
+curl -Ls https://sh.jbang.dev | bash -s - app install --fresh --force quarkus@quarkusio
+```
+
+On Windows using Powershell:
+
+```s
+iex "& { $(iwr https://ps.jbang.dev) } app install --fresh --force quarkus@quarkusio"
+```
+
+If jbang has already been installed, you can it directly:
+
+```s
+# This can also be used to update to the latest version
+jbang app install --fresh --force quarkus@quarkusio
+# Use the latest (or locally built) snapshot (with qss as an alias)
+jbang app install --force --name qss ~/.m2/repository/io/quarkus/quarkus-cli/999-SNAPSHOT/quarkus-cli-999-SNAPSHOT-runner.jar
+```
+
+Once installed quarkus will be in your PATH and if you run quarkus --version it will print the installed version:
+
+```s
+quarkus --version
+Client Version {quarkus-version}
+```
+
+Check out `quarkus --help` to get a help information with all the available commands.
+
+
+### Creating a new project
+
+To create a new Quarkus project simply run the `create` command of the CLI:
+
+```s
+
+quarkus create app test-name
+
+-----------
+
+applying codestarts...
+📚  java
+🔨  maven
+📦  quarkus
+📝  config-properties
+🔧  dockerfiles
+🔧  maven-wrapper
+🚀  resteasy-codestart
+
+-----------
+[SUCCESS] ✅  quarkus project has been successfully generated in:
+--> <pwd>/test-name
+-----------
+Navigate into this directory and get started: quarkus dev
+
+```
+
+To check out the options for project creation see `quarkus create app --help`.
+
+
+### Working with extensions
+
+The Quarkus CLI will give you quality of life features when working with extensions.
+You can list your installed extensions in a Quarkus project by invoking
+
+```s
+
+quarkus ext ls
+
+Looking for the newly published extensions in registry.quarkus.io
+Current Quarkus extensions installed: 
+
+quarkus-resteasy                                  
+
+To get more information, append `--full` to your command line.
+
+```
+
+When looking for new extensions to install you can use the `--installable / -i` option. This will simply list all extensions available. You can also filter your query by using the `--search / -s <key>` for the keyword `<key>`.
+
+```s
+
+quarkus ext ls -is openshift
+
+Current Quarkus extensions installable: 
+
+quarkus-openshift                                 
+
+To get more information, append `--full` to your command line.
+
+To list only extensions from specific category, append `--category "categoryId"` to your command line.
+
+Add an extension to your project by adding the dependency to your pom.xml or use `quarkus extension add "artifactId"`
+
+```
+
+When you have found your desired extension you can add the extension with
+
+```s
+
+quarkus ext add smallrye-health
+
+[SUCCESS] ✅  Extension io.quarkus:quarkus-smallrye-health has been installed
+
+```
+
+Or to remove extensions use
+
+```s
+
+quarkus ext rm smallrye-health
+
+[SUCCESS] ✅  Extension io.quarkus:quarkus-smallrye-health has been uninstalled
+
+```
+
+
+### Building and running the project
+
+Building your project with the Quarkus CLI is as simple as:
+
+```s
+
+quarkus build
+
+```
+
+To start up your application in dev mode you can use:
+
+```s
+
+quarkus dev
+
+```
+
+{{% details title="Hint" %}}
+
+They say cool kids use:
+
+```s
+
+alias q=quarkus
+
+```
+
+{{% /details %}}
