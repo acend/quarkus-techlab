@@ -104,3 +104,35 @@ USER 1001
 ENTRYPOINT [ "/deployments/run-java.sh" ]
 
 ```
+
+If you are in a restricted environment, where possible dependencies and packages cannot be downloaded, try to use this Dockerfile instead:
+
+```Dockerfile
+
+FROM registry.access.redhat.com/ubi8/openjdk-11:1.10
+
+USER root
+
+RUN chown 1001 /deployments \
+    && chmod "g+rwX" /deployments \
+    && chown 1001:root /deployments \
+    && echo "#!/bin/sh" > /deployments/run-java.sh \
+    && echo "java -jar /deployments/quarkus-run.jar" >> /deployments/run-java.sh \
+    && chown 1001 /deployments/run-java.sh \
+    && chmod 540 /deployments/run-java.sh \
+    && echo "securerandom.source=file:/dev/urandom" >> /etc/alternatives/jre/lib/security/java.security
+
+# Configure the JAVA_OPTIONS, you can add -XshowSettings:vm to also display the heap size.
+ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+# We make four distinct layers so if there are application changes the library layers can be re-used
+COPY --chown=1001 target/quarkus-app/lib/ /deployments/lib/
+COPY --chown=1001 target/quarkus-app/*.jar /deployments/
+COPY --chown=1001 target/quarkus-app/app/ /deployments/app/
+COPY --chown=1001 target/quarkus-app/quarkus/ /deployments/quarkus/
+
+EXPOSE 8080
+USER 1001
+
+ENTRYPOINT [ "/deployments/run-java.sh" ]
+
+```
