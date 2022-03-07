@@ -54,7 +54,7 @@ Triggers version: unknown
 
 ## Task {{% param sectionnumber %}}.4: Create Pipeline tasks
 
-A Task is the smallest block of a Pipeline, which by itself can contain one or more steps. These steps are executed to process a specific element. For each task, a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. _Input_ and _Output_ specifications can be used to interact with other tasks.
+A Task is the smallest block of a Pipeline, which by itself can contain one or more steps. These steps are executed to process a specific element. For each task, a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. *Input* and *Output* specifications can be used to interact with other tasks.
 
 {{% alert title="Note" color="primary" %}}
 You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
