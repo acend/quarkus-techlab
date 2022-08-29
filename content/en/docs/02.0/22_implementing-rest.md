@@ -31,13 +31,13 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 
 {{% /details %}}
 
-To write better APIs and share data over our defined resources, we need the 'resteasy-jsonb' extension which provides us with
-JSON-B functionalities for our REST interfaces.
+To write better APIs and share data over our defined resources, we need the 'resteasy-jackson' extension which provides us with
+Jackson functionalities for our REST interfaces.
 To add an extension to your existing Quarkus application simply use:
 
 ```bash
 
-./mvnw quarkus:add-extension -Dextensions="quarkus-resteasy-jsonb"
+./mvnw quarkus:add-extension -Dextensions="quarkus-resteasy-reactive-jackson"
 
 ```
 
@@ -72,6 +72,11 @@ In the generated DataResource edit the `@GET` endpoint to return a new SensorMea
 
 ```java
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 @Path("/data")
 public class DataResource {
 
@@ -93,7 +98,7 @@ For more information about writing REST APIs with Quarkus see the [documentation
 
 ### {{% param sectionnumber %}}.3: Consuming Data
 
-With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called 'data-consumer' with the follwing extensions: "rest-client, resteasy-jsonb".
+With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called 'data-consumer' with the follwing extensions: "rest-client-reactive-jackson".
 
 {{% details title="Hint" %}}
 
@@ -104,7 +109,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectArtifactId=data-consumer \
     -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumerResource" \
     -Dpath="/data" \
-    -Dextensions="rest-client, resteasy-jsonb"
+    -Dextensions="rest-client-reactive-jackson"
 
 ```
 
@@ -115,6 +120,12 @@ In the data-consumer microservice we will have another resource on the path "/da
 ```java
 
 // DataProducerService
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/data")
 @RegisterRestClient
@@ -181,6 +192,11 @@ To use the registered RestClient in our application inject it into the DataConsu
 You can edit our resource in the data-consumer to use the `DataProducerService` to create a proxy consuming the data-producer's API and return it.
 
 ```java
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import ch.puzzle.quarkustechlab.restconsumer.DataProducerService;
+import ch.puzzle.quarkustechlab.restconsumer.SensorMeasurement;
 
 @Path("/data")
 public class DataConsumerResource {
