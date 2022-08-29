@@ -14,8 +14,6 @@ As our application grows in complexity and in horizontal distribution, microserv
 
 The microprofile 'fault-tolerance' (Quarkus extension: `smallrye-fault-tolerance`) comes in very handy to implement simple but effective design patterns to be prepared for said events. Add this extension to both of your microservices!
 
-If you are manually importing the health extension use the following dependency:
-
 ```xml
 <dependency>
   <groupId>io.quarkus</groupId>
@@ -23,7 +21,7 @@ If you are manually importing the health extension use the following dependency:
 </dependency>
 ```
 
-Hint: Maybe it's a good time to tag your repositories for the consumer and producer at this point. We are going to intentionally break some code and test fault tolerance which we will revert after each example.
+**Hint:** Maybe it's a good time to tag your repositories for the consumer and producer at this point. We are going to intentionally break some code and test fault tolerance which we will revert after each example.
 
 
 ### {{% param sectionnumber %}}.1.1: Resilience through Retries
@@ -35,11 +33,20 @@ Let's take a look at an example:
 In the data-producer project let's change our REST endpoint, which serves data to the consumer, so it will fail randomly.
 
 ```java
+import java.util.Random;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/data")
 public class DataResource {
 
-    private static Logger logger = Logger.getLogger(DataResource.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DataResource.class);
 
     Random random = new Random();
 
@@ -48,13 +55,12 @@ public class DataResource {
     public SensorMeasurement getSensorMeasurement() {
         logger.info("getSensorMeasurement called!");
         if (random.nextBoolean()) {
-            logger.severe("Failed!");
+            logger.error("Failed!");
             throw new RuntimeException();
         }
         return new SensorMeasurement();
     }
 }
-
 ```
 
 As you can see we introduced a random boolean which will make the endpoint to fail half the time. We added a log for you to see that the retries will work and the endpoint will be called multiple times!
@@ -64,6 +70,14 @@ If we start up both microservices and try to consume data multiple times, we can
 In our data-consumer project we will add the retry mechanism. Add the extension `smallrye-fault-tolerance` if you don't already have and edit our DataProducerService interface:
 
 ```java
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
 
 @Path("/data")
 @RegisterRestClient(configKey = "data-producer-api")
@@ -72,9 +86,9 @@ public interface DataProducerService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 10)
-    SensorMeasurement getSensorMeasurement();
+    SensorMeasurement getSensorMeasurment();
+    
 }
-
 ```
 
 You can see that we added the `@Retry` annotation and configured it to have a maximum of retries before it fails. Let's try to consume data again. If you send a request to your data-consumer you can see now from the amount of logs produced by the data-producer that after a failure the endpoint is instantaniously called again.
@@ -87,11 +101,20 @@ The `@Timeout` annotation can be used to mark functions which will have a finite
 We update our producer to take a random amount of time to answer with the desired response.
 
 ```java
+import java.util.Random;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/data")
 public class DataResource {
 
-    private static Logger logger = Logger.getLogger(DataResource.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DataResource.class);
 
     Random random = new Random();
 
@@ -109,6 +132,14 @@ public class DataResource {
 Then update the DataProducerService of our data-consumer to time out after 500ms:
 
 ```java
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
 
 @Path("/data")
 @RegisterRestClient(configKey = "data-producer-api")
@@ -117,9 +148,9 @@ public interface DataProducerService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Timeout(500)
-    SensorMeasurement getSensorMeasurement();
+    SensorMeasurement getSensorMeasurment();
+    
 }
-
 ```
 
 If you send a request to the consumer, you will see that about half of the time we will run into a TimeoutException. The method took longer than 500 ms to finish, so the `@Timeout(500)` interrupted the invocation.
@@ -132,6 +163,15 @@ When we insert timeouts or a maximum amount of retries for a certain part of our
 Let's update the example from before to use a fallback if it takes longer than the defined 500 ms to respond:
 
 ```java
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
 
 @Path("/data")
 @RegisterRestClient(configKey = "data-producer-api")
@@ -141,13 +181,12 @@ public interface DataProducerService {
     @Produces(MediaType.APPLICATION_JSON)
     @Timeout(500)
     @Fallback(fallbackMethod = "getDefaultMeasurement")
-    SensorMeasurement getSensorMeasurement();
-
+    SensorMeasurement getSensorMeasurment();
+    
     default SensorMeasurement getDefaultMeasurement() {
         return new SensorMeasurement();
     }
 }
-
 ```
 
 We have seen that we can increase resilience in our microservices without touching the business logic at all.

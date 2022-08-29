@@ -53,8 +53,7 @@ Add the `smallrye-health` extension to your data-producer and data-consumer serv
 
 {{% details title="Hint" %}}
 ```s
-./mvnw -pl data-producer quarkus:add-extension -Dextensions="smallrye-health"
-./mvnw -pl data-consumer quarkus:add-extension -Dextensions="smallrye-health"
+./mvnw quarkus:add-extension -Dextensions="smallrye-health"
 ```
 
 If you are manually importing the health extension use the following dependency:
