@@ -21,12 +21,17 @@ We will start similar to the previous example with a producer which exposes data
 
 ### Task {{% param sectionnumber %}}.1.1: Create producer project
 
-Start by creating a project 'quarkus-reactive-rest-producer'. Add the extensions 'quarkus-resteasy-reactive', 'quarkus-resteasy-reactive-jsonb', 'quarkus-reactive-pg-client' to the project.
+Start by creating a project 'quarkus-reactive-rest-producer'. Add the extensions 'quarkus-resteasy-reactive', 'quarkus-resteasy-reactive-jackson', 'quarkus-reactive-pg-client' to the project.
 
 {{% details title="Hint" %}}
 
-```s
-mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -DprojectGroupId=ch.puzzle -DprojectArtifactId=quarkus-reactive-rest-producer -Dextensions="quarkus-resteasy-reactive,quarkus-resteasy-reactive-jsonb" -DprojectVersion=1.0.0 -DclassName="ch.puzzle.producer.boundary.DataResource"
+```shell
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
+  -DprojectGroupId=ch.puzzle \
+  -DprojectArtifactId=quarkus-reactive-rest-producer \
+  -Dextensions="quarkus-resteasy-reactive,quarkus-resteasy-reactive-jackson" \
+  -DprojectVersion=1.0.0 \
+  -DclassName="ch.puzzle.producer.boundary.DataResource"
 ```
 
 {{% /details %}}
@@ -37,7 +42,6 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -Dproj
 The producer application should expose `SensorMeasurement` to the consumer. Let's create a simple class `ch.puzzle.producer.entity.SensorMeasurement` with the follwoing content:
 
 ```java
-
 public class SensorMeasurement {
 
     public Long id;
@@ -49,7 +53,6 @@ public class SensorMeasurement {
         this.time = Instant.now();
     }
 }
-
 ```
 
 Next up we will write our first reactive REST endpoint. Alter the generated `DataResource` class to serve the path '/data' and implement a simple endpoint to return a `Uni<SensorMeasurement>` whenever a GET request is incoming.
@@ -58,7 +61,6 @@ Creating a `Uni` holding a `SensorMeasurement` is as simple as `Uni.createFrom()
 
 {{% details title="Hint" %}}
 ```java
-
 @Path("/data")
 public class DataResource {
 
@@ -69,14 +71,12 @@ public class DataResource {
     }
 
 }
-
 ```
 {{% /details %}}
 
 When you hit your API with a GET call to the defined `/data` endpoint, you will get a JSON response with a `SensorMeasurement`.
 
-```s
-
+```shell
 GET http://localhost:8080/data
 
 HTTP/1.1 200 OK
@@ -89,7 +89,6 @@ Content-Type: application/json
 }
 
 Response code: 200 (OK); Time: 115ms; Content length: 64 bytes
-
 ```
 
 
@@ -97,24 +96,26 @@ Response code: 200 (OK); Time: 115ms; Content length: 64 bytes
 
 To use the full potential of the reactive world we will need to have our database access reactive as well. Let's start by initializing a database. We don't need to worry about creating the database instance ourselves, the quarkus dev services will start our desired database in a container all by itself.
 
-Add the extension 'quarkus-reactive-pg-client' to your project. This will allow you to use a reactive way to connect and query your database. Configure the extension in your `application.properties` with the following content:
+Add the extension 'quarkus-reactive-pg-client' to your project. 
 
-```s
+```shell
+./mvnw quarkus:add-extension -Dextensions="reactive-pg-client"
+```
 
+This will allow you to use a reactive way to connect and query your database. Configure the extension in your `application.properties` with the following content:
+
+```shell
 myapp.schema.create=true
-
 ```
 
 For starters we are going to create a class which observes the start-up event and initializes the database whenever the application starts. Create a class `...producer.control.DBInit`. The class should have a private field `io.vertx.mutiny.pgclient.PgPool` injected and have a method `void onStart(@Observes StartupEvent ev)` which initializes the database with the following schema:
 
 ```sql
-
 CREATE TABLE sensormeasurements (
   id SERIAL PRIMARY KEY, 
   data DOUBLE PRECISION, 
   time TIMESTAMP WITH TIME ZONE DEFAULT NOW()::timestamp
 )
-
 ```
 
 To query the database you can use your `PgPool client` like this:
@@ -182,7 +183,7 @@ Create a function `public static Multi<SensorMeasurement> findAll(PgPool client)
 ```java
 
 client.query("SELECT id, data, time from sensormeasurements").execute()
-                .onItem().transformToMulti(set -> Multi.createFrom().items(() -> StreamSupport.stream(set.spliterator(), false)))
+                .onItem().transformToMulti(set -> Multi.createFrom().iterable(set))
                 .onItem().transform(SensorMeasurement::new)
 
 ```
@@ -199,34 +200,120 @@ public SensorMeasurement(Row row) {
 
 ```
 
-In our `DataResource` we have to inject a `io.vertx.mutiny.pgclient.PgPool`. Alter your default `@GET` annotated function to return all `SensorMeasurement` objects in the database as a `Uni<List<...>>`.
+In our `DataResource` we have to inject a `io.vertx.mutiny.pgclient.PgPool`. Alter your default `@GET` annotated function to return all `SensorMeasurement` objects in the database as a `Multi<...>`.
 
-{{% details title="Hint" %}}
+{{% details title="Solution" %}}
+**DataResource.java:**
 ```java
+import io.smallrye.mutiny.Multi;
+import io.vertx.mutiny.pgclient.PgPool;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 @Path("/data")
 public class DataResource {
 
-    private final PgPool client;
-
-    public DataResource(PgPool client) {
-        this.client = client;
-    }
+    @Inject
+    PgPool client;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<List<SensorMeasurement>> findAll() {
-        return SensorMeasurement.findAll(client).collect().asList();
+    public Multi<SensorMeasurement> findAll() {
+        return SensorMeasurement.findAll(client);
+    }
+}
+```
+
+**DBInit.java:**
+```java
+import io.quarkus.runtime.StartupEvent;
+import io.vertx.mutiny.pgclient.PgPool;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+
+@ApplicationScoped
+public class DBInit {
+
+    private final PgPool client;
+    private final boolean schemaCreate;
+    private static final Logger log = Logger.getLogger(DBInit.class.getName());
+
+    public DBInit(PgPool client, @ConfigProperty(name = "myapp.schema.create", defaultValue = "true") boolean schemaCreate) {
+        this.client = client;
+        this.schemaCreate = schemaCreate;
     }
 
-}
+    void onStart(@Observes StartupEvent ev) {
+        if (schemaCreate) {
+            log.info("Initializing Database");
+            initDb();
+        }
+    }
 
+    private void initDb() {
+        client.query("DROP TABLE IF EXISTS sensormeasurements").execute()
+                .flatMap(r -> client.query("CREATE TABLE sensormeasurements (id SERIAL PRIMARY KEY, data DOUBLE PRECISION, time TIMESTAMP WITH TIME ZONE DEFAULT NOW()::timestamp)").execute())
+                .flatMap(r -> client.query("INSERT INTO sensormeasurements (data) VALUES (0.1)").execute())
+                .flatMap(r -> client.query("INSERT INTO sensormeasurements (data) VALUES (0.2)").execute())
+                .flatMap(r -> client.query("INSERT INTO sensormeasurements (data) VALUES (0.3)").execute())
+                .flatMap(r -> client.query("INSERT INTO sensormeasurements (data) VALUES (0.4)").execute())
+                .await().indefinitely();
+    }
+}
 ```
+
+**SensorMeasurement.java:**
+```java
+import io.smallrye.mutiny.Multi;
+import io.vertx.mutiny.pgclient.PgPool;
+import io.vertx.mutiny.sqlclient.Row;
+
+import java.time.Instant;
+
+public class SensorMeasurement {
+
+    public Long id;
+    public Double data;
+    public Instant time;
+
+    public SensorMeasurement() {
+        this.data = Math.random();
+        this.time = Instant.now();
+    }
+
+
+    public SensorMeasurement(Row row) {
+        this.id = row.getLong("id");
+        this.data = row.getDouble("data");
+        this.time = Instant.from(row.getOffsetDateTime("time"));
+    }
+
+    public static Multi<SensorMeasurement> findAll(PgPool client) {
+        return client.query("SELECT id, data, time from sensormeasurements").execute()
+                .onItem().transformToMulti(set -> Multi.createFrom().iterable(set))
+                .onItem().transform(SensorMeasurement::new);
+    }
+}
+```
+
 {{% /details %}}
 
 Test your API again and check if you receive your created data in the response.
 
-Let's create the other API endpoints to find a single `SensorMeasurement` by id and a POST endpoint to save a `SensorMeasurement`.
+
+### Task {{% param sectionnumber %}}.1.2: Find and persist in a reactive way
+
+Let's create two more API endpoints:
+
+* GET `/data/{id}`: Find a single `SensorMeasurement` by id
+* POST `/data`: Persist a data entry to the DB
 
 To save a entity we will use the `client.preparedQuery` instead. You can use the prepared query like this:
 
@@ -239,9 +326,9 @@ client.preparedQuery("INSERT INTO sensormeasurements (data, time) VALUES ($1, $2
 
 Try to implement the `save` and `findById` on your own!
 
-{{% details title="SensorMeasurement" %}}
+{{% details title="Solution" %}}
+**SensorMeasurement.java:**
 ```java
-
 public static Uni<SensorMeasurement> findById(PgPool client, Long id) {
     return client.preparedQuery("SELECT id, data, time from sensormeasurements where id = $1").execute(Tuple.of(id))
             .onItem().transform(RowSet::iterator)
@@ -254,13 +341,10 @@ public Uni<SensorMeasurement> save(PgPool client) {
             .onItem().transform(RowSet::iterator)
             .onItem().transform(iterator -> iterator.hasNext() ? this : null);
 }
-
 ```
-{{% /details %}}
 
-{{% details title="DataResource" %}}
+**DataResource.java:**
 ```java
-
 @GET
 @Path("/{id}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -275,38 +359,48 @@ public Uni<Response> findById(@PathParam(value = "id") Long id) {
 public Uni<SensorMeasurement> create(SensorMeasurement sensorMeasurement) {
     return sensorMeasurement.save(client);
 }
-
 ```
 {{% /details %}}
 
 Test your API again to ensure all your implemented REST endpoints work.
 
+```bash
+#GET
+curl localhost:8080/data/1
+
+=> {"id":1,"data":0.1,"time":"2022-08-29T14:17:32.069072Z"}
+
+#POST
+curl -X POST localhost:8080/data -d "{\"data\":0.1, \"time\":\"2022-01-01T00:00:00.000000Z\"}" -H "Content-Type: application/json"
+
+=> {"id":null,"data":0.1,"time":"2022-01-01T00:00:00Z"}%               
+```
 
 ### Task {{% param sectionnumber %}}.2: The consumer side
 
-We have learned how to implement a reactive REST API to serve data in a complete reactive way. Now it's time to take a look at the opposite, how do we reactively consume the API.
+We have learned how to implement a reactive REST API to serve data in a complete reactive non-blocking way. Now it's time to take a look at the opposite, how do we reactively consume the API.
 
-Create another Quarkus project with the following extensions: "quarkus-resteasy-reactive, quarkus-jsonb, quarkus-resteasy-reactive-jsonb, quarkus-rest-client-mutiny, quarkus-rest-client-jsonb".
+Create another Quarkus project with the following extensions: "quarkus-resteasy-reactive, quarkus-resteasy-reactive-jackson, quarkus-rest-client-mutiny, quarkus-rest-client-jackson":
 
-{{% details title="Hint" %}}
-
-```s
-mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create -DprojectGroupId=ch.puzzle -DprojectArtifactId=quarkus-reactive-rest-consumer -Dextensions="quarkus-resteasy-reactive,quarkus-jsonb,quarkus-resteasy-reactive-jsonb,quarkus-rest-client-mutiny,quarkus-rest-client-jsonb" -DprojectVersion=1.0.0 -DclassName="ch.puzzle.producer.boundary.DataResource"
+```bash
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
+    -DprojectGroupId=ch.puzzle \
+    -DprojectArtifactId=quarkus-reactive-rest-consumer \
+    -Dextensions="quarkus-resteasy-reactive,quarkus-resteasy-reactive-jackson,quarkus-rest-client-mutiny,quarkus-rest-client-jackson" \
+    -DprojectVersion=1.0.0 \
+    -DclassName="ch.puzzle.consumer.boundary.DataResource"
 ```
 
-{{% /details %}}
+Change the default port of the consumer application in the `application.properties`, so we can have both up and running:
 
-Change the default port of the consumer application in the application.properties, so we can have both up and running.
-
-```s
-
+```properties
 quarkus.http.port=8081
-
 ```
 
 We will duplicate the `SensorMeasurement` class without the Active Record pattern functions.
 
 ```java
+import java.time.Instant;
 
 public class SensorMeasurement {
 
@@ -323,7 +417,6 @@ public class SensorMeasurement {
         this.time = time;
     }
 }
-
 ```
 
 To consume the producer's REST API we create a `@RestClient`. Create a new interface `..consumer.boundary.DataService` and annotate it with:
@@ -340,9 +433,16 @@ public interface DataService {
 
 Define the producers API method headers and you have your service ready to go.
 
-{{% details title="Hint" %}}
+{{% details title="Solution" %}}
 
+**DataService.java:**
 ```java
+import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/data")
 @RegisterRestClient(configKey = "data-service")
@@ -362,27 +462,32 @@ public interface DataService {
     @Produces(MediaType.APPLICATION_JSON)
     Uni<List<SensorMeasurement>> findAll();
 }
-
 ```
 
 {{% /details %}}
 
 We configure the rest client in our application properties.
 
-```s
-
+```properties
 quarkus.http.port=8081
 
 data-service/mp-rest/url=http://localhost:8080
 data-service/mp-rest/scope=javax.inject.Singleton
-
 ```
 
 Let's create another REST API resource to tunnel the requests and consume the produced events. Duplicate the definition of the producer's `DataResource` into a new class in the consumer. Inject the defined `DataService` as a `@RestClient` into the created resource and use it to tunnel the requests to the producer's API.
 
-{{% details title="Hint" %}}
+{{% details title="Solution" %}}
 
+**DataResource.java:**
 ```java
+import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/data")
 public class DataResource {
@@ -390,7 +495,7 @@ public class DataResource {
     @Inject
     @RestClient
     DataService dataService;
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> findAll() {
@@ -415,7 +520,6 @@ public class DataResource {
         return dataService.create(sensorMeasurement);
     }
 }
-
 ```
 
 {{% /details %}}
@@ -432,7 +536,7 @@ Start by creating the endpoint for receiving the latest `SensorMeasurement`. Cre
 
 {{% details title="Hint" %}}
 
-...producer.boundary.DataResource:
+**...producer.boundary.DataResource:**
 ```java
 
     [...]
@@ -450,7 +554,7 @@ Start by creating the endpoint for receiving the latest `SensorMeasurement`. Cre
 
 ```
 
-...producer.entity.SensorMeasurement
+**...producer.entity.SensorMeasurement:**
 ```java
 
     [...]
@@ -464,7 +568,6 @@ Start by creating the endpoint for receiving the latest `SensorMeasurement`. Cre
     [...]
 
 ```
-
 {{% /details %}}
 
 Test your API with `curl -N localhost:8080/data/latest`.
@@ -472,8 +575,7 @@ Test your API with `curl -N localhost:8080/data/latest`.
 Can you implement the similar API endpoint for calculating the average?
 
 {{% details title="Hint" %}}
-
-...producer.boundary.DataResource:
+**...producer.boundary.DataResource:**
 ```java
 
     [...]
@@ -491,7 +593,7 @@ Can you implement the similar API endpoint for calculating the average?
 
 ```
 
-...producer.entity.SensorMeasurement
+**...producer.entity.SensorMeasurement:**
 ```java
 
     [...]
@@ -503,5 +605,4 @@ Can you implement the similar API endpoint for calculating the average?
     }
 
 ```
-
 {{% /details %}}
