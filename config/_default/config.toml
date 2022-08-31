@@ -84,7 +84,7 @@ registry_url = "default-route-openshift-image-registry.$CLUSTER_URL"
 
 folder_extension = "appinfo"
 
-enabledModule = "base tekton artemis openshift"
+enabledModule = "base"
 
 # Enable Lunr.js offline search
 offlineSearch = true
