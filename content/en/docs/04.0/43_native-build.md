@@ -14,6 +14,11 @@ errors like the following you may tweak your `.dockerignore` file or for simplic
 
 ```
 COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such file or directory
+
+
+[1/2] STEP 2/9: COPY --chown=quarkus:quarkus mvnw /code/mvnw
+Error: error building at STEP "COPY --chown=quarkus:quarkus mvnw /code/mvnw": no items matching glob "/home/rhertle/code/quarkus-techlab-test/8/quarkus-reactive-messaging-consumer/mvnw" copied (1 filtered out using /home/rhertle/code/quarkus-techlab-test/8/quarkus-reactive-messaging-consumer/.dockerignore): no such file or directory
+
 ```
 
 Quarkus native builds are taking a lot of memory resources. Docker installations on windows and mac os are known to set
@@ -36,22 +41,21 @@ There are multiple ways to build native images. One possibility is to install th
 The lazy way is simpler. We create a multistage Dockerfile to do both steps in our docker build process.
 
 ```Dockerfile
-# Dockerfile.multistage
-
 ## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/centos-quarkus-maven:21.2.0-java11 AS build
-COPY pom.xml /usr/src/app/
-RUN mvn -f /usr/src/app/pom.xml -B de.qaware.maven:go-offline-maven-plugin:1.2.5:resolve-dependencies
-COPY src /usr/src/app/src
-USER root
-RUN chown -R quarkus /usr/src/app
+FROM quay.io/quarkus/ubi-quarkus-native-image:22.2-java17 AS build
+COPY --chown=quarkus:quarkus mvnw /code/mvnw
+COPY --chown=quarkus:quarkus .mvn /code/.mvn
+COPY --chown=quarkus:quarkus pom.xml /code/
 USER quarkus
-RUN mvn -f /usr/src/app/pom.xml -Pnative clean package
+WORKDIR /code
+RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+COPY src /code/src
+RUN ./mvnw package -Pnative
 
 ## Stage 2 : create the docker final image
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM quay.io/quarkus/quarkus-micro-image:1.0
 WORKDIR /work/
-COPY --from=build /usr/src/app/target/*-runner /work/application
+COPY --from=build /code/target/*-runner /work/application
 
 # set up permissions for user `1001`
 RUN chmod 775 /work /work/application \
@@ -63,7 +67,6 @@ EXPOSE 8080
 USER 1001
 
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
-
 ```
 
 Now you can create your own native executable with:
