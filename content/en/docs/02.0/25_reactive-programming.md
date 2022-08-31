@@ -13,6 +13,11 @@ Be aware that bringing reactive flows to your system brings further complexity t
 
 In this chapter we will implement a simple rest application to show an example of a pure reactive approach through all components in the system. We will rely on the Mutiny project to expose Uni and Multi datatypes on the API.
 
+If you are not familiar with reactive programming and are interested to go further down the rabbit hole, consider reading some additional literature:
+
+* [Reactive Manifesto](https://www.reactivemanifesto.org/en)
+* [Mutiny! Documentation](https://smallrye.io/smallrye-mutiny/1.7.0/tutorials/hello-mutiny/)
+
 
 ## {{% param sectionnumber %}}.1: Producing Data
 
