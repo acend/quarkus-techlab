@@ -101,7 +101,7 @@ Response code: 200 (OK); Time: 115ms; Content length: 64 bytes
 
 To use the full potential of the reactive world we will need to have our database access reactive as well. Let's start by initializing a database. We don't need to worry about creating the database instance ourselves, the quarkus dev services will start our desired database in a container all by itself.
 
-Add the extension 'quarkus-reactive-pg-client' to your project. 
+Add the extension 'quarkus-reactive-pg-client' to your project.
 
 ```shell
 ./mvnw quarkus:add-extension -Dextensions="reactive-pg-client"
@@ -378,8 +378,9 @@ curl localhost:8080/data/1
 #POST
 curl -X POST localhost:8080/data -d "{\"data\":0.1, \"time\":\"2022-01-01T00:00:00.000000Z\"}" -H "Content-Type: application/json"
 
-=> {"id":null,"data":0.1,"time":"2022-01-01T00:00:00Z"}%               
+=> {"id":null,"data":0.1,"time":"2022-01-01T00:00:00Z"}%
 ```
+
 
 ### Task {{% param sectionnumber %}}.2: The consumer side
 

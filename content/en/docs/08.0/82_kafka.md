@@ -16,7 +16,7 @@ In this chapter we want to use Apache Kafka as our message oriented middleware. 
 
 ### {{% param sectionnumber %}}.1: Apache Kafka
 
-
+Insert Kafka introduction here
 
 
 ### {{% param sectionnumber %}}.2: Local Development
