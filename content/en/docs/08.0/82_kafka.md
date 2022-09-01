@@ -16,7 +16,7 @@ In this chapter we want to use Apache Kafka as our message oriented middleware. 
 
 ### {{% param sectionnumber %}}.1: Apache Kafka
 
-Insert Kafka introduction here
+Apache Kafka is an event streaming platform used to collect, process, store, and integrate data at scale. It has numerous use cases including distributed streaming, stream processing, data integration, and pub/sub messaging. If you'd like to go more in depth, continue reading the article [here](https://developer.confluent.io/what-is-apache-kafka/).
 
 
 ### {{% param sectionnumber %}}.2: Local Development
