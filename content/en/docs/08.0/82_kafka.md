@@ -89,7 +89,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
       -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-consumer \
-      -Dextensions="smallrye-reactive-messaging-kafka,quarkus-resteasy-reactive-jackson,quarkus-resteasy-reactive" \
+      -Dextensions="smallrye-reactive-messaging-kafka,quarkus-resteasy-reactive-jackson,quarkus-resteasy-reactive-jsonb" \
       -DprojectVersion=1.0.0
 
 ```
@@ -175,7 +175,7 @@ On the other side of the system we want to consume the messages and stream them 
 {{% details title="Hint" %}}
 
 ```java
-// ...producer.boundary.ReactiveDataProducer.java
+// ...consumer.boundary.ReactiveDataConsumer.java
 
 @ApplicationScoped
 public class ReactiveDataConsumer {
@@ -197,7 +197,7 @@ public class ReactiveDataConsumer {
 To receive and deserialize our messages we need to impelement a SensorMeasurementDeserializer which extends the JsonbDeserializer:
 
 ```java
-// ..producer.boundary.SensorMeasurementDeserializer
+// ..consumer.boundary.SensorMeasurementDeserializer
 
 
 public class SensorMeasurementDeserializer extends JsonbDeserializer<SensorMeasurement> {
