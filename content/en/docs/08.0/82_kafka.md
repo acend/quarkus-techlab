@@ -81,7 +81,7 @@ Create again two Quarkus projects 'quarkus-reactive-messaging-consumer' and 'qua
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
       -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-producer \
-      -Dextensions="smallrye-reactive-messaging-kafka,quarkus-jackson" \
+      -Dextensions="smallrye-reactive-messaging-kafka,quarkus-jackson,quarkus-jsonb" \
       -DprojectVersion=1.0.0
 
 # Create consumer application
