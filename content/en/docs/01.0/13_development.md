@@ -124,9 +124,9 @@ databases.
 * Postgresql (container)
 * MySQL (container)
 * MariaDB (container)
-* H2 (container)
-* Apache Derby (container)
-* Oracle (copntainer) 
+* H2 (in-process)
+* Apache Derby (in-process)
+* Oracle (container)
 * DB2 (container) (requires license acceptance)
 * MSSQL (container) (requires license acceptance)
 
