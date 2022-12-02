@@ -240,7 +240,7 @@ public class DataResource {
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    @RestSseElementType(MediaType.APPLICATION_JSON)
+    @RestStreamElementType(MediaType.APPLICATION_JSON)
     public Multi<SensorMeasurement> stream() {
         return channel;
     }
