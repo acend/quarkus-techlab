@@ -1,10 +1,10 @@
 ---
-title: "9.1 OpenTracing"
-linkTitle: "9.1 OpenTracing"
+title: "9.1 OpenTelemetry"
+linkTitle: "9.1 OpenTelemetry"
 weight: 910
 sectionnumber: 9.1
 description: >
-    Introduction OpenTracing.
+    Introduction OpenTelemetry.
 ---
 
 
@@ -13,14 +13,14 @@ description: >
 Applications consisting of several microservices reduce the cohesion and complexity of single parts of applications massively. By enforcing a single responsibility principle on the application's architectural top layer the bottom-up vision brings a very clear image of what each part of a system does. On the other side the top-down vision of an application gets more complex. Handling errors across multiple microservices will become very frustrating and time consuming. This is very tracing comes in handy.
 
 
-## {{% param sectionnumber %}}.2: Distributed Tracing with Opentracing
+## {{% param sectionnumber %}}.2: Distributed Tracing with OpenTelemetry
 
-The [Opentracing](https://opentracing.io) project defines an API for distributed tracing in modern applications. It defines a certain terminology or semantic specification to avoid language-specific concepts.
+The [OpenTelemetry](https://opentelemetry.io/) project defines an API for distributed tracing in modern applications. It defines a certain terminology or semantic specification to avoid language-specific concepts.
 
 
-### {{% param sectionnumber %}}.2.1: The OpenTracing Data Model
+### {{% param sectionnumber %}}.2.1: The OpenTelemetry's Tracing Data Model
 
-*Traces* in Opentracing are defined implicitly by their *Spans*. In particular, a *Trace* can be thought of as a directed acyclic graph (DAG) of *Spans*, where the edges between *Spans* are called *References*.
+The data model in OpenTelemetry is quite similar to the OpenTracing model: *Traces* in OpenTelemetry are defined implicitly by their *Spans*. In particular, a *Trace* can be thought of as a directed acyclic graph (DAG) of *Spans*, where the edges between *Spans* are called *References*.
 
 For example, the following is an example *Trace* made up of 8 *Spans*:
 
@@ -78,7 +78,7 @@ Each *SpanContext* encapsulates the following state:
 * *Baggage Items*, which are just key:value pairs that cross process boundaries
 
 
-### {{% param sectionnumber %}}.2.2: The OpenTracing API
+### {{% param sectionnumber %}}.2.2: The OpenTelemetry API
 
 There are three critical and inter-related types in the OpenTracing specification: `Tracer`, `Span`, and `SpanContext`. Below, we go through the behaviors of each type; roughly speaking, each behavior becomes a "method" in a typical programming language, though it may actually be a set of related sibling methods due to type overloading and so on.
 

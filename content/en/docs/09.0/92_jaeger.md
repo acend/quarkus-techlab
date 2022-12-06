@@ -7,128 +7,200 @@ description: >
     Tracing powered by Jaeger in Quarkus.
 ---
 
-## {{% param sectionnumber %}}.1: OpenTracing with Jaeger
+We are going to test the OpenTelemetry API live with Jaeger as our tracing service.
 
-Let us enhance our application and add distributed tracing to the microservices. We will start by duplicating the 'rest' project. If you are not confident with your solution, simply copy the solution in the '/solution' folder provided.
 
-We start by adding the 'quarkus-smallrye-opentracing' extension to the consumer and the producer project.
+## Task {{% param sectionnumber %}}.1: Create the new service
 
-{{% details title="Hint" %}}
+Create a new Quarkus application, in this example we are going to use a simple reactive rest application:
 
-```xml
-
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-smallrye-opentracing</artifactId>
-</dependency>
-
+```bash
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
+  -DprojectGroupId=ch.puzzle \
+  -DprojectArtifactId=opentelemetry \
+  -Dextensions="quarkus-resteasy-reactive,quarkus-resteasy-reactive-jackson,quarkus-opentelemetry,quarkus-opentelemetry-exporter-otlp" \
+  -DprojectVersion=1.0.0 \
+  -DclassName="ch.puzzle.TracedResource"
 ```
 
-{{% /details %}}
 
-Create a `docker-compose.yaml` file and add the following service to it:
+## Task {{% param sectionnumber %}}.2: Start Jaeger service
 
-```yaml
-version: '2'
+To collect and visualize your traces, we are going to use a Jaeger service. Jaeger will collect your traces and display them in the Jaeger UI, running on [http://localhost:16686/](http://localhost:16686/):
 
-services:
-
-  jaeger:
-    image: jaegertracing/all-in-one:1.25.0
-    hostname: jaeger
-    container_name: jaeger
-    ports:
-      - 5775:5775/udp
-      - 6831:6831/udp
-      - 6832:6832/udp
-      - 5778:5778
-      - 14268:14268
-      - 16686:16686
-      
+```bash
+docker run --name jaeger \
+  -e COLLECTOR_OTLP_ENABLED=true \
+  -p 16686:16686 \
+  -p 4317:4317 \
+  -p 4318:4318 \
+  -p 16685:16685 jaegertracing/all-in-one:1.35
 ```
 
-Start your docker Jaeger service with `docker-compose -f docker-compose.yaml up -d`.
 
-Configure your microservices to report the traces to your Jaeger instance. Add the following properties to your `application.properties`:
+## Task {{% param sectionnumber %}}.3: Configure service
 
-```s
+Alter the resource created as a default resource with the `@WithSpan` annotation:
 
-quarkus.jaeger.endpoint=http://localhost:14268/api/traces
-quarkus.jaeger.service-name=quarkus-tracing-producer
-quarkus.jaeger.sampler-type=const
-quarkus.jaeger.sampler-param=1
-quarkus.log.console.format=%d{HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n
-
-```
-
-Start up your jaeger server and your two microservices. You can visit the Jaeger UI at [localhost:16686](http://localhost:16686). Test your API endpoint of the consumer and check the UI for traces.
-
-Let's create a service class for providing the `SensorMeasurements` in the producer. Write a new `@ApplicationScoped` class `..control.DataService` and add a function which returns with a 50/50 chance a new SensorMeasurement or throws an Exception. Change the REST endpoint to call and return the DataService's function. Test your API again and check the traces in the Jaeger UI. You will see that the trace leading to an exception will be marked and could be further investigated.
-
-{{% details title="Hint" %}}
-
-DataService:
 ```java
+package ch.puzzle;
 
-@ApplicationScoped
-@Traced
-public class DataService {
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    public SensorMeasurement createSensorMeasurementOrFail() throws Exception {
-        if (Math.random() > 0.6)
-            throw new Exception("Random failure");
-        return new SensorMeasurement();
-    }
-}
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
-```
-
-DataResource:
-```java
-
-@Path("/data")
-public class DataResource {
-
-    @Inject
-    DataService dataService;
+@Path("/hello")
+public class TracedResource {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public SensorMeasurement hello() throws Exception {
-        return dataService.createSensorMeasurementOrFail() ;
+    @Produces(MediaType.TEXT_PLAIN)
+    @WithSpan
+    public String hello() {
+        return "hello";
     }
 }
-
 ```
 
-{{% /details %}}
+To start receiving traces from your service, we need to adapt some configuration first:
 
-We can extend our observability by using the OpenTracings baggage. We can add key-value pairs of strings to our traces to add further information available in the traces. Let's alter the `DataService` to create a `SensorMeasurement` adding it to the baggage with the key "measurement" and then returning it.
+```properties
+quarkus.application.name=myservice 
+quarkus.opentelemetry.enabled=true 
+quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317 
 
-Inject a `Tracer tracer` into your `DataService` class and use the `tracer.activeSpan().setBaggageItem("key", "value")` funcitonality to add the created `SensorMeasurement` to the baggage of the active span. Test your API again and check the results reflected in the Jaeger UI.
+quarkus.log.console.format=%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n  
 
-{{% details title="Hint" %}}
+# Alternative to the console log
+quarkus.http.access-log.pattern="...traceId=%{X,traceId} spanId=%{X,spanId}" 
+```
+
+This will instruct the application to send traces from a service called `myservice`, to the endpoint `http://localhost:4317`.
+
+
+## Task {{% param sectionnumber %}}.4: Test your traces
+
+Spin up your Quarkus application:
+
+```bash
+./mvnw quarkus:dev
+```
+
+Then try to send a request to your applications `/hello` endpoint:
+
+```bash
+curl localhost:8080/hello
+```
+
+You should be greeted by the application's response. But what is happening at the back? Check the [Jaeger UI](http://localhost:16686/) if you have received any traces! You will be able to see that the request should have been sampled and collected by the Jaeger service.
+
+![Image from Jaeger UI showing the trace](img/first_trace.png)
+
+
+## Task {{% param sectionnumber %}}.5: Add more spans
+
+Okay, so far - so good. We can add more spans and visibility by adding a service which will return the `"hello"` for us, called `TracingService`. The service will have a function called `hello` which will return the string for us:
 
 ```java
+package ch.puzzle;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/hello")
+public class TracedResource {
+
+    @Inject
+    TracedService tracedService;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return tracedService.hello();
+    }
+}
+```
+
+TracingService:
+```java
+package ch.puzzle;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @ApplicationScoped
-@Traced
-public class DataService {
+public class TracedService {
+
+
+    @WithSpan
+    public String hello() {
+        return "hello";
+    }
+}
+```
+
+
+## Task {{% param sectionnumber %}}.6: Fire again
+
+If you call the endpoint again, you should see the second span in the [Jaeger UI](http://localhost:16686/)!
+
+```bash
+curl localhost:8080/hello
+```
+
+Verify that the span will be displayed in the [Jaeger UI](http://localhost:16686/).
+
+
+## Task {{% param sectionnumber %}}.7: Adding baggage
+
+For visibility purposes it will often be useful to have some more detailed information in the traces. To do that, we can simply add attributes to a span:
+
+TracedResource:
+```java
+package ch.puzzle;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
+@Path("/hello")
+public class TracedResource {
+
+    @Inject
+    TracedService tracedService;
 
     @Inject
     Tracer tracer;
 
-    public SensorMeasurement createSensorMeasurementOrFail() throws Exception {
-        if (Math.random() > 0.6)
-            throw new Exception("Random failure");
-        SensorMeasurement measurement = new SensorMeasurement();
-        tracer.activeSpan().setBaggageItem("measurement", JsonbBuilder.create().toJson(measurement));
-        return measurement;
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @WithSpan
+    public String hello() {
+        Span span = Span.current();
+        span.setAttribute("Additional information key", "Additional information value");
+        return tracedService.hello();
     }
 }
-
 ```
 
-{{% /details %}}
 
-In the Jaeger UI you should see your measurement as the baggage item in the trace.
+## Task {{% param sectionnumber %}}.8: Verify baggage in the span
+
+Call the endpoint again and head over to the [Jaeger UI](http://localhost:16686/). You should see your attributes in the collapsed span!
+
+If you did it correctly you can see the span like this:
+
+![Jaeger UI with span](img/baggage_trace.png)
