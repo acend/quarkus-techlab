@@ -5,7 +5,7 @@ acendTraining:
       name: puzzle
       replicaCount: 1
       image:
-        repository: quay.io/puzzle/quarkus-techlab
+        repository: registry.puzzle.ch/quarkus_techlab
         pullPolicy: Always
         tag: ""
         tagsuffix: ""
@@ -19,7 +19,7 @@ acendTraining:
       name: mobi
       replicaCount: 1
       image:
-        repository: quay.io/puzzle/quarkus-techlab
+        repository: registry.puzzle.ch/quarkus_techlab
         pullPolicy: Always
         tag: ""
         tagsuffix: "-mobi"
