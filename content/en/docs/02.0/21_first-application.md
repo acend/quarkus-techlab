@@ -61,7 +61,8 @@ performs the live reload.
 * Point your browser to the Development UI at [http://localhost:8080/q/dev](http://localhost:8080/q/dev). Explore the
 provided information.
 * Try to change the log level using the configuration editor in the development ui.
-* Check the dependency graph from the ArC panel. You will find it under Beans > Actions
+* Check the invocation trees from the ArC panel. You first have to enable this feature via `ARC-Panel`-> `Config-Editor` -> `quarkus.arc.dev-mode.monitoring-enabled` and rebuild the app.
+ What happens if you invoke your /hello endpoint?
 * When was the application started? (tip: check the fired events)
 * Check the details about your runtime environment (environment variables and system properties) in the configuration
 editor.
