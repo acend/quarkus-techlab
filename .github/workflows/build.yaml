@@ -40,12 +40,12 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            registry.puzzle.ch/quarkus_techlab/quarkus_techlab:pr-${{ github.event.pull_request.number }}
+            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
 
       - name: Run vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'registry.puzzle.ch/quarkus_techlab/quarkus_techlab:pr-${{ github.event.pull_request.number }}'
+          image-ref: 'registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}'
           format: 'table'
           output: 'trivy-results.txt'
           exit-code: '0'
@@ -68,7 +68,7 @@ jobs:
             TRAINING_HUGO_ENV=mobi
           push: true
           tags: |
-            registry.puzzle.ch/quarkus_techlab/quarkus_techlab:pr-${{ github.event.pull_request.number }}-mobi
+            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}-mobi
 
       - name: 'Install Helm'
         uses: azure/setup-helm@v1
