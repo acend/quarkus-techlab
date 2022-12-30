@@ -93,15 +93,25 @@ jobs:
           TRAINING_NAMESPACE: 'pitc-quarkus-techlab-test'
           TRAINING_VERSION: '${{ github.sha }}'
         run: |
-          helm upgrade $TRAINING_HELM_RELEASE acend-training-chart --install --wait --kubeconfig $HOME/.kube/config  --namespace=$TRAINING_NAMESPACE --set=app.name=$HELM_RELEASE --set=app.version=$TRAINING_VERSION --repo=https://acend.github.io/helm-charts/ --values=helm-chart/values.yaml --atomic
+          helm upgrade $TRAINING_HELM_RELEASE acend-training-chart --install --wait \
+            --kubeconfig $HOME/.kube/config \
+            --namespace=$TRAINING_NAMESPACE \
+            --set=app.name=$HELM_RELEASE \
+            --set=app.version=$TRAINING_VERSION \
+            --repo=https://acend.github.io/helm-charts/ \
+            --values=helm-chart/values.yaml --atomic
 
       - name: Redeploy Deployments
         env:
           TRAINING_HELM_RELEASE: 'pr-${{ github.event.pull_request.number }}'
           TRAINING_NAMESPACE: 'pitc-quarkus-techlab-test'
         run: |
-          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-puzzle --kubeconfig $HOME/.kube/config --namespace $TRAINING_NAMESPACE
-          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-mobi --kubeconfig $HOME/.kube/config --namespace $TRAINING_NAMESPACE
+          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-puzzle \
+            --kubeconfig $HOME/.kube/config \
+            --namespace $TRAINING_NAMESPACE
+          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-mobi \
+            --kubeconfig $HOME/.kube/config \
+            --namespace $TRAINING_NAMESPACE
 
       - name: Comment PR Environments in PR
         uses: marocchino/sticky-pull-request-comment@v2
@@ -109,5 +119,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           message: |
            PR Environments: 
-           * puzzle <https://quarkus-techlab-pr-${{ github.event.pull_request.number }}.k8s.puzzle.ch>
-           * mobi <https://quarkus-techlab-mobi-pr-${{ github.event.pull_request.number }}.k8s.puzzle.ch>
+           * puzzle <https://quarkus-techlab-pr-${{ github.event.pull_request.number }}.ocp-internal.cloudscale.puzzle.ch>
+           * mobi <https://quarkus-techlab-mobi-pr-${{ github.event.pull_request.number }}.ocp-internal.cloudscale.puzzle.ch>
+
