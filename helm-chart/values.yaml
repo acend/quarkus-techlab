@@ -27,7 +27,8 @@ acendTraining:
         emptyTLS: true
         useDefaultSecret: true
         appname: quarkus-techlab-mobi
-        domain: ocp.cloudscale.puzzle.ch
+        domainmain: ocp.cloudscale.puzzle.ch
+        domain: ocp-internal.cloudscale.puzzle.ch
 
 
 nameOverride: "quarkus-techlab"
