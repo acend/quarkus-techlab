@@ -10,11 +10,13 @@ acendTraining:
         tag: ""
         tagsuffix: ""
       ingress:
+        labels:
+          public: true
         annotations: 
           kubernetes.io/ingress.class: nginx-public
         useDefaultSecret: true
         appname: quarkus-techlab
-        domain: k8s.puzzle.ch
+        domain: ocp.cloudscale.puzzle.ch
     -
       name: mobi
       replicaCount: 1
@@ -24,11 +26,13 @@ acendTraining:
         tag: ""
         tagsuffix: "-mobi"
       ingress:
+        labels:
+          public: true
         annotations:
           kubernetes.io/ingress.class: nginx-public
         useDefaultSecret: true
         appname: quarkus-techlab-mobi
-        domain: k8s.puzzle.ch
+        domain: ocp.cloudscale.puzzle.ch
 
 
 nameOverride: "quarkus-techlab"
