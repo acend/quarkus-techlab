@@ -27,7 +27,7 @@ acendTraining:
         tagsuffix: "-mobi"
       ingress:
         labels:
-          public: true
+          public: "true"
         annotations:
           kubernetes.io/ingress.class: nginx-public
         useDefaultSecret: "true"
