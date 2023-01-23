@@ -10,11 +10,13 @@ acendTraining:
         tag: ""
         tagsuffix: ""
       ingress:
+        labels:
+          public: "true"
         emptyTLS: true
         useDefaultSecret: true
         appname: quarkus-techlab
         domainmain: puzzle.ch
-        domain: ocp-internal.cloudscale.puzzle.ch
+        domain: ocp.cloudscale.puzzle.ch
     -
       name: mobi
       replicaCount: 1
@@ -24,11 +26,13 @@ acendTraining:
         tag: ""
         tagsuffix: "-mobi"
       ingress:
+        labels:
+          public: "true"
         emptyTLS: true
         useDefaultSecret: true
         appname: quarkus-techlab-mobi
         domainmain: ocp.cloudscale.puzzle.ch
-        domain: ocp-internal.cloudscale.puzzle.ch
+        domain: ocp.cloudscale.puzzle.ch
 
 
 nameOverride: "quarkus-techlab"
