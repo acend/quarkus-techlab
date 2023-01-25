@@ -12,10 +12,10 @@ acendTraining:
       ingress:
         labels:
           public: "true"
-        annotations: 
-          kubernetes.io/ingress.class: nginx-public
+        emptyTLS: true
         useDefaultSecret: true
         appname: quarkus-techlab
+        domainmain: puzzle.ch
         domain: ocp.cloudscale.puzzle.ch
     -
       name: mobi
@@ -28,10 +28,10 @@ acendTraining:
       ingress:
         labels:
           public: "true"
-        annotations:
-          kubernetes.io/ingress.class: nginx-public
-        useDefaultSecret: "true"
+        emptyTLS: true
+        useDefaultSecret: true
         appname: quarkus-techlab-mobi
+        domainmain: ocp.cloudscale.puzzle.ch
         domain: ocp.cloudscale.puzzle.ch
 
 
