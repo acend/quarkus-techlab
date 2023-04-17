@@ -9,7 +9,7 @@
   "author": "Puzzle ITC",
   "dependencies": {
     "autoprefixer": "^10.2.4",
-    "postcss-cli": "^8.0.0"
+    "postcss-cli": "^10.0.0"
   },
   "scripts": {
     "mdlint": "markdownlint --config .markdownlint.json content *.md",
