@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/puzzle/quarkus-techlab#readme",
   "devDependencies": {
-    "husky": "7.0.2",
+    "husky": "7.0.4",
     "markdownlint-cli": "0.31.0"
   },
   "main": "index.js",
