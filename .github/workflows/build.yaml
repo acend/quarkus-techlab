@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.PUZZLE_REG_TOKEN }}
 
       - name: Build Puzzle Version
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -60,7 +60,7 @@ jobs:
           path: trivy-results.txt
 
       - name: Build Mobi Version
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
