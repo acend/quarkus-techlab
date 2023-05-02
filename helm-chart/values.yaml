@@ -10,10 +10,11 @@ acendTraining:
         tag: ""
         tagsuffix: ""
       ingress:
+        emptyTLS: true
+        ingressClassName: openshift-public
+        useDefaultSecret: true
         labels:
           public: "true"
-        emptyTLS: true
-        useDefaultSecret: true
         appname: quarkus-techlab
         domainmain: puzzle.ch
         domain: ocp.cloudscale.puzzle.ch
@@ -26,10 +27,11 @@ acendTraining:
         tag: ""
         tagsuffix: "-mobi"
       ingress:
+        emptyTLS: true
+        ingressClassName: openshift-public
+        useDefaultSecret: true
         labels:
           public: "true"
-        emptyTLS: true
-        useDefaultSecret: true
         appname: quarkus-techlab-mobi
         domainmain: ocp.cloudscale.puzzle.ch
         domain: ocp.cloudscale.puzzle.ch
