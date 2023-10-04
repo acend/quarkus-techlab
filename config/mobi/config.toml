@@ -1,4 +1,3 @@
-theme = ["docsy-puzzle", "docsy-plus", "docsy"]
 title = "Quarkus Training"
 languageCode = "en-us"
 
@@ -17,3 +16,21 @@ weight = 3
 name = "Puzzle ITC GmbH"
 copyright = "Puzzle ITC GmbH"
 url = "https://www.puzzle.ch"
+
+# puzzle design
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.100.0"
+  [[module.imports]]
+    path = "github.com/puzzle/docsy-puzzle"
+    disable = false
+  [[module.imports]]
+    path = "github.com/acend/docsy-plus"
+    disable = false
+  [[module.imports]]
+    path = "github.com/google/docsy"
+    disable = false
+  [[module.imports]]
+    path = "github.com/google/docsy/dependencies"
+    disable = false
