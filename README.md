@@ -44,6 +44,7 @@ Run the following command to update all submodules with their newest upstream ve
 
 ```bash
 git submodule update --remote
+git pull --recurse-submodules
 ```
 
 
@@ -52,7 +53,7 @@ git submodule update --remote
 Build the image:
 
 ```bash
-docker build <--build-arg TRAINING_HUGO_ENV=...> -t puzzle/quarkus-techlab:latest .
+docker build [--build-arg TRAINING_HUGO_ENV=...] -t puzzle/quarkus-techlab:latest .
 ```
 
 Run it locally:
