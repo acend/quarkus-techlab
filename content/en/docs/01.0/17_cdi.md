@@ -120,15 +120,15 @@ public class DummyService {
 
 ### {{% param sectionnumber %}}.3: Bean scopes
 
-The scope of a bean defines the lifecycle of its instances, it defines where and when it should be created and destroyed. Every bean has exactly one scope. In Quarkus you can use all of the built-in scopes except for `javax.enterprise.context.ConversationScoped`:
+The scope of a bean defines the lifecycle of its instances, it defines where and when it should be created and destroyed. Every bean has exactly one scope. In Quarkus you can use all of the built-in scopes except for `jakarta.enterprise.context.ConversationScoped`:
 
 Annotation | Description
 ---|---
-`@javax.enterprise.context.ApplicationScoped` | A single bean instance is used for the application and shared among all injection points. The instance is created lazily, i.e. once a method is invoked upon the client proxy.
-`@javax.inject.Singleton` | Just like `@ApplicationScoped` except that no client proxy is used. The instance is created when an injection point that resolves to a `@Singleton` bean is being injected.
-`@javax.enterprise.context.RequestScoped` | The bean instance is associated with the current request (usually an HTTP request).
-`@javax.enterprise.context.Dependent` | This is a pseudo-scope. The instances are not shared and every injection point spawns a new instance of the dependent bean. The lifecycle of dependent bean is bound to the bean injecting it - it will be created and destroyed along with the bean injecting it.
-`@javax.enterprise.context.SessionScoped` | This scope is backed by a `javax.servlet.http.HttpSession` object. It’s only available if the `quarkus-undertow` extension is used.
+`@jakarta.enterprise.context.ApplicationScoped` | A single bean instance is used for the application and shared among all injection points. The instance is created lazily, i.e. once a method is invoked upon the client proxy.
+`@jakarta.inject.Singleton` | Just like `@ApplicationScoped` except that no client proxy is used. The instance is created when an injection point that resolves to a `@Singleton` bean is being injected.
+`@jakarta.enterprise.context.RequestScoped` | The bean instance is associated with the current request (usually an HTTP request).
+`@jakarta.enterprise.context.Dependent` | This is a pseudo-scope. The instances are not shared and every injection point spawns a new instance of the dependent bean. The lifecycle of dependent bean is bound to the bean injecting it - it will be created and destroyed along with the bean injecting it.
+`@jakarta.enterprise.context.SessionScoped` | This scope is backed by a `jakarta.servlet.http.HttpSession` object. It’s only available if the quarkus-undertow extension is used.
 
 Altough the `@Singleton` is more performant, in general use going for the `@ApplicationScoped` scope. The `@Singleton` bean has no client proxy and hence an instance is created eagerly when the bean is injected. The `@ApplicationScoped` bean is created lazily and will be created when a method is invoked upon an injected instance for the first time. Due to its nature the `@Singleton` scoped bean cannot be mocked using QuarkusMock (more on that later).
 

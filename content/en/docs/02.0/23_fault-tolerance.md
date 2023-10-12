@@ -35,10 +35,10 @@ In the data-producer project let's change our REST endpoint, which serves data t
 ```java
 import java.util.Random;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,10 +70,10 @@ If we start up both microservices and try to consume data multiple times, we can
 In our data-consumer project we will add the retry mechanism. Add the extension `smallrye-fault-tolerance` if you don't already have and edit our DataProducerService interface:
 
 ```java
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -103,10 +103,10 @@ We update our producer to take a random amount of time to answer with the desire
 ```java
 import java.util.Random;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,13 +129,13 @@ public class DataResource {
 
 ```
 
-Then update the DataProducerService of our data-consumer to time out after 500ms:
+Then update the `DataProducerService` of our data-consumer to time out after `500ms`:
 
 ```java
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -153,7 +153,7 @@ public interface DataProducerService {
 }
 ```
 
-If you send a request to the consumer, you will see that about half of the time we will run into a TimeoutException. The method took longer than 500 ms to finish, so the `@Timeout(500)` interrupted the invocation.
+If you send a request to the consumer, you will see that about half of the time we will run into a `TimeoutException`. The method took longer than 500 ms to finish, so the `@Timeout(500)` interrupted the invocation.
 
 
 ### {{% param sectionnumber %}}.1.3: Fallbacks
@@ -163,10 +163,10 @@ When we insert timeouts or a maximum amount of retries for a certain part of our
 Let's update the example from before to use a fallback if it takes longer than the defined 500 ms to respond:
 
 ```java
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Timeout;

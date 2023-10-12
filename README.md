@@ -2,8 +2,6 @@
 
 In this guided hands-on training, we learn how to implement microservices with help of the Quarkus framework.
 
-The techlab is available on GitHub Pages [here](https://puzzle.github.io/quarkus-techlab/).
-
 
 ## Content Sections
 

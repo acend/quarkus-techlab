@@ -7,7 +7,7 @@ description: >
   Introduction to Vert.x
 ---
 
-Eclipse Vert.x is a toolkit provided to build reactive applications. The ecosystem is very diverse and versatile. To see the diversity head over to the official [https://vertx.io/docs/](documentation).
+Eclipse Vert.x is a toolkit provided to build reactive applications. The ecosystem is very diverse and versatile. To see the diversity head over to the official [documentation](https://vertx.io/docs/).
 Quarkus is under the hood powered by Vert.x. Whenever Quarkus serves and HTTP endpoint there is a underlying Vert.x HTTP server to handle the request.
 
 
@@ -88,4 +88,4 @@ uni.subscribe()
 
 ```
 
-To dive further into the Mutiny framework consider checking their [https://smallrye.io/smallrye-mutiny/guides](documentation).
+To dive further into the Mutiny framework consider checking their [documentation](https://smallrye.io/smallrye-mutiny/guides).

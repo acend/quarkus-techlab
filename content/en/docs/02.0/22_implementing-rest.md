@@ -16,12 +16,11 @@ it on it's own endpoint.
 
 ### {{% param sectionnumber %}}.2: Producing Data
 
-Create a new Quarkus application like shown before called 'data-producer'. The application should expose a `DataResource` on the path "/data" which provides the user with a SensorMeasurement holding a random double when requested.
+Create a new Quarkus application like shown before called `data-producer`. The application should expose a `DataResource` on the path `/data` which provides the user with a `SensorMeasurement` holding a random double when requested.
 
 {{% details title="Hint" %}}
 
 ```bash
-
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=data-producer \
@@ -31,22 +30,18 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 
 {{% /details %}}
 
-To write better APIs and share data over our defined resources, we need the 'resteasy-jackson' extension which provides us with
+To write better APIs and share data over our defined resources, we need the `resteasy-reactive-jackson` extension which provides us with
 Jackson functionalities for our REST interfaces.
 To add an extension to your existing Quarkus application simply use:
 
 ```bash
-
 ./mvnw quarkus:add-extension -Dextensions="quarkus-resteasy-reactive-jackson"
-
 ```
 
 To see the available extensions you can use:
 
 ```bash
-
 ./mvnw quarkus:list-extensions
-
 ```
 
 Alternatively you could just add the new dependency to your `pom.xml` manually.
@@ -56,7 +51,6 @@ In our lab we want to transfer sensor measurements between our microservices. Cr
 It should look something like this:
 
 ```java
-
 public class SensorMeasurement {
 
     public Double data;
@@ -71,11 +65,10 @@ public class SensorMeasurement {
 In the generated DataResource edit the `@GET` endpoint to return a new SensorMeasurement and change the `@Produces` type to `MediaType.APPLICATION_JSON`.
 
 ```java
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/data")
 public class DataResource {
@@ -98,12 +91,11 @@ For more information about writing REST APIs with Quarkus see the [documentation
 
 ### {{% param sectionnumber %}}.3: Consuming Data
 
-With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called 'data-consumer' with the follwing extensions: "rest-client-reactive-jackson".
+With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called `data-consumer` with the follwing extensions: `rest-client-reactive-jackson`.
 
 {{% details title="Hint" %}}
 
 ```bash
-
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=data-consumer \
@@ -115,15 +107,14 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 
 {{% /details %}}
 
-In the data-consumer microservice we will have another resource on the path "/data" which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
+In the data-consumer microservice we will have another resource on the path `/data` which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
 
 ```java
-
 // DataProducerService
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -138,12 +129,11 @@ public interface DataProducerService {
 
 ```
 
-Implement the same POJO as in the producer again for the data-consumer project.
+Implement the same POJO `SensorMeasurement` as in the producer again for the data-consumer project but with an empty constructor.
 
 {{% details title="Hint" %}}
 
 ```java
-
 public class SensorMeasurement {
 
     public Double data;
@@ -159,16 +149,13 @@ To access the defined interface as a RestClient we need to configure it properly
 We need to define at least the base url which the RestClient should use and the default injection scope for the CDI bean.
 
 ```yaml
-
-ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/url=http://localhost:8080
-ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService/mp-rest/scope=javax.inject.Singleton
-
+quarkus.rest-client."ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService".url=http://localhost:8080
+quarkus.rest-client."ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService".scope=jakarta.inject.Singleton
 ```
 
 When managing multiple RestClients the configuration with the fully qualified name of the class (`ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService`) the readability suffers pretty fast. You can extend the annotation of the RestClient (`@RegisterRestClient`) with a configKey property to shorten the configurations.
 
 ```java
-
 // DataProducerService
 
 [...]
@@ -181,18 +168,15 @@ public interface DataProducerService {
 ```
 
 ```java
-
 // application.properties
-data-producer-api/mp-rest/url=http://localhost:8080
-data-producer-api/mp-rest/scope=javax.inject.Singleton
-
+quarkus.rest-client.data-producer-api.url=http://localhost:8080
+quarkus.rest-client.data-producer-api.scope=jakarta.inject.Singleton
 ```
 
 To use the registered RestClient in our application inject it into the DataConsumerResource and simply call the defined interface's method. To inject a RestClient into your desired class create a field of type `DataProducerService dataProducerService` and annotate it with `@RestClient`.
 You can edit our resource in the data-consumer to use the `DataProducerService` to create a proxy consuming the data-producer's API and return it.
 
 ```java
-
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import ch.puzzle.quarkustechlab.restconsumer.DataProducerService;
@@ -215,4 +199,10 @@ public class DataConsumerResource {
 
 To run both microservices you have to alter the `application.properties` of the consumer and change it's default port. Simply add `quarkus.http.port=8081` to your `application.properties` and the default port will be changed.
 
-When you have both microservices running, try sending a request to the consumer. You will see that we receive a SensorMeasurement, which the data-producer produced.
+When you have both microservices running, try sending a request to the consumer. You will see that we receive a `SensorMeasurement`, which the data-producer produced. Probably you'll only see the generated object reference like this `SensorMeasurement@4c7758a8`. Do you rememeber what we did in the producer to get the json output?
+
+{{% details title="Hint" %}}
+
+To get the full json output you have to add the `resteasy-reactive-jackson` extension and make sure the media type is set to json.
+
+{{% /details %}}

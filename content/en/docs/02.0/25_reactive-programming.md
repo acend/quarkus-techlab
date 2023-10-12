@@ -16,7 +16,7 @@ In this chapter we will implement a simple rest application to show an example o
 If you are not familiar with reactive programming and are interested to go further down the rabbit hole, consider reading some additional literature:
 
 * [Reactive Manifesto](https://www.reactivemanifesto.org/en)
-* [Mutiny! Documentation](https://smallrye.io/smallrye-mutiny/1.7.0/tutorials/hello-mutiny/)
+* [Mutiny! Documentation](https://smallrye.io/smallrye-mutiny/{{% param "mutinyVersion" %}}/tutorials/hello-mutiny/)
 
 
 ## {{% param sectionnumber %}}.1: Producing Data
@@ -26,7 +26,7 @@ We will start similar to the previous example with a producer which exposes data
 
 ### Task {{% param sectionnumber %}}.1.1: Create producer project
 
-Start by creating a project 'quarkus-reactive-rest-producer'. Add the extensions 'quarkus-resteasy-reactive', 'quarkus-resteasy-reactive-jackson', 'quarkus-reactive-pg-client' to the project.
+Start by creating a project `quarkus-reactive-rest-producer`. Add the extensions `quarkus-resteasy-reactive-jackson` to the project.
 
 {{% details title="Hint" %}}
 
@@ -34,7 +34,7 @@ Start by creating a project 'quarkus-reactive-rest-producer'. Add the extensions
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
   -DprojectGroupId=ch.puzzle \
   -DprojectArtifactId=quarkus-reactive-rest-producer \
-  -Dextensions="quarkus-resteasy-reactive,quarkus-resteasy-reactive-jackson" \
+  -Dextensions="quarkus-resteasy-reactive-jackson" \
   -DprojectVersion=1.0.0 \
   -DclassName="ch.puzzle.producer.boundary.DataResource"
 ```
@@ -60,7 +60,7 @@ public class SensorMeasurement {
 }
 ```
 
-Next up we will write our first reactive REST endpoint. Alter the generated `DataResource` class to serve the path '/data' and implement a simple endpoint to return a `Uni<SensorMeasurement>` whenever a GET request is incoming.
+Next up we will write our first reactive REST endpoint. Alter the generated `DataResource` class to serve the path `/data` and implement a simple endpoint to return a `Uni<SensorMeasurement>` whenever a GET request is incoming.
 
 Creating a `Uni` holding a `SensorMeasurement` is as simple as `Uni.createFrom().item(new SensorMeasurement())`.
 
@@ -101,7 +101,7 @@ Response code: 200 (OK); Time: 115ms; Content length: 64 bytes
 
 To use the full potential of the reactive world we will need to have our database access reactive as well. Let's start by initializing a database. We don't need to worry about creating the database instance ourselves, the quarkus dev services will start our desired database in a container all by itself.
 
-Add the extension 'quarkus-reactive-pg-client' to your project.
+Add the extension `reactive-pg-client` to your project.
 
 ```shell
 ./mvnw quarkus:add-extension -Dextensions="reactive-pg-client"
@@ -126,21 +126,17 @@ CREATE TABLE sensormeasurements (
 To query the database you can use your `PgPool client` like this:
 
 ```java
-
 client.query("YOUR QUERY").execute().await().indefinitely();
-
 ```
 
 See if you can create your schema. To execute multiple queries you can use `.flatMap(...)`:
 
 ```java
-
 client.query("QUERY 1").execute()
                 .flatMap(r -> client.query("QUERY 2").execute())
                 .flatMap(r -> client.query("QUERY 3").execute())
                 .flatMap(r -> client.query("...").execute())
                 .await().indefinitely();
-
 ```
 
 Test if you can drop your table if it exists, re-create the table and fill it with some dummy data.
@@ -386,13 +382,13 @@ curl -X POST localhost:8080/data -d "{\"data\":0.1, \"time\":\"2022-01-01T00:00:
 
 We have learned how to implement a reactive REST API to serve data in a complete reactive non-blocking way. Now it's time to take a look at the opposite, how do we reactively consume the API.
 
-Create another Quarkus project with the following extensions: "quarkus-resteasy-reactive, quarkus-resteasy-reactive-jackson, quarkus-rest-client-mutiny, quarkus-rest-client-jackson":
+Create another Quarkus project with the following extensions: `quarkus-resteasy-reactive-jackson`, `quarkus-rest-client-reactive-jackson`, `quarkus-resteasy-mutiny`:
 
 ```bash
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-reactive-rest-consumer \
-    -Dextensions="quarkus-resteasy-reactive,quarkus-resteasy-reactive-jackson,quarkus-rest-client-mutiny,quarkus-rest-client-jackson" \
+    -Dextensions="quarkus-resteasy-reactive-jackson,quarkus-rest-client-jackson,quarkus-resteasy-mutiny" \
     -DprojectVersion=1.0.0 \
     -DclassName="ch.puzzle.consumer.boundary.DataResource"
 ```
@@ -403,7 +399,7 @@ Change the default port of the consumer application in the `application.properti
 quarkus.http.port=8081
 ```
 
-We will duplicate the `SensorMeasurement` class without the Active Record pattern functions.
+We will duplicate the `SensorMeasurement` class from the producer but without the Active Record pattern functions.
 
 ```java
 import java.time.Instant;
@@ -425,7 +421,7 @@ public class SensorMeasurement {
 }
 ```
 
-To consume the producer's REST API we create a `@RestClient`. Create a new interface `..consumer.boundary.DataService` and annotate it with:
+To consume the producer's REST API we create a `@RestClient` named `data-service`. Create a new interface `DataService` and annotate it with:
 
 ```java
 
@@ -477,8 +473,8 @@ We configure the rest client in our application properties.
 ```properties
 quarkus.http.port=8081
 
-data-service/mp-rest/url=http://localhost:8080
-data-service/mp-rest/scope=javax.inject.Singleton
+quarkus.rest-client.data-service.url=http://localhost:8080
+quarkus.rest-client.data-service.scope=jakarta.inject.Singleton
 ```
 
 Let's create another REST API resource to tunnel the requests and consume the produced events. Duplicate the definition of the producer's `DataResource` into a new class in the consumer. Inject the defined `DataService` as a `@RestClient` into the created resource and use it to tunnel the requests to the producer's API.

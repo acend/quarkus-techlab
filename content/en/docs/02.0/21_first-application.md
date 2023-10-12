@@ -46,7 +46,7 @@ live reloading on each API call. Try hitting the API and test the
 curl http://localhost:8080/hello
 ```
 
-You should get the 'hello' response in your console. Other RESTeasy functionalities work like they always do.
+You should get the `Hello from RESTEasy Reactive` response in your console. Other RESTeasy functionalities work like they always do.
 For further information on basic REST interaction with Quarkus see [Documentation](https://quarkus.io/guides/rest-json).
 
 
@@ -57,11 +57,11 @@ performs the live reload.
 
 * Alter the response given in the `GreetingResource`
 * Add a logger and a log statement to your `GreetingResource`
-* Try changing the log level in the `application.properties` configuration file (quarkus.log.level=DEBUG)
-* Point your browser to the Development UI at [http://localhost:8080/q/dev](http://localhost:8080/q/dev). Explore the
+* Try changing the log level in the `application.properties` configuration file (`quarkus.log.level=DEBUG`)
+* Point your browser to the Development UI at [http://localhost:8080/q/dev-ui](http://localhost:8080/q/dev). Explore the
 provided information.
 * Try to change the log level using the configuration editor in the development ui.
-* Check the invocation trees from the ArC panel. What happens if you invoke your /hello endpoint?
+* Check the invocation trees from the ArC panel. You first have to enable this feature via `ARC-Panel`-> `Config-Editor` -> `quarkus.arc.dev-mode.monitoring-enabled` and rebuild the app. What happens if you invoke your `/hello` endpoint?
 * When was the application started? (tip: check the fired events)
 * Check the details about your runtime environment (environment variables and system properties) in the configuration
 editor.
@@ -71,10 +71,10 @@ editor.
 
 {{% details title="GreetingResource Hint" %}}
 ```java
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +88,7 @@ public class GreetingResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
         logger.debug("Info log");
-        return "Hello RESTEasy";
+        return "Hello from RESTEasy Reactive";
     }
 }
 ```
@@ -97,7 +97,7 @@ public class GreetingResource {
 
 ## Exploring the quarkus byte code
 
-In the introduction section we had a brief overview of how quarkus jars may look like. Its not expected that you have
+In the introduction section we had a brief overview of how quarkus jars may look like. It's not expected that you have
 to do things like this at a regular basis and to get all details is pretty hard. However, it may give you a feeling
 where things came from and how they are wired up.
 

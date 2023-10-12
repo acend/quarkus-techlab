@@ -5,9 +5,6 @@ title = "Quarkus Basics Training"
 enableGitInfo = true
 
 
-
-
-
 languageCode = "en-us"
 
 contentDir = "content/en"
@@ -79,7 +76,10 @@ github_branch = "master"
 
 lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
-quarkusVersion = "2.11.3.Final"
+
+#versions
+quarkusVersion = "3.4.2"
+mutinyVersion = "2.5.1"
 
 k8s_user_name = "userXY"
 registry_url = "default-route-openshift-image-registry.$CLUSTER_URL"
