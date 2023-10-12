@@ -18,6 +18,7 @@ This extension will expose the following REST endpoints:
 
 * `/q/health/live`: is the application up and running?
 * `/q/health/ready`: is the application ready to serve requests?
+* `/q/health/started`: Is the application started?
 * `/q/health`: accumulation of all checks
 
 In a cloud environment these endpoints will be used to probe the health of your application. these checks will therefore

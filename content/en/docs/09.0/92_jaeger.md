@@ -97,7 +97,7 @@ curl localhost:8080/hello
 
 You should be greeted by the application's response. But what is happening at the back? Check the [Jaeger UI](http://localhost:16686/) if you have received any traces! You will be able to see that the request should have been sampled and collected by the Jaeger service.
 
-![Image from Jaeger UI showing the trace](img/first_trace.png)
+![Image from Jaeger UI showing the trace](../first_trace.png)
 
 
 ## Task {{% param sectionnumber %}}.5: Add more spans
@@ -203,4 +203,4 @@ Call the endpoint again and head over to the [Jaeger UI](http://localhost:16686/
 
 If you did it correctly you can see the span like this:
 
-![Jaeger UI with span](img/baggage_trace.png)
+![Jaeger UI with span](../baggage_trace.png)
