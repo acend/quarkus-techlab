@@ -107,10 +107,9 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 
 {{% /details %}}
 
-In the data-consumer microservice we will have another resource on the path `/data` which serves for now as a proxy to our data-producer. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
+In the data-consumer microservice we will have another resource on the path `/data` which serves for now as a proxy to our `data-producer`. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
 
 ```java
-// DataProducerService
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -126,10 +125,9 @@ public interface DataProducerService {
     @Produces(MediaType.APPLICATION_JSON)
     SensorMeasurement getSensorMeasurement();
 }
-
 ```
 
-Implement the same POJO `SensorMeasurement` as in the producer again for the data-consumer project but with an empty constructor.
+Implement the same POJO `SensorMeasurement` as in the producer again for the `data-consumer` project but with an empty constructor.
 
 {{% details title="Hint" %}}
 
@@ -140,7 +138,6 @@ public class SensorMeasurement {
 
     public SensorMeasurement() {}
 }
-
 ```
 
 {{% /details %}}
@@ -156,14 +153,10 @@ quarkus.rest-client."ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducer
 When managing multiple RestClients the configuration with the fully qualified name of the class (`ch.puzzle.quarkustechlab.restconsumer.boundary.DataProducerService`) the readability suffers pretty fast. You can extend the annotation of the RestClient (`@RegisterRestClient`) with a configKey property to shorten the configurations.
 
 ```java
-// DataProducerService
-
-[...]
-
 @Path("/data")
 @RegisterRestClient(configKey = "data-producer-api")
 public interface DataProducerService {
-
+    
 [...]
 ```
 
@@ -173,14 +166,14 @@ quarkus.rest-client.data-producer-api.url=http://localhost:8080
 quarkus.rest-client.data-producer-api.scope=jakarta.inject.Singleton
 ```
 
-To use the registered RestClient in our application inject it into the DataConsumerResource and simply call the defined interface's method. To inject a RestClient into your desired class create a field of type `DataProducerService dataProducerService` and annotate it with `@RestClient`.
-You can edit our resource in the data-consumer to use the `DataProducerService` to create a proxy consuming the data-producer's API and return it.
+To use the registered RestClient in our application inject it into the `DataConsumerResource` and simply call the defined interface's method. To inject a RestClient into your desired class create a field of type `DataProducerService dataProducerService` and annotate it with `@RestClient`.
+You can edit our resource in the `data-consumer` to use the `DataProducerService` to create a proxy consuming the API of the `data-producer` and return it.
 
 ```java
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import ch.puzzle.quarkustechlab.restconsumer.DataProducerService;
-import ch.puzzle.quarkustechlab.restconsumer.SensorMeasurement;
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/data")
 public class DataConsumerResource {
@@ -194,10 +187,9 @@ public class DataConsumerResource {
         return dataProducerService.getSensorMeasurement();
     }
 }
-
 ```
 
-To run both microservices you have to alter the `application.properties` of the consumer and change it's default port. Simply add `quarkus.http.port=8081` to your `application.properties` and the default port will be changed.
+To run both microservices you have to alter the `application.properties` of the consumer and change its default port. Simply add `quarkus.http.port=8081` to your `application.properties` and the default port will be changed.
 
 When you have both microservices running, try sending a request to the consumer. You will see that we receive a `SensorMeasurement`, which the data-producer produced. Probably you'll only see the generated object reference like this `SensorMeasurement@4c7758a8`. Do you rememeber what we did in the producer to get the json output?
 

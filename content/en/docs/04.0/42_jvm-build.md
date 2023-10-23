@@ -13,8 +13,11 @@ Be aware, a generated Quarkus project contains a `.dockerignore` file. This file
 to the docker deamon for building a docker container (similar concept as the `.gitignore` files). If you encounter
 errors like the following you may tweak your `.dockerignore` file or for simplicity delete it.
 
-```
-COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such file or directory
+```s
+=> ERROR [build 2/8] COPY --chown=quarkus:quarkus mvnw /code/mvnw
+[...]
+failed to solve: rpc error: code = Unknown desc = failed to compute cache key: failed to calculate checksum of ref 
+6jmcf7surio3u6alym2zn08cm::ewthv5cbdp8e5pdt3562y9mzg: "/pom.xml": not found
 ```
 {{% /alert %}}
 
@@ -24,29 +27,28 @@ COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such f
 To build a Quarkus application to be run with the JVM you can use the provided Dockerfile `Dockerfile.jvm`.
 
 ```s
+~/data-producer$ ./mvnw clean package
+~/data-consumer$ ./mvnw clean package
 
-~/data-producer ./mvnw clean package
-~/data-consumer ./mvnw clean package
-~/ docker build -f data-producer/src/main/docker/Dockerfile.jvm -t data-producer:latest data-producer/.
-~/ docker build -f data-consumer/src/main/docker/Dockerfile.jvm -t data-consumer:latest data-consumer/.
-
+~$ docker build -f data-producer/src/main/docker/Dockerfile.jvm -t data-producer:latest data-producer/.
+~$ docker build -f data-consumer/src/main/docker/Dockerfile.jvm -t data-consumer:latest data-consumer/.
 ```
 
-The image will be produced and tagged as data-producer:latest / data-consumer:latest. You can test and run the built image locally with:
+{{% alert color="primary" title="Docker Version" %}}
+Depending on your docker version you have to specify the output format. If you get a warning that there is no output specified for docker-container driver just add `-o type=docker` to your command line.
+{{% /alert %}}
+
+The image will be produced and tagged as `data-producer:latest` / `data-consumer:latest`. You can test and run the built image locally with:
 
 ```s
-
 docker run --network host data-producer:latest
 docker run --network host data-consumer:latest
-
 ```
 
 When the applications are up and running you can test the API again:
 
 ```s
-
 curl http://localhost:8081/data
-
 ```
 
 You should get your desired response.
@@ -54,22 +56,22 @@ You should get your desired response.
 
 ## {{% param sectionnumber %}}.2: Multistage Dockerfiles
 
-For a generic approach to build applications from scratch inside a container we suggest using a multistage Dockerfile. As the name states, the multistage file can be composed from multiple stages. In this example, we create a stage called 'build' and an unnamed stage. The build stage uses maven to package our application, the next stage references the build stage and copies the artifact into the resulting docker image.
+For a generic approach to build applications from scratch inside a container we suggest using a multistage Dockerfile. As the name states, the multistage file can be composed from multiple stages. In this example, we create a stage called `build` and an unnamed stage. The `build` stage uses maven to package our application, the next stage references the build stage and copies the artifact into the resulting docker image.
 
 ```Dockerfile
 ## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/ubi-quarkus-native-image:22.2-java17 AS build
+FROM {{% param "ubiQuarkusNativeImage" %}} AS build
 COPY --chown=quarkus:quarkus mvnw /code/mvnw
 COPY --chown=quarkus:quarkus .mvn /code/.mvn
 COPY --chown=quarkus:quarkus pom.xml /code/
 USER quarkus
 WORKDIR /code
-RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.6.0:go-offline
 COPY src /code/src
 RUN ./mvnw package
 
 ## Stage 2 : create the docker final image
-FROM registry.access.redhat.com/ubi8/openjdk-17:1.11
+FROM {{% param "openJdkImage" %}}
 
 ENV LANGUAGE='en_US:en'
 
@@ -88,8 +90,7 @@ ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 If you are in a restricted environment, where possible dependencies and packages cannot be downloaded, try to use this Dockerfile instead:
 
 ```Dockerfile
-
-FROM registry.access.redhat.com/ubi8/openjdk-11:1.10
+FROM {{% param "openJdkImage" %}}
 
 USER root
 
@@ -114,5 +115,4 @@ EXPOSE 8080
 USER 1001
 
 ENTRYPOINT [ "/deployments/run-java.sh" ]
-
 ```

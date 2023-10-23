@@ -80,6 +80,9 @@ solution_code_basedir = "/solution/"
 #versions
 quarkusVersion = "3.4.2"
 mutinyVersion = "2.5.1"
+ubiQuarkusNativeImage = "quay.io/quarkus/ubi-quarkus-native-image:22.3-java17"
+openJdkImage = "registry.access.redhat.com/ubi8/openjdk-17:1.16"
+quarkusMicroImage = "quay.io/quarkus/quarkus-micro-image:2.0"
 
 k8s_user_name = "userXY"
 registry_url = "default-route-openshift-image-registry.$CLUSTER_URL"
