@@ -163,6 +163,8 @@ When we insert timeouts or a maximum amount of retries for a certain part of our
 Let's update the example from before to use a fallback if it takes longer than the defined 500 ms to respond:
 
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.boundary;
+
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -171,7 +173,7 @@ import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
 
 @Path("/data")
 @RegisterRestClient(configKey = "data-producer-api")
@@ -181,7 +183,7 @@ public interface DataProducerService {
     @Produces(MediaType.APPLICATION_JSON)
     @Timeout(500)
     @Fallback(fallbackMethod = "getDefaultMeasurement")
-    SensorMeasurement getSensorMeasurment();
+    SensorMeasurement getSensorMeasurement();
     
     default SensorMeasurement getDefaultMeasurement() {
         return new SensorMeasurement();
@@ -190,4 +192,4 @@ public interface DataProducerService {
 ```
 
 We have seen that we can increase resilience in our microservices without touching the business logic at all.
-You can try to make your application more fault tolerant and commit your changes whenever you're ready to move on!
+You can try to make your application more fault-tolerant and commit your changes whenever you're ready to move on!

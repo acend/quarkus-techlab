@@ -37,7 +37,7 @@ public String streamProcess(String value) {
 ```
 
 
-If you read this example it's pretty clear what is happening. We are connecting with a Connector to a Channel (Queue or Topic) we call "data-inbound-reactive" and define it as the inbound connector for this method. On the other side we connect the outcome of this method to the "data-outbound-reactive" stream. Whenever the "data-inobund-reactive" stream sends an message we perform a transformation to uppercase and return the value into the "data-outbound-reactive" channel. Simple as that!
+If you read this example it's pretty clear what is happening. We are connecting with a Connector to a Channel (Queue or Topic) we call `data-inbound-reactive` and define it as the inbound connector for this method. On the other side we connect the outcome of this method to the `data-outbound-reactive` stream. Whenever the `data-inbound-reactive` stream sends a message we perform a transformation to uppercase and return the value into the `data-outbound-reactive` channel. Simple as that!
 
 
 ### {{% param sectionnumber %}}.2.1: Connectors
@@ -54,7 +54,7 @@ Inbound connectors are responsible for:
 * Getting messages from the remote broker,
 * Creating a Reactive Messaging Message associated with the retrieved message.
 * Potentially associating technical metadata with the message. This includes unmarshalling the payload.
-* Associating a acknowledgement callback to acknowledge the incoming message when the Reactive Messaging message is acknowledged.
+* Associating an acknowledgement callback to acknowledge the incoming message when the Reactive Messaging message is acknowledged.
 
 Important:
 Reactive matters! The first step should follow the reactive streams principle: uses non-blocking technology, respects downstream requests.
