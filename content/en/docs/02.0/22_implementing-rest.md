@@ -51,6 +51,8 @@ In our lab we want to transfer sensor measurements between our microservices. Cr
 It should look something like this:
 
 ```java
+package ch.puzzle.quarkustechlab.restproducer.entity;
+
 public class SensorMeasurement {
 
     public Double data;
@@ -65,10 +67,13 @@ public class SensorMeasurement {
 In the generated DataResource edit the `@GET` endpoint to return a new SensorMeasurement and change the `@Produces` type to `MediaType.APPLICATION_JSON`.
 
 ```java
+package ch.puzzle.quarkustechlab.restproducer.boundary;
+
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import ch.puzzle.quarkustechlab.restproducer.entity.SensorMeasurement;
 
 @Path("/data")
 public class DataResource {
@@ -110,10 +115,13 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 In the data-consumer microservice we will have another resource on the path `/data` which serves for now as a proxy to our `data-producer`. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
 
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.boundary;
+
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -132,6 +140,8 @@ Implement the same POJO `SensorMeasurement` as in the producer again for the `da
 {{% details title="Hint" %}}
 
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.entity;
+
 public class SensorMeasurement {
 
     public Double data;
@@ -173,6 +183,9 @@ You can edit our resource in the `data-consumer` to use the `DataProducerService
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/data")
@@ -191,7 +204,7 @@ public class DataConsumerResource {
 
 To run both microservices you have to alter the `application.properties` of the consumer and change its default port. Simply add `quarkus.http.port=8081` to your `application.properties` and the default port will be changed.
 
-When you have both microservices running, try sending a request to the consumer. You will see that we receive a `SensorMeasurement`, which the data-producer produced. Probably you'll only see the generated object reference like this `SensorMeasurement@4c7758a8`. Do you rememeber what we did in the producer to get the json output?
+When you have both microservices running, try sending a request to the consumer. You will see that we receive a `SensorMeasurement`, which the `data-producer` produced. Probably you'll only see the generated object reference like this `SensorMeasurement@4c7758a8`. Do you remember what we did in the producer to get the json output?
 
 {{% details title="Hint" %}}
 
