@@ -15,10 +15,10 @@ errors like the following you may tweak your `.dockerignore` file or for simplic
 ```
 COPY failed: stat /var/lib/docker/tmp/docker-builder885613220/pom.xml: no such file or directory
 
-
 [1/2] STEP 2/9: COPY --chown=quarkus:quarkus mvnw /code/mvnw
-Error: error building at STEP "COPY --chown=quarkus:quarkus mvnw /code/mvnw": no items matching glob "/home/rhertle/code/quarkus-techlab-test/8/quarkus-reactive-messaging-consumer/mvnw" copied (1 filtered out using /home/rhertle/code/quarkus-techlab-test/8/quarkus-reactive-messaging-consumer/.dockerignore): no such file or directory
-
+Error: error building at STEP "COPY --chown=quarkus:quarkus mvnw /code/mvnw": no items matching glob 
+"/home/rhertle/code/quarkus-techlab-test/8/quarkus-reactive-messaging-consumer/mvnw" copied (1 filtered out using 
+/home/rhertle/code/quarkus-techlab-test/8/quarkus-reactive-messaging-consumer/.dockerignore): no such file or directory
 ```
 
 Quarkus native builds are taking a lot of memory resources. Docker installations on windows and mac os are known to set
@@ -42,18 +42,18 @@ The lazy way is simpler. We create a multistage Dockerfile to do both steps in o
 
 ```Dockerfile
 ## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/ubi-quarkus-native-image:22.2-java17 AS build
+FROM {{% param "ubiQuarkusNativeImage" %}} AS build
 COPY --chown=quarkus:quarkus mvnw /code/mvnw
 COPY --chown=quarkus:quarkus .mvn /code/.mvn
 COPY --chown=quarkus:quarkus pom.xml /code/
 USER quarkus
 WORKDIR /code
-RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.6.0:go-offline
 COPY src /code/src
 RUN ./mvnw package -Pnative
 
 ## Stage 2 : create the docker final image
-FROM quay.io/quarkus/quarkus-micro-image:1.0
+FROM {{% param "quarkusMicroImage" %}}
 WORKDIR /work/
 COPY --from=build /code/target/*-runner /work/application
 
@@ -72,12 +72,11 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 Now you can create your own native executable with:
 
 ```s
+~/data-producer$ ./mvnw clean package
+~/data-consumer$ ./mvnw clean package
 
-~/data-producer ./mvnw clean package
-~/data-consumer ./mvnw clean package
-~/ docker build -f data-producer/src/main/docker/Dockerfile.multistage -t data-producer:native data-producer/.
-~/ docker build -f data-consumer/src/main/docker/Dockerfile.multistage -t data-consumer:native data-consumer/.
-
+~$ docker build -f data-producer/src/main/docker/Dockerfile.multistage -t data-producer:native data-producer/.
+~$ docker build -f data-consumer/src/main/docker/Dockerfile.multistage -t data-consumer:native data-consumer/.
 ```
 
 Now start the built native images. You will realize that the startup time is almost instantaneous.
@@ -90,5 +89,4 @@ __  ____  __  _____   ___  __ ____  ______
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) data-consumer 1.0-SNAPSHOT native (powered by Quarkus {{% param "quarkusVersion" %}}) started in 0.031s. Listening on: http://0.0.0.0:8080
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Profile prod activated.
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Installed features: [cdi, rest-client, resteasy, resteasy-jsonb, smallrye-health]
-
 ```
