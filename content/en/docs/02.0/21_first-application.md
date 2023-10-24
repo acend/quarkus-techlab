@@ -24,7 +24,7 @@ command:
 ```bash
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
-    -DprojectArtifactId=getting-started \
+    -DprojectArtifactId=quarkus-getting-started \
     -DclassName="ch.puzzle.quarkustechlab.GreetingResource" \
     -Dpath="/hello"
 ```

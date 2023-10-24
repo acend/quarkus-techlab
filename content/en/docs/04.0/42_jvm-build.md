@@ -27,22 +27,22 @@ failed to solve: rpc error: code = Unknown desc = failed to compute cache key: f
 To build a Quarkus application to be run with the JVM you can use the provided Dockerfile `Dockerfile.jvm`.
 
 ```s
-~/data-producer$ ./mvnw clean package
-~/data-consumer$ ./mvnw clean package
+~/quarkus-rest-data-producer$ ./mvnw clean package
+~/quarkus-rest-data-consumer$ ./mvnw clean package
 
-~$ docker build -f data-producer/src/main/docker/Dockerfile.jvm -t data-producer:latest data-producer/.
-~$ docker build -f data-consumer/src/main/docker/Dockerfile.jvm -t data-consumer:latest data-consumer/.
+~$ docker build -f quarkus-rest-data-producer/src/main/docker/Dockerfile.jvm -t quarkus-rest-data-producer:latest quarkus-rest-data-producer/.
+~$ docker build -f quarkus-rest-data-consumer/src/main/docker/Dockerfile.jvm -t quarkus-rest-data-consumer:latest quarkus-rest-data-consumer/.
 ```
 
 {{% alert color="primary" title="Docker Version" %}}
 Depending on your docker version you have to specify the output format. If you get a warning that there is no output specified for docker-container driver just add `-o type=docker` to your command line.
 {{% /alert %}}
 
-The image will be produced and tagged as `data-producer:latest` / `data-consumer:latest`. You can test and run the built image locally with:
+The image will be produced and tagged as `quarkus-rest-data-producer:latest` / `quarkus-rest-data-consumer:latest`. You can test and run the built image locally with:
 
 ```s
-docker run --network host data-producer:latest
-docker run --network host data-consumer:latest
+docker run --network host quarkus-rest-data-producer:latest
+docker run --network host quarkus-rest-data-consumer:latest
 ```
 
 When the applications are up and running you can test the API again:

@@ -73,17 +73,17 @@ We create two new Quarkus projects:
 > Creation of Quarkus projects
 
 ```shell
-
+# Create producer application
 mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
-    -DprojectGroupId=org.acme \
-    -DprojectArtifactId=data-producer \
-    -Dextensions="resteasy-reactive"
+    -DprojectGroupId=ch.puzzle \
+    -DprojectArtifactId=quarkus-cloudevents-producer \
+    -Dextensions="resteasy-reactive,smallrye-reactive-messaging-kafka"
 
+# Create consumer application
 mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
-    -DprojectGroupId=org.acme \
-    -DprojectArtifactId=data-consumer \
-    -Dextensions="resteasy-reactive"
-
+    -DprojectGroupId=ch.puzzle \
+    -DprojectArtifactId=quarkus-cloudevents-consumer \
+    -Dextensions="resteasy-reactive,smallrye-reactive-messaging-kafka"
 ```
 
 Remove the test classes and add the following extensions to your projects' `pom.xml`:
@@ -91,11 +91,6 @@ Remove the test classes and add the following extensions to your projects' `pom.
 > Dependencies in `pom.xml`
 
 ```xml
-
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-confluent-registry-avro</artifactId>
@@ -103,7 +98,7 @@ Remove the test classes and add the following extensions to your projects' `pom.
     <dependency>
       <groupId>io.confluent</groupId>
       <artifactId>kafka-avro-serializer</artifactId>
-      <version>6.1.1</version>
+      <version>{{% param "confluentKafkaAvroVersion" %}}</version>
       <exclusions>
         <exclusion>
           <groupId>jakarta.ws.rs</groupId>
@@ -126,17 +121,16 @@ Remove the test classes and add the following extensions to your projects' `pom.
 
 ```
 
-For demonstration purposes we use a Avro-schema, which is be the most common approach to manage schemas with Kafka.
+For demonstration purposes we use a Avro-schema, which is the most common approach to manage schemas with Kafka.
 
 
 ### {{% param sectionnumber %}}.2.1: The Producer
 
-Create a Avro schema `src/main/avro/SensorMeasurement.avsc` with the following content:
+Create an AVRO Schema `src/main/avro/SensorMeasurement.avsc` with the following content
 
 ```json
-
 {
-  "namespace": "org.acme",
+  "namespace": "ch.puzzle.quarkustechlab.cloudevents",
   "type": "record",
   "name": "SensorMeasurement",
   "fields": [
@@ -146,23 +140,24 @@ Create a Avro schema `src/main/avro/SensorMeasurement.avsc` with the following c
     }
   ]
 }
-
 ```
+{{% alert color="primary" title="Generated Java Class" %}}
+According to this AVRO Schema the Java class will be generated when you run `mvn compile`. You'll find the generated class in the `target/generated-sources/avsc` directory. Now is a good time to have this class generated.
+{{% /alert %}}
 
 This represents a simple Java POJO to hold some information about measurements we want to emit.
 
-We create a service `org.acme.KafkaProducer` which allows us to emit `SensorMeasurements` to a defined Channel `measurements` which we will connect to a Kafka Topic. This could look like the following:
+We create a service `KafkaProducer` which allows us to emit `SensorMeasurements` to a defined Channel `measurements` which we will connect to a Kafka Topic. This could look like the following:
 
 ```java
+package ch.puzzle.quarkustechlab.cloudevents.producer.boundary;
 
-package org.acme;
-
+import ch.puzzle.quarkustechlab.cloudevents.SensorMeasurement;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Message;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @ApplicationScoped
 public class KafkaProducer {
@@ -175,18 +170,18 @@ public class KafkaProducer {
         sensorMeasurementEmitter.send(Message.of(sensorMeasurement));
     }
 }
-
 ```
 
-Then we alter the pre-generated REST resource to emit an event every time we receive a POST request to the endpoint `/measurements`:
+Alter the pre-generated REST resource to emit an event every time we receive a POST request to the endpoint `/measurements`:
 
 ```java
+package ch.puzzle.quarkustechlab.cloudevents.producer.boundary;
 
-package org.acme;
+import ch.puzzle.quarkustechlab.cloudevents.SensorMeasurement;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Response;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
 import java.util.Random;
 
 @Path("/measurements")
@@ -205,12 +200,13 @@ public class MeasurementsResource {
         return Response.ok().build();
     }
 }
-
 ```
 
-Of course we need some configuration in the `application.properties` to emit the events to our Kafka broker:
+Of course, we need some configuration in the `application.properties` to emit the events to our Kafka broker.
 
 ```properties
+# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
+kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.outgoing.measurements.connector=smallrye-kafka
 mp.messaging.outgoing.measurements.value.serializer=io.confluent.kafka.serializers.KafkaAvroSerializer
@@ -218,23 +214,37 @@ mp.messaging.outgoing.measurements.topic=measurements
 mp.messaging.outgoing.measurements.cloud-events-source=event-producer
 mp.messaging.outgoing.measurements.cloud-events-type=measurement-emitted
 mp.messaging.outgoing.measurements.cloud-events-subject=subject-123
-
 ```
 
-And this is where the magic happens: Configuring the channel "measurements" with additional properties `cloud-events-XXX` will simply enrich the message envelope with the properties defined. If you don't like the config approach and would rather enrich the message programmatically, I got you covered!
+And this is where the magic happens: Configuring the channel `measurements` with additional properties `cloud-events-XXX` will simply enrich the message envelope with the properties defined. If you don't like the config approach and would rather enrich the message programmatically, I got you covered!
 
 ```java
+    [...]
+    @ConfigProperty(name = "quarkus.uuid")
+    String uuid;
+
+    @ConfigProperty(name = "quarkus.application.name")
+    String applicationName;
 
     public void emitEvent(SensorMeasurement sensorMeasurement) {
         OutgoingCloudEventMetadata<Object> metadata = OutgoingCloudEventMetadata.builder()
                 .withId(UUID.randomUUID().toString())
-                .withSource(URI.create("event-producer"))
+                .withSource(URI.create(applicationName+"-"+uuid))
                 .withType("measurement-emitted")
                 .withSubject("subject-123")
                 .build();
+
+        logger.info("Producing Cloud Event, (spec-version: {}): id: '{}', source:  '{}', type: '{}', subject: '{}', payload-message: '{}' ",
+            metadata.getSpecVersion(),
+            metadata.getId(),
+            metadata.getSource(),
+            metadata.getType(),
+            metadata.getSubject().orElse("no subject"),
+            sensorMeasurement);
+        
         sensorMeasurementEmitter.send(Message.of(sensorMeasurement).addMetadata(metadata));
     }
-
+    [...]
 ```
 
 And that's all you need to create events to our little system!
@@ -242,12 +252,11 @@ And that's all you need to create events to our little system!
 
 ### {{% param sectionnumber %}}.2.2: The consumer
 
-The data-consumer's side of the system looks quite similar. Create a Avro schema `src/main/avro/SensorMeasurement.avsc` with the following content:
+The consumer side of the system looks quite similar. Create an Avro schema `src/main/avro/SensorMeasurement.avsc` with the following content
 
 ```json
-
 {
-  "namespace": "org.acme",
+  "namespace": "ch.puzzle.quarkustechlab.cloudevents",
   "type": "record",
   "name": "SensorMeasurement",
   "fields": [
@@ -257,63 +266,63 @@ The data-consumer's side of the system looks quite similar. Create a Avro schema
     }
   ]
 }
-
 ```
 
-Instead of producing messages, we will simply define a listener on a channel connected to the same Kafka topic and print the events to the command line!
+> Don't forget to run `mvn compile` to generate your SensorMeasurement class.
 
-Create the EventListener `org.acme.EventListener`:
+Instead of producing messages, we will simply define a listener on a channel connected to the same Kafka topic and print the events to the command line. Create the `EventListener`
 
 ```java
+package ch.puzzle.quarkustechlab.cloudevents.consumer.boundary;
 
-package org.acme;
-
+import ch.puzzle.quarkustechlab.cloudevents.SensorMeasurement;
 import io.smallrye.reactive.messaging.ce.IncomingCloudEventMetadata;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.concurrent.CompletionStage;
 
 @ApplicationScoped
 public class EventListener {
 
-    private final Logger logger = Logger.getLogger(EventListener.class);
+    private final Logger logger = LoggerFactory.getLogger(EventListener.class);
 
     @Incoming("measurements")
     public CompletionStage<Void> consume(Message<SensorMeasurement> message) {
-        IncomingCloudEventMetadata cloudEventMetadata = message.getMetadata(IncomingCloudEventMetadata.class).orElseThrow(() -> new IllegalArgumentException("Expected a CloudEvent!"));
-        logger.infof("Received Cloud Events (spec-version: %s): id: '%s', source:  '%s', type: '%s', subject: '%s', payload-message: '%s' ",
+        IncomingCloudEventMetadata cloudEventMetadata = message.getMetadata(
+                IncomingCloudEventMetadata.class).orElseThrow(() -> new IllegalArgumentException("Expected a CloudEvent!"));
+        
+        logger.info("Received Cloud Events (spec-version: {}): id: '{}', source:  '{}', type: '{}', subject: '{}', payload-message: '{}' ",
                 cloudEventMetadata.getSpecVersion(),
                 cloudEventMetadata.getId(),
                 cloudEventMetadata.getSource(),
                 cloudEventMetadata.getType(),
                 cloudEventMetadata.getSubject().orElse("no subject"),
                 message.getPayload());
+        
         return message.ack();
     }
-}
-
 ```
 
 Add the following properties to the `application.properties` file:
 
 ```properties
+quarkus.http.port=8081
+
+# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
+kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.incoming.measurements.connector=smallrye-kafka
 mp.messaging.incoming.measurements.topic=measurements
-
-quarkus.http.port=8081
-
 ```
 
 And that's all you need to have your application up and running! If you have Docker installed, starting the application will also start a mock Kafka broker and connect your applications automatically. If you don't have Docker installed you will need to configure the connection to a Kafka broker yourself by adding the following property to the applications:
 
 ```properties
-
-kafka.bootstrap.servers=your-kafka-broker:9092
-
+kafka.bootstrap.servers=localhost:9092
 ```
 
 
@@ -321,22 +330,27 @@ kafka.bootstrap.servers=your-kafka-broker:9092
 
 Start both of your applications in your favorite IDE or shell:
 
-```shell
-
+```s
 ./mvnw compile quarkus:dev
-
 ```
 
 Fire some requests against your producer and test your CloudEvents getting emitted and consumed!
 
-```shell
-
-$ curl -X POST localhost:8080/measurements
-
-2022-07-21 11:01:56,654 INFO  [org.acm.EventListener] (vert.x-eventloop-thread-10) Received Cloud Events (spec-version: 1.0): id: '98d85610-6d8d-4943-b8ea-641c4940e148', source:  'event-producer', type: 'measurement-emitted', subject: 'subject-123', payload-message: '{"data": 0.12169099891061863}' 
-
-
+```s
+~$ curl -X POST localhost:8080/measurements
 ```
+
+Your consumer should log the received Event
+```s
+Received Cloud Events (spec-version: 1.0): 
+  id: '98d85610-6d8d-4943-b8ea-641c4940e148', 
+  source:  'quarkus-cloudevents-producer-70430aea-5702-4f8b-a8cc-cfd0475fb1a3', 
+  type: 'measurement-emitted',
+  subject: 'subject-123', 
+  payload-message: '{"data": 0.12169099891061863}' 
+```
+
+Take your time and start exploring your setup. If you have a closer look at the startup log of your producer you'll find the url for the schema registry which is started as a devservice. Your Avro schema is propagated to this registry and you should find your schema using the UI. Further you can have a look at the dev ui of your quarkus applications. You'll find an Apache Kafka Client Card with details about your kafka cluster like topics, nodes, consumer groups and even messages.
 
 
 ### {{% param sectionnumber %}}.3: Recap

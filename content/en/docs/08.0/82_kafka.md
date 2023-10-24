@@ -75,14 +75,14 @@ Create again two Quarkus projects `quarkus-reactive-messaging-consumer` and `qua
 ```s
 # Create producer application
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
-      -DprojectGroupId=ch.puzzle.quarkustechlab.messaging.producer \
+      -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-producer \
       -Dextensions="smallrye-reactive-messaging-kafka,quarkus-jackson,quarkus-jsonb" \
       -DprojectVersion=1.0.0
 
 # Create consumer application
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
-      -DprojectGroupId=ch.puzzle.quarkustechlab.messaging.consumer \
+      -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-consumer \
       -Dextensions="smallrye-reactive-messaging-kafka,quarkus-resteasy-reactive-jackson,quarkus-resteasy-reactive-jsonb" \
       -DprojectVersion=1.0.0
@@ -142,7 +142,7 @@ public class ReactiveDataProducer {
 To ensure the connection from the connector to your message broker we need some configuration in our `application.properties`.
 
 ```s
-# If you'd like to use devservices instead of a docker-compose simply comment or remove the line below
+# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
 kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.outgoing.data.connector=smallrye-kafka
@@ -218,7 +218,7 @@ After creating the deserializer we need to set up the connectors for the consume
 ```s
 quarkus.http.port=8081
 
-# Remove property below to use the quarkus Devservices
+# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
 kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.incoming.data.connector=smallrye-kafka

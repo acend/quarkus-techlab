@@ -16,22 +16,19 @@ The main idea behind Funqy is pretty simple. Create Java methods, define optiona
 
 ## {{% param sectionnumber %}}.2: Our first serverless journey
 
-Let's dive straight into the it and start by creating a normal Quarkus application with the `quarkus-funqy-http` extension.
+Let's dive straight into it and start by creating a normal Quarkus application with the `quarkus-funqy-http` extension.
 
 ```s
-
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
-    -DprojectArtifactId=data-producer \
+    -DprojectArtifactId=quarkus-serverless-data-producer \
     -DclassName="ch.puzzle.quarkustechlab.serverless.boundary.Funqy" \
     -Dextensions="funqy-http"
-
 ```
 
 This will set up a small example application already providing a serverless function. Head over to the code and check the example:
 
 ```java
-
 public class Funqy {
 
     private static final String CHARM_QUARK_SYMBOL = "c";
@@ -45,7 +42,6 @@ public class Funqy {
         public String value;
     }
 }
-
 ```
 
 Add getter and setter functions for the `Answer` class. Somehow the Quarkus plugin does not generate them automatically for this test setup.
@@ -62,7 +58,6 @@ Test your API again, try to mix now the REST consumer from the previous example 
 {{% details title="Hint" %}}
 
 ```java
-
 public class Funqy {
 
     @Inject
@@ -73,11 +68,9 @@ public class Funqy {
         return dataService.getMeasurement();
     }
 }
-
 ```
 
 ```java
-
 @ApplicationScoped
 public class DataService {
 
@@ -85,11 +78,9 @@ public class DataService {
         return new SensorMeasurement();
     }
 }
-
 ```
 
 ```java
-
 public class SensorMeasurement {
 
     public Double data;
@@ -98,9 +89,7 @@ public class SensorMeasurement {
         this.data = Math.random();
     }
 }
-
 ```
 
 {{% /details %}}
 
-Head over to the next section to get to know how to deploy your serverless applications to OpenShift!
