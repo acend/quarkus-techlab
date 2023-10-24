@@ -12,14 +12,13 @@ In this section we are going to extend our created REST microservices and create
 
 ## Task {{% param sectionnumber %}}.1: Testing your Quarkus producer
 
-Start can start with your `data-producer` project. Add tests for verifying your producing interfaces. Try to use the different techniques for mocking your injected beans.
+Start can start with your `quarkus-rest-data-producer` project. Add tests for verifying your producing interfaces. Try to use the different techniques for mocking your injected beans.
 
 For demonstration purposes we implement a new endpoint `/dummy` which simply returns a String `dummy` with the help of an injected `DummyService`.
 
 It could look something like this:
 
 ```java
-
 @ApplicationScoped
 public class DummyService {
 
@@ -27,11 +26,9 @@ public class DummyService {
         return "dummy";
     }
 }
-
 ```
 
 ```java
-
 @Path("/data")
 public class DataResource {
 
@@ -50,7 +47,6 @@ public class DataResource {
         return dummyService.dummy();
     }
 }
-
 ```
 
 Add the necessary dependencies to your project and you're all good to go!

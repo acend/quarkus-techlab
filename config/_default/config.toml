@@ -78,12 +78,14 @@ lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
 
 #versions
-quarkusVersion = "3.4.2"
+quarkusVersion = "3.4.3"
 mutinyVersion = "2.5.1"
-ubiQuarkusNativeImage = "quay.io/quarkus/ubi-quarkus-native-image:22.3-java17"
+confluentKafkaAvroVersion = "7.5.1"
 openJdkImage = "registry.access.redhat.com/ubi8/openjdk-17:1.16"
+ubiQuarkusNativeImage = "quay.io/quarkus/ubi-quarkus-native-image:22.3-java17"
 quarkusMicroImage = "quay.io/quarkus/quarkus-micro-image:2.0"
 strimziVersion = "quay.io/strimzi/kafka:0.37.0-kafka-3.5.1"
+jaegerTracingImage = " quay.io/jaegertracing/all-in-one:1.50.0"
 
 k8s_user_name = "userXY"
 registry_url = "default-route-openshift-image-registry.$CLUSTER_URL"

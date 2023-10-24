@@ -17,10 +17,10 @@ Create a new Quarkus application, in this example we are going to use a simple r
 ```bash
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
   -DprojectGroupId=ch.puzzle \
-  -DprojectArtifactId=opentelemetry \
-  -Dextensions="quarkus-resteasy-reactive,quarkus-resteasy-reactive-jackson,quarkus-opentelemetry,quarkus-opentelemetry-exporter-otlp" \
+  -DprojectArtifactId=quarkus-opentelemetry-jaeger \
+  -Dextensions="resteasy-reactive,quarkus-opentelemetry" \
   -DprojectVersion=1.0.0 \
-  -DclassName="ch.puzzle.TracedResource"
+  -DclassName="ch.puzzle.quarkustechlab.opentelemetry.jaeger.boundary.TracedResource"
 ```
 
 
@@ -34,7 +34,7 @@ docker run --name jaeger \
   -p 16686:16686 \
   -p 4317:4317 \
   -p 4318:4318 \
-  -p 16685:16685 jaegertracing/all-in-one:1.35
+  -p 16685:16685 {{% param "jaegerTracingImage" %}}
 ```
 
 
@@ -43,15 +43,13 @@ docker run --name jaeger \
 Alter the resource created as a default resource with the `@WithSpan` annotation:
 
 ```java
-package ch.puzzle;
-
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+package ch.puzzle.quarkustechlab.opentelemetry.jaeger.boundary;
 
 import io.opentelemetry.instrumentation.annotations.WithSpan;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/hello")
 public class TracedResource {
@@ -60,7 +58,7 @@ public class TracedResource {
     @Produces(MediaType.TEXT_PLAIN)
     @WithSpan
     public String hello() {
-        return "hello";
+        return "Hello from RESTEasy Reactive";
     }
 }
 ```
@@ -68,14 +66,13 @@ public class TracedResource {
 To start receiving traces from your service, we need to adapt some configuration first:
 
 ```properties
-quarkus.application.name=myservice 
-quarkus.opentelemetry.enabled=true 
-quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317 
+quarkus.application.name=myservice
+quarkus.otel.exporter.otlp.traces.endpoint=http://localhost:4317
 
-quarkus.log.console.format=%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n  
+quarkus.log.console.format=%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n
 
 # Alternative to the console log
-quarkus.http.access-log.pattern="...traceId=%{X,traceId} spanId=%{X,spanId}" 
+quarkus.http.access-log.pattern="...traceId=%{X,traceId} spanId=%{X,spanId}"
 ```
 
 This will instruct the application to send traces from a service called `myservice`, to the endpoint `http://localhost:4317`.
@@ -85,17 +82,17 @@ This will instruct the application to send traces from a service called `myservi
 
 Spin up your Quarkus application:
 
-```bash
+```s
 ./mvnw quarkus:dev
 ```
 
 Then try to send a request to your applications `/hello` endpoint:
 
-```bash
+```s
 curl localhost:8080/hello
 ```
 
-You should be greeted by the application's response. But what is happening at the back? Check the [Jaeger UI](http://localhost:16686/) if you have received any traces! You will be able to see that the request should have been sampled and collected by the Jaeger service.
+You should be greeted by the application's response. But what is happening at the back? Check the Jaeger UI at [localhost:16686](http://localhost:16686/) if you have received any traces! You will be able to see that the request should have been sampled and collected by the Jaeger service.
 
 ![Image from Jaeger UI showing the trace](../first_trace.png)
 
@@ -105,22 +102,25 @@ You should be greeted by the application's response. But what is happening at th
 Okay, so far - so good. We can add more spans and visibility by adding a service which will return the `"hello"` for us, called `TracingService`. The service will have a function called `hello` which will return the string for us:
 
 ```java
-package ch.puzzle;
+package ch.puzzle.quarkustechlab.opentelemetry.jaeger.boundary;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import ch.puzzle.quarkustechlab.opentelemetry.jaeger.control.TracedService;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/hello")
 public class TracedResource {
-
+    
     @Inject
     TracedService tracedService;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
+    @WithSpan
     public String hello() {
         return tracedService.hello();
     }
@@ -129,15 +129,13 @@ public class TracedResource {
 
 TracingService:
 ```java
-package ch.puzzle;
-
-import javax.enterprise.context.ApplicationScoped;
+package ch.puzzle.quarkustechlab.opentelemetry.jaeger.control;
 
 import io.opentelemetry.instrumentation.annotations.WithSpan;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class TracedService {
-
 
     @WithSpan
     public String hello() {
@@ -151,7 +149,7 @@ public class TracedService {
 
 If you call the endpoint again, you should see the second span in the [Jaeger UI](http://localhost:16686/)!
 
-```bash
+```s
 curl localhost:8080/hello
 ```
 
@@ -162,28 +160,23 @@ Verify that the span will be displayed in the [Jaeger UI](http://localhost:16686
 
 For visibility purposes it will often be useful to have some more detailed information in the traces. To do that, we can simply add attributes to a span:
 
-TracedResource:
 ```java
-package ch.puzzle;
+package ch.puzzle.quarkustechlab.opentelemetry.jaeger.boundary;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
+import ch.puzzle.quarkustechlab.opentelemetry.jaeger.control.TracedService;
 import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/hello")
 public class TracedResource {
 
     @Inject
     TracedService tracedService;
-
-    @Inject
-    Tracer tracer;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)

@@ -72,11 +72,11 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 Now you can create your own native executable with:
 
 ```s
-~/data-producer$ ./mvnw clean package
-~/data-consumer$ ./mvnw clean package
+~/quarkus-rest-data-producer$ ./mvnw clean package
+~/quarkus-rest-data-consumer$ ./mvnw clean package
 
-~$ docker build -f data-producer/src/main/docker/Dockerfile.multistage -t data-producer:native data-producer/.
-~$ docker build -f data-consumer/src/main/docker/Dockerfile.multistage -t data-consumer:native data-consumer/.
+~$ docker build -f quarkus-rest-data-producer/src/main/docker/Dockerfile.multistage -t quarkus-rest-data-producer:native quarkus-rest-data-producer/.
+~$ docker build -f quarkus-rest-data-consumer/src/main/docker/Dockerfile.multistage -t quarkus-rest-data-consumer:native quarkus-rest-data-consumer/.
 ```
 
 Now start the built native images. You will realize that the startup time is almost instantaneous.
@@ -86,7 +86,7 @@ __  ____  __  _____   ___  __ ____  ______
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
  -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/
-2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) data-consumer 1.0-SNAPSHOT native (powered by Quarkus {{% param "quarkusVersion" %}}) started in 0.031s. Listening on: http://0.0.0.0:8080
+2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) quarkus-rest-data-consumer 1.0-SNAPSHOT native (powered by Quarkus {{% param "quarkusVersion" %}}) started in 0.031s. Listening on: http://0.0.0.0:8080
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Profile prod activated.
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Installed features: [cdi, rest-client, resteasy, resteasy-jsonb, smallrye-health]
 ```

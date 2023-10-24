@@ -74,7 +74,7 @@ Start the application and query the health-endpoints either by using curl or you
 
 {{% details title="Hint" %}}
 ```s
-./mvnw -pl data-producer quarkus:dev
+./mvnw quarkus:dev
 
 curl localhost:8080/q/health 
 

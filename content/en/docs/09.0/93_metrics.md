@@ -11,17 +11,15 @@ description: >
 
 Knowing about the state of your applications in a microservice architecture is crucial. We will learn in this chapter how to use the metrics extension to get insights about our applications.
 
-We start by copying the rest application and extend it with custom metrics. Add the 'micrometer-registry-prometheus' to both of your projects. This will add the micrometer as well as the according prometheus extension to your project.
+You can start by copying the rest application `data-producer` and `data-consumer` or you can just use these project and enhance them with metrics. Add the `micrometer-registry-prometheus` to both of your projects. This will add the micrometer as well as the according prometheus extension to your project.
 
 {{% details title="Hint" %}}
 
 ```xml
-
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
 </dependency>
-
 ```
 
 {{% /details %}}
@@ -30,9 +28,9 @@ Per default the applications will expose all the metrics collected on the endpoi
 
 The most common metric types used are:
 
-* Counter: The counter will simply increment and exposed at the current state
-* Gauge: The gauge will expose a numerical value at the current state
-* Timer: A time will give insight about a record of time spent in a defined state
+* **Counter**: The counter will simply increment and exposed at the current state
+* **Gauge**: The gauge will expose a numerical value at the current state
+* **Timer**: A time will give insight about a record of time spent in a defined state
 
 Let's test these impelementations in our producing application.
 
@@ -305,7 +303,7 @@ services:
 
   consumer:
     build:
-      context: ../data-consumer
+      context: ../quarkus-metrics-data-consumer
       dockerfile: src/main/docker/Dockerfile.jvm
     hostname: consumer
     container_name: consumer
@@ -316,7 +314,7 @@ services:
 
   producer:
     build:
-      context: ../data-producer
+      context: ../quarkus-metrics-data-producer
       dockerfile: src/main/docker/Dockerfile.jvm
     hostname: producer
     container_name: producer
@@ -343,7 +341,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
 
 ```
 

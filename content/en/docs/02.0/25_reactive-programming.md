@@ -36,7 +36,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
   -DprojectArtifactId=quarkus-reactive-rest-producer \
   -Dextensions="quarkus-resteasy-reactive-jackson" \
   -DprojectVersion=1.0.0 \
-  -DclassName="ch.puzzle.producer.boundary.DataResource"
+  -DclassName="ch.puzzle.quarkustechlab.reactiverest.producer.boundary.DataResource"
 ```
 
 {{% /details %}}
@@ -44,7 +44,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 
 ### Task {{% param sectionnumber %}}.1.1: First reactive endpoint
 
-The producer application should expose `SensorMeasurement` to the consumer. Let's create a simple class `ch.puzzle.producer.entity.SensorMeasurement` with the follwoing content:
+The producer application should expose `SensorMeasurement` to the consumer. Let's create a simple class with the following content:
 
 ```java
 public class SensorMeasurement {
@@ -390,7 +390,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectArtifactId=quarkus-reactive-rest-consumer \
     -Dextensions="quarkus-resteasy-reactive-jackson,quarkus-rest-client-jackson,quarkus-resteasy-mutiny" \
     -DprojectVersion=1.0.0 \
-    -DclassName="ch.puzzle.consumer.boundary.DataResource"
+    -DclassName="ch.puzzle.quarkustechlab.reactiverest.consumer.boundary.DataResource"
 ```
 
 Change the default port of the consumer application in the `application.properties`, so we can have both up and running:
