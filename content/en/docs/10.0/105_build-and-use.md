@@ -25,18 +25,25 @@ mvn clean package install
 
 ## Using the extension
 
-In the `{{% param "solution_code_basedir" %}}` folder there is an `appinfo-app` application. This simple Quarkus
-application contains the following dependency:
+In the `{{% param "solution_code_basedir" %}}` folder there is an `quarkus-appinfo-application` application. You can use the provided solution, or you can just create a new quarkus project with:
+```s
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
+    -DprojectGroupId=ch.puzzle \
+    -DprojectArtifactId=quarkus-appinfo-application \
+    -DclassName="ch.puzzle.quarkustechlab.extensions.appinfo.application.boundary.DemoResource" \
+    -Dpath="/demo"
+```
 
+This simple Quarkus application needs to have the following dependency:
 ```xml
     <dependency>
-      <groupId>ch.puzzle.quarkustechlab</groupId>
-      <artifactId>appinfo</artifactId>
+      <groupId>ch.puzzle</groupId>
+      <artifactId>techlab-extension-appinfo</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
 ```
 
-In the application.properties the following values are configured:
+Make sure your `application.properties` has the following values defined:
 ```properties
 # Application Name
 quarkus.application.name=Demo Application AppInfo
@@ -48,16 +55,15 @@ quarkus.appinfo.built-for=quarkus-training
 
 # runtime (changeable at runtime)
 quarkus.appinfo.run-by=Puzzle ITC GmbH
-
 ```
 
 
 ### Task {{% param sectionnumber %}}.2 - Starting the Application
 
-Enter the `{{% param "solution_code_basedir" %}}appinfo-app` folder and run the following command:
+Enter the `{{% param "solution_code_basedir" %}}quarkus-appinfo-application` folder and run the following command:
 
 ```s
-./mvnw clean compile quarkus:dev
+./mvnw clean quarkus:dev
 ```
 
 You should now be able to use the following endpoint:

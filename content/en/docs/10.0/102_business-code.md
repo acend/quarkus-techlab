@@ -36,7 +36,7 @@ a simple endpoint based on the undertow web server[^1].
 * Add the `quarkus-undertow` extension to your runtime `pom.xml`.
 * Add the `quarkus-undertow-deployment` extension to your deployment `pom.xml`.
 
-{{% details title="Task hint Runtime Module" %}}
+{{% details title="Hint Runtime Module" %}}
 Your dependency block in the runtime `pom.xml` should look like this:
 
 ```xml
@@ -49,12 +49,12 @@ Your dependency block in the runtime `pom.xml` should look like this:
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-undertow</artifactId>
     </dependency>
-  </dependencies>
+ </dependencies>
 ```
 {{% /details %}}
 
 
-{{% details title="Task hint Deployment Module" %}}
+{{% details title="Hint Deployment Module" %}}
 Your dependency block in the deplyoment `pom.xml` should look like this:
 
 ```xml
@@ -65,7 +65,7 @@ Your dependency block in the deplyoment `pom.xml` should look like this:
     </dependency>
     <dependency>
       <groupId>ch.puzzle</groupId>
-      <artifactId>appinfo</artifactId>
+      <artifactId>quarkus-extension-appinfo</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -77,11 +77,6 @@ Your dependency block in the deplyoment `pom.xml` should look like this:
       <artifactId>quarkus-junit5-internal</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 ```
 {{% /details %}}
@@ -91,7 +86,7 @@ Your dependency block in the deplyoment `pom.xml` should look like this:
 
 {{% alert title="Source Folder" color="warning" %}}
 The creation of the extension did not create any source folder in the runtime module. Make sure you create the
-following directories yourself `runtime/src/main/java/ch/puzzle/quarkustechlab/appinfo/`.
+following directories yourself `runtime/src/main/java/ch/puzzle/quarkustechlab/extensions/appinfo/runtime`.
 
 In the further tasks we usually only reference class names like `Appinfo.java`. If not stated otherwise, all classes
 belong to the path created above.
@@ -103,7 +98,6 @@ Class      | Description
 -----------------|--------------------------------------------
 `Appinfo.java`        | Holding the application info
 `BuildInfo.java`      | Holding the information collected at build-time
-`AppinfoNames.java`   | For simplicity holds some constants
 
 Create the `Appinfo.java` and `BuildInfo.java` class according to the diagram below. The method `asHumanReadableString`
 in `Appinfo.java` is supposed to export the information as a simple string. Usually we would create an API for exporting
@@ -116,12 +110,12 @@ Create the following `AppinfoNames.java` class:
 
 ```java
 public class AppinfoNames {
-    public static final String EXTENSION_NAME = "appinfo";
-    public static final String CONFIG_PREFIX = "quarkus."+ EXTENSION_NAME;
+  public static final String EXTENSION_NAME = "appinfo";
+  public static final String CONFIG_PREFIX = "quarkus."+ EXTENSION_NAME;
 }
 ```
 
-{{% details title="Task hint" %}}
+{{% details title="Hint" %}}
 Your `Appinfo.java` class should look something like this:
 
 ```java
@@ -140,7 +134,7 @@ public class Appinfo {
     String asHumanReadableString() {
         String format = "%-15s %s%n";
 
-        return "AppInfo\n" +
+        return "Appinfo\n" +
                 String.format(format, "buildTime", buildTime) +
                 String.format(format, "builtFor", builtFor) +
 
@@ -269,7 +263,7 @@ public class AppinfoService {
     }
 
     void onStart(@Observes StartupEvent ev) {
-        logger.info("AppInfoService Startup: "+Instant.now());
+        logger.info("AppinfoService Startup: "+Instant.now());
         this.startupTime = Instant.now().toString();
     }
 

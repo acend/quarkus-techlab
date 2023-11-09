@@ -62,7 +62,7 @@ When you have tested your data producer microservice it's time to write tests fo
 quarkus.http.port=8081
 quarkus.rest-client.data-producer-api.url=http://localhost:8080
 quarkus.rest-client.data-producer-api.scope=jakarta.inject.Singleton
-%test.quarkus.rest-client.data-producer-api.scope=javax.enterprise.context.ApplicationScoped
+%test.quarkus.rest-client.data-producer-api.scope=jakarta.enterprise.context.ApplicationScoped
 ```
 
 This will modify the scope of your bean only during the test context.

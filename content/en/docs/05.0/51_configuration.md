@@ -34,7 +34,7 @@ application.data-producer.port=8080
 %dev.application.data-producer.port=8080
 
 data-producer-api/mp-rest/url=http://${application.data-producer.url}:${application.data-producer.port}
-data-producer-api/mp-rest/scope=javax.inject.Singleton
+data-producer-api/mp-rest/scope=jakarta.inject.Singleton
 ```
 
 The prefix `%dev.` in front of a configuration property defines a quarkus profile. Whenever the defined profile is active the value will be overwritten.

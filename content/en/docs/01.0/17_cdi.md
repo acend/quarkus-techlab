@@ -33,7 +33,7 @@ public class DummyService {
 
 This example defines a `DummyService` bean. The annotation `@ApplicationScoped` tells the container to create a single bean instance for the application and will be used by all other beans that inject `DummyService`.
 
-The CDI process of matching beans to injection points is type-safe. Each bean defines set of bean types. In our example the defined `DummyService` has two types: `DummyService` and `java.lang.Object`. Exactly one bean must be assignable to the injection point, otherwise your build will fail with an `UnsatisfiedResolutionException` when none are assignable and with `AmbiguousResolutionException` when multiple are assignable. You can use the `javax.enterprise.inject.Instance` to resolve ambiguities at runtime and iterate over all beans implementing a given type:
+The CDI process of matching beans to injection points is type-safe. Each bean defines set of bean types. In our example the defined `DummyService` has two types: `DummyService` and `java.lang.Object`. Exactly one bean must be assignable to the injection point, otherwise your build will fail with an `UnsatisfiedResolutionException` when none are assignable and with `AmbiguousResolutionException` when multiple are assignable. You can use the `jakarta.enterprise.inject.Instance` to resolve ambiguities at runtime and iterate over all beans implementing a given type:
 
 ```java
 
@@ -190,8 +190,8 @@ A bean class may declare lifecylce callbacks: `@PostConstruct` and `@PreDestroy`
 
 ```java
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;;
+import jakarta.annotation.PreDestroy;
 
 @ApplicationScoped
 public class Translator {

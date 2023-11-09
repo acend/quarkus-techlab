@@ -32,7 +32,7 @@ We will define our build-time configuration to contain the following properties:
 * **recordBuildTime:** Boolean whether the collection of information at build time should run or not
 * **alwaysInclude:** Boolean if the extension should always be included or only for prod and test profile.
 
-Use the template below for creating the `AppinfoConfig.java` in your **deployment** module:
+Use the template below for creating the `AppinfoBuildTimeConfig.java` in your **deployment** module:
 
 Things to complete
 
@@ -43,7 +43,7 @@ Things to complete
 
 ```java
 // TODO: annotate class
-public class AppinfoConfig {
+public class AppinfoBuildTimeConfig {
 
     /**
      * Simple builtFor information string
@@ -68,7 +68,7 @@ The build-time configuration looks like this:
 
 ```java
 @ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.BUILD_TIME)
-public class AppinfoConfig {
+public class AppinfoBuildTimeConfig {
 
     /**
      * Simple builtFor information string
@@ -99,11 +99,11 @@ Our extension uses the runtime configuration `quarkus.appinfo.run-by`. Therefore
 in our runtime module. If we do not specify this config as part of the extension Quarkus will run but complain about
 unrecognized configuration keys.
 
-Use the template below for creating the `AppinfoRuntimeConfig.java` in your **runtime** module.
+Use the template below for creating the `AppinfoRunTimeConfig.java` in your **runtime** module.
 
 ```java
 // TODO: annotate class
-public class AppinfoRuntimeConfig {
+public class AppinfoRunTimeConfig {
 
    /**
      * Simple runBy information string
@@ -118,7 +118,7 @@ The run-time configuration looks like this:
 
 ```java
 @ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.RUN_TIME)
-public class AppinfoRuntimeConfig {
+public class AppinfoRunTimeConfig {
 
     /**
      * Simple runBy information string
