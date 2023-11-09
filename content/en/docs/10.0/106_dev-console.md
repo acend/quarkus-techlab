@@ -14,117 +14,289 @@ extension descriptor `quarkus-extension.yaml`
 
 ## Development UI Integration
 
-We will now provide more information for the Quarkus Dev UI. For this we need to create a `DevConsoleProcessor` and the
-templates for the Dev UI.
+In this section we will expose static information and dynamic information about our config sources. After finishing the
+section our Dev UI Card should look like this:
 
+![Appinfo Extension Dev UI Card](../devui-card.png)
 
-### Task {{% param sectionnumber %}}.1 - Creating the processor for the dev console
+Further we create a dedicated configuration page to display various config sources and their values present in our application.
 
-For the integration in the Dev UI we create a new `DevConsoleProcessor` in our **deployment** module.
+![Appinfo Extension Dev UI](../devui.png)
 
-* Create a new package `ch.puzzle.quarkustechlab.appinfo.deployment.devconsole`
-* Create the `DevConsoleProcessor` in this package
+### Task {{% param sectionnumber %}}.1 - Static Information
 
-The `DevConsoleProcessor` needs to provide an object which can be used from within the templates of our Dev UI.
+Quarkus knows various ways to easily display information in the [Dev Ui Guide](https://quarkus.io/guides/dev-ui). 
 
-Use the following snippet:
+We will create a simple Java POJO which extends the `SimpleBuildItem` in our deployment module to expose the static information. 
 
 ```java
-public class DevConsoleProcessor {
+package ch.puzzle.quarkustechlab.extensions.appinfo.deployment;
+
+import io.quarkus.builder.item.SimpleBuildItem;
+
+public final class StaticMetadataBuildItem extends SimpleBuildItem {
+
+    private final String quarkusVersion;
+    private final String builtFor;
+    private final boolean recordBuildTime;
+    private final boolean alwaysInclude;
+    private final String basePath;
+
+    // Getters not shown here. Make sure you generate them.
+    
+    public StaticMetadataBuildItem(String quarkusVersion, String builtFor, boolean alwaysInclude, String basePath, boolean recordBuildTime) {
+        this.quarkusVersion = quarkusVersion;
+        this.builtFor = builtFor;
+        this.alwaysInclude = alwaysInclude;
+        this.basePath = basePath;
+        this.recordBuildTime = recordBuildTime;
+    }
+}
+```
+
+This POJO needs to be filled by a `BuildStep` which is run at build time. Add the following `BuildStep` in your `TechlabExtensionAppinfoProcessor`
+```java
+    @BuildStep
+    StaticMetadataBuildItem createStaticMetadata(AppinfoBuildTimeConfig appInfoBuildTimeConfig) {
+            return new StaticMetadataBuildItem(Version.getVersion(),
+            appInfoBuildTimeConfig.builtFor,
+            appInfoBuildTimeConfig.alwaysInclude,
+            appInfoBuildTimeConfig.basePath,
+            appInfoBuildTimeConfig.recordBuildTime);
+    }
+```
+
+To show information of this class we need to customize our Dev Ui Card. Create a package `devui` in your deployment module and create a class `AppinfoDevUiProcessor`.
+
+```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.deployment.devui;
+
+import ch.puzzle.quarkustechlab.extensions.appinfo.deployment.StaticMetadataBuildItem;
+import io.quarkus.deployment.IsDevelopment;
+import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.devui.spi.page.CardPageBuildItem;
+import io.quarkus.devui.spi.page.Page;
+import io.quarkus.vertx.http.deployment.HttpRootPathBuildItem;
+
+public class AppinfoDevUiProcessor {
 
     @BuildStep(onlyIf = IsDevelopment.class)
-    public DevConsoleRuntimeTemplateInfoBuildItem getAppinfoService() {
-        return new DevConsoleRuntimeTemplateInfoBuildItem("data", new AppinfoServiceSupplier());
+    CardPageBuildItem createAppInfoCard(HttpRootPathBuildItem rootPath, StaticMetadataBuildItem smd) {
+
+        CardPageBuildItem cardPageBuildItem = new CardPageBuildItem();
+
+        cardPageBuildItem.addPage(Page.rawDataPageBuilder("Custom BuildConfig Dump")
+                .icon("font-awesome-solid:sitemap")
+                .buildTimeDataKey("smd"));
+
+        cardPageBuildItem.addPage(Page.externalPageBuilder("Appinfo Endpoint")
+                .url(rootPath.resolvePath("appinfo"))
+                .doNotEmbed()
+                .icon("font-awesome-solid:link"));
+
+        cardPageBuildItem.addPage(Page.externalPageBuilder("Write Your Own Extension Guide")
+                .url("https://quarkus.io/guides/writing-extensions", "https://quarkus.io/guides/writing-extensions")
+                .doNotEmbed()
+                .icon("font-awesome-solid:book"));
+
+        cardPageBuildItem.addBuildTimeData("smd", smd);
+
+
+        return cardPageBuildItem;
     }
 }
 ```
 
-As you see the DevConsoleProcessor creates a template item named `data` which refers a Supplier. This supplier needs to
-provide the `AppinfoService`. Create the following `AppinfoServiceSupplier` in your **runtime** module.
+The `createAppInfoCard` class does the following:
+* Registering our POJO as build time data
+* Create a page in the dev ui showing the content of our POJO using a `Page.RawDataPageBuilder`
+* Show a link to our Appinfo Servlet 
+* Show an external Link to the quarkus guide for writing extensions
+
+To test our dev ui integration you need to rebuild your extension
+```s
+mvn clean package install
+```
+
+Then make sure you restart the `quarkus-appinfo-application` application which includes your extension.
+
+### Task {{% param sectionnumber %}}.2 - Dynamic Information
+
+To show runtime data we use a JsonRPC which allows to simply fetch or stream data. 
+We need two parts for this - the java part and then the usage in the web component.
+
+Our java part will reside in the runtime module as a `ConfigSourceJsonRPCService`. This Service will query our configuration and return the details as a json response to the ui.
 
 ```java
-public class AppinfoServiceSupplier implements Supplier</* TODO: Class */>  {
+package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
 
-    @Override
-    public /* TODO: Class */ get() {
-        // programmatically access CDI and return the desired class
+import io.smallrye.common.annotation.NonBlocking;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.spi.ConfigSource;
+
+@ApplicationScoped
+public class ConfigSourceJsonRPCService {
+
+    @Inject
+    Config config;
+
+    @NonBlocking
+    public JsonArray getAll() {
+        var array = new JsonArray();
+        config.getConfigSources().forEach(cs -> {
+            array.add(getJsonRepresentationForConfigSource(cs));
+        });
+
+        return array;
+    }
+
+    private JsonObject getJsonRepresentationForConfigSource(ConfigSource c) {
+        var properties = new JsonArray();
+        c.getProperties().forEach((prop, value) -> {
+            properties.add(new JsonObject().put("key", prop).put("value", value));
+        });
+
+        return new JsonObject()
+                .put("name", c.getName())
+                .put("size", c.getProperties().size())
+                .put("ordinal", c.getOrdinal())
+                .put("properties", properties);
     }
 }
 ```
 
-{{% details title="Task hint" %}}
-Your code should look like this:
+Our JsonRPC Service needs to be registered as a BuildStep in our `AppinfoDevUiProcessor`.
 
 ```java
-public class AppinfoServiceSupplier implements Supplier<AppinfoService>  {
+    @BuildStep(onlyIf = IsDevelopment.class)
+    JsonRPCProvidersBuildItem createJsonRPCServiceForConfigSources() {
+        return new JsonRPCProvidersBuildItem(ConfigSourceJsonRPCService.class);
+    }
+```
 
-    @Override
-    public AppinfoService get() {
-        return CDI.current().select(AppinfoService.class).get();
+Now let's create the web component. Create a web component template `appinfo-config-sources.js` in your deployment module `src/main/resources/dev-ui`.
+
+```javascript
+import { QwcHotReloadElement, html, css} from 'qwc-hot-reload-element';
+import { JsonRpc } from 'jsonrpc';
+
+import '@vaadin/details';
+import '@vaadin/horizontal-layout';
+import 'echarts-gauge-grade';
+import 'qui-badge';
+import 'qwc-no-data';
+
+import '@vaadin/grid';
+import '@vaadin/grid/vaadin-grid-sort-column.js';
+
+/**
+ * This component shows the Rest Easy Reactive Endpoint scores
+ */
+export class AppinfoConfigSources extends QwcHotReloadElement {
+    jsonRpc = new JsonRpc(this);
+
+    // Component style
+    static styles = css`
+        .heading{
+            width: 100em;
+            padding: 15px;
+            background: var(--lumo-contrast-5pct);
+            border-bottom: 1px solid var(--lumo-contrast-10pct);
+        }
+        .heading-details {
+            display: flex;
+            gap:10px;
+            padding-top: 10px;
+            font-size: 0.8em;
+        }
+        .property {
+            width: 100em;
+            text-align: left;
+            padding-left: 20px;
+            padding-right: 20px;
+            color: var(--lumo-contrast-70pct);
+        }
+        .props {
+            color: var(--lumo-primary-text-color);
+        }
+    `;
+
+    // Component properties
+    static properties = {
+        _configsources: {state: true}
+    };
+
+    constructor() {
+        super();
+        this._configsources = null;
+    }
+
+    // Components callbacks
+
+    /**
+     * Called when displayed
+     */
+    connectedCallback() {
+        super.connectedCallback();
+        this.hotReload();
+    }
+
+    /**
+     * Called when it needs to render the components
+     * @returns {*}
+     */
+    render() {
+        if(this._configsources) {
+            return html`${this._configsources.map(cs=>{
+                return html`${this._renderConfigSource(cs)}`;
+            })}`;
+        } else {
+            return html`<span>Loading Config Sources...</span>`;
+        }
+    }
+
+    // View / Templates
+    _renderConfigSource(cs) {
+        // let level = this._getLevel(cs.size);
+        
+        return html`
+            <vaadin-details theme="reverse">
+                <div class="heading" slot="summary">
+                    <qui-badge level='success'><span>${cs.name}</span></qui-badge>
+                    <div class="heading-details">
+                        <code class="props">${cs.size} Properties</code> <code>Ordinal ${cs.ordinal}</code>
+                    </div>
+                </div>
+
+                <div class="properties">
+                    ${this._renderProperties(cs.properties)}
+                </div>
+            </vaadin-details>`;
+    }
+
+    _renderProperties(props){
+        const propsTemplates = [];
+
+        props.forEach(property => {
+            propsTemplates.push(html`<div class="property">${property.key} = <qui-badge level='contrast'>${property.value}</qui-badge></div>`);
+        })
+
+        return html`${propsTemplates}`;
+    }
+
+    hotReload(){
+        this._configsources = null;
+        this.jsonRpc.getAll().then(response => {
+            this._configsources = response.result;
+        });
     }
 }
+customElements.define('appinfo-config-sources', AppinfoConfigSources);
 ```
-{{% /details %}}
-
-
-### Task {{% param sectionnumber %}}.2 - Creating the Dev UI Template
-
-Now we need to create our rendered template. Templates are located in your **deployment** module at
-`src/main/resources/dev-templates`.
-
-* Create the `src/main/resources/dev-templates` folder
-* Create the file `embedded.html` in this folder
-
-This file will be interpreted by the Qute template engine. Using the [Qute reference guide](https://quarkus.io/guides/qute-reference)
-try to create a template that looks like this (The endpoint information should link to the actual extension endpoint):
-
-![Appinfo Extension Dev UI](../extension-devui-integration.png)
-
-You can start with the following snippet:
-```html
-<span class="badge badge-light">
-    <i class="fa fa-cogs fa-fw"></i> BUILD_TIME_TEXT <span class="badge badge-light">{info:OBJECT_PATH}</span>
-</span>
-<br />
-<span class="badge badge-light">
-    <i class="fa fa-clock fa-fw"></i> START_TIME_TEXT <span class="badge badge-light">{info:OBJECT_PATH}</span>
-</span>
-```
-
-For more information about the engine itself have a look at the [Qute Templating Engine](https://quarkus.io/guides/qute).
-
-{{% details title="Starting hints" %}}
-
-* `BUILD_TIME_TEXT` is just the human readable Information like "Built Time"
-* `OBJECT_PATH` is the navigation to your information. As we used `data` in our `DevConsoleRuntimeTemplateInfoBuildItem`
-which refers to the `AppinfoService`. Your may navigate to the information with `data.appinfo.XY`
-* Quarkus properties can be accessed directly from a template using `{config:property('PROPERTY')}`
-{{% /details %}}
-
-{{% details title="Full solution hint" %}}
-```html
-<span class="badge badge-light">
-    <i class="fa fa-cogs fa-fw"></i> Build Time <span class="badge badge-light">{info:data.appinfo.buildTime}</span>
-</span>
-<br />
-<span class="badge badge-light">
-    <i class="fa fa-clock fa-fw"></i> Start Time <span class="badge badge-light">{info:data.appinfo.startupTime}</span>
-</span>
-<br />
-<span class="badge badge-light">
-    <i class="fa fa-compass fa-fw"></i> Built for <span class="badge badge-light">{info:data.appinfo.builtFor} </span>
-</span>
-<span class="badge badge-light">
-    <i class="fa fa-child fa-fw"></i> Run by <span class="badge badge-light">{info:data.appinfo.runBy} </span>
-</span>
-<br />
-<br />
-<a href="/{config:property('quarkus.appinfo.base-path')}" class="badge badge-light">
-    <i class="fa fa-map-signs fa-fw"></i> Endpoint <span class="badge badge-light">{config:property('quarkus.appinfo.base-path')}</span>
-</a>
-```
-{{% /details %}}
-
 
 ### Task {{% param sectionnumber %}}.3 - Rebuild extension
 

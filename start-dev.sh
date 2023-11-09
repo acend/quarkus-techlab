@@ -9,5 +9,5 @@ docker run \
   --name hugo-dev \
   -v $(pwd):/src \
   klakegg/hugo:${HUGO_VERSION} \
-  server -p 8095 --bind 0.0.0.0
+  server -p 8095 --bind 0.0.0.0 --environment mobi
 

@@ -14,11 +14,21 @@ Quarkus provides the `create-extension` Maven Mojo to initialize your extension 
 
 ### Task {{% param sectionnumber %}}.1 - Initialize Extension
 
-Enter the {{% param "lab_code_basedir" %}} folder from your workspace and initialize the extension with the following command:
-```
-mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extension -N -DgroupId=ch.puzzle.quarkustechlab -DextensionId=appinfo -DwithoutTests 
+Initialize the extension with the following command:
+```s
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extension -N \
+  -DgroupId=ch.puzzle \
+  -DpackageName=ch.puzzle.quarkustechlab.extensions.appinfo \
+  -DextensionId=techlab-extension-appinfo \
+  -DextensionName="Appinfo Extension" \
+  -DextensionDescription="Simple quarkus extension with some application details" \
+  -DwithoutTests 
 ```
 
+{{% alert color="warning" %}}
+We will use the prefix `techlab-` for our extension. Extensions starting with `quarkus-` are usually meant to be official 
+extensions built and supported by the quarkus core team. Therefore, you should not prefix your own extensions with `quarkus-`.
+{{% /alert %}}
 
 ## Extension Structure
 
@@ -60,7 +70,7 @@ You may wonder what these fields are used for:
 
 * keywords: Used by [code.quarkus.io](https://code.quarkus.io) for searching
 * categories: Used by [code.quarkus.io](https://code.quarkus.io) to categorize the extensions
-  * Used: `web`, `data`, `messaging`, `core`, `reactive`, `cloud`, `observability`, `security`, `serialization`, `miscellaneous`, `compatibility`, `alt-languages`, `integration`, `business-automation`
+  * Used: `web`, `data`, `messaging`, `core`, `reactive`, `cloud`, `observability`, `security`, `serialization`, `miscellaneous`, `compatibility`, `alt-languages`, `integration`
 * name: describes your extension. Shown in Quarkus Dev-UI.
 * description: describes your extension. Shown in Quarkus Dev-UI.
 * guide: Link to an extension guide. Shown in Quarkus Dev-UI.
@@ -76,7 +86,7 @@ description: Simple Appinfo Extension
 metadata:
   keywords:
     - appinfo
-  guide: http://www.puzzle.ch
+  guide: https://www.puzzle.ch
   categories:
     - "miscellaneous"
   status: "experimental"

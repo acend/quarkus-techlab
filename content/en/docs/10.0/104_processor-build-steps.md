@@ -9,7 +9,7 @@ description: >
 In the previous section we created our extension configuration. Earlier we have written our runtime code which accesses
 the `BuildInfo` object. However, at this time this information has not yet been collected.
 
-In this section we will complete our `AppinfoProcessor`:
+In this section we will complete our `TechlabExtensionAppinfoProcessor`:
 
 * Collect the information `buildTime`
 * Read and store the `builtFor` configuration value
@@ -19,8 +19,8 @@ In this section we will complete our `AppinfoProcessor`:
 * Instruct Quarkus ArC to include an additional bean
 
 {{% alert title="Code Location" color="warning" %}}
-If not stated otherwise, all classes in this section belong to `deployment/src/main/java/ch/puzzle/quarkustechlab/appinfo/deployment/`.
-There should already be the generated `AppinfoProcessor` class in this folder.
+If not stated otherwise, all classes in this section belong to `deployment/src/main/java/ch/puzzle/quarkustechlab/extensions/appinfo/deployment/`.
+There should already be the generated `TechlabExtensionAppinfoProcessor` class in this folder.
 {{% /alert %}}
 
 
@@ -33,7 +33,7 @@ For detailed information have a look at [Three Phases of Bootstrap and Quarkus P
 
 ### Augmentation
 
-The work in this phase is done with build steps handled by the Build Step Processors (`AppinfoProcessor`).
+The work in this phase is done with build steps handled by the Build Step Processors (`TechlabExtensionAppinfoProcessor`).
 
 A build step can produce and consume build items and may therefore depend on each other. Think about a build step which
 is consuming a build item produced by an earlier stage. For example build steps are able to access the Jandex annotation
@@ -57,7 +57,7 @@ As an example, the only reason that a Quarkus application should load an XML par
 Bytecode recorded with `@Record(RUNTIME_INIT)` is run from the applications main method. In a native executable this
 code will run at boot. This is for example a good phase for code which needs to open ports.
 
-Generally you should move as much code as possible to the STATIC_INIT phase as this speeds up the boot time in your
+Generally you should move as much code as possible to the `STATIC_INIT` phase as this speeds up the boot time in your
 native image.
 
 
@@ -105,7 +105,7 @@ public class AppinfoRecorder {
 ```
 {{% /details %}}
 
-Now we open the `AppinfoProcessor` class and add a build step which invokes the recorder to actually record our build
+Now we open the `TechlabExtensionAppinfoProcessor` class and add a build step which invokes the recorder to actually record our build
 values. Remember that we want to conditionally include or exclude the recording of the build information.
 
 The build step does the following:
@@ -123,7 +123,7 @@ For a complete list of all Build items have a look at [All BuildItems](https://q
 Use this template as starting point:
 
 ```java
-private static final Logger logger = LoggerFactory.getLogger(AppinfoProcessor.class);
+private static final Logger logger = LoggerFactory.getLogger(TechlabExtensionAppinfoProcessor.class);
 
 // TODO: annotations for build step and record
 void syntheticBean(/* TODO: method arguments */) {
@@ -146,7 +146,7 @@ void syntheticBean(/* TODO: method arguments */) {
 /**
  * Conditionally include functionality based on configuration property
  */ 
-private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConfig appinfoConfig) {
+private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoBuildTimeConfig appinfoConfig) {
     // TODO: return true if launchMode is dev or test or the appinfoConfig.alwaysInclude is true
 }
 ```
@@ -155,11 +155,11 @@ private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConf
 Your code may look like this:
 
 ```java
-private static final Logger logger = LoggerFactory.getLogger(AppinfoProcessor.class);
+private static final Logger logger = LoggerFactory.getLogger(TechlabExtensionAppinfoProcessor.class);
 
 @BuildStep
 @Record(STATIC_INIT)
-void syntheticBean(AppinfoConfig appinfoConfig,
+void syntheticBean(AppinfoBuildTimeConfig appinfoConfig,
                    LaunchModeBuildItem launchMode,
                    AppinfoRecorder recorder,
                    BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
@@ -177,7 +177,7 @@ void syntheticBean(AppinfoConfig appinfoConfig,
     }
 }
 
-private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoConfig appinfoConfig) {
+private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoBuildTimeConfig appinfoConfig) {
     return launchMode.getLaunchMode().isDevOrTest() || appinfoConfig.alwaysInclude;
 }
 ```
@@ -192,7 +192,7 @@ in a previous section. Quarkus provides a `ServletBuildItem` which will be used 
 
 ### Task {{% param sectionnumber %}}.1 - Undertow BuildStep
 
-Open the `AppinfoProcessor` and create a new BuildStep which produces a `ServletBuildItem`. As the collection of the build
+Open the `TechlabExtensionAppinfoProcessor` and create a new BuildStep which produces a `ServletBuildItem`. As the collection of the build
 information this step should also use the `shouldInclude` method to conditionally exclude it.
 
 Some details what the implementation should do
@@ -202,7 +202,7 @@ Some details what the implementation should do
 * Should use the `shouldInclude` method to conditionally exclude it
 
 {{% details title="Task hint" %}}
-The additional build configuration in `AppinfoConfig` looks like this:
+The additional build configuration in `AppinfoBuildTimeConfig` looks like this:
 ```java
 /**
  * Specify basePath for extension endpoint
@@ -211,12 +211,12 @@ The additional build configuration in `AppinfoConfig` looks like this:
 String basePath;
 ```
 
-The code in the `AppinfoProcessor` should look like this:
+The code in the `TechlabExtensionAppinfoProcessor` should look like this:
 
 ```java
 @BuildStep
 void createServlet(LaunchModeBuildItem launchMode,
-                   AppinfoConfig appinfoConfig,
+                   AppinfoBuildTimeConfig appinfoConfig,
                    BuildProducer<ServletBuildItem> additionalBean) {
 
     if(shouldInclude(launchMode, appinfoConfig)) {
@@ -249,13 +249,13 @@ Use this build step below to add the additional bean:
 
 ```java
 @BuildStep
-void registerAdditionalBeans(AppinfoConfig appinfoConfig,
+void registerAdditionalBeans(AppinfoBuildTimeConfig appinfoConfig,
                              LaunchModeBuildItem launchMode,
                              BuildProducer<AdditionalBeanBuildItem> additionalBean) {
 
     if(shouldInclude(launchMode, appinfoConfig)) {
         logger.info("Adding AppinfoService");
-        // Add AppInfoService as AdditionalBean - else it is not available at runtime.
+        // Add AppinfoService as AdditionalBean - else it is not available at runtime.
         additionalBean.produce(AdditionalBeanBuildItem.builder()
                 .setUnremovable()
                 .addBeanClass(AppinfoService.class)
