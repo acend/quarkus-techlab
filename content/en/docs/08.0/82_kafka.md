@@ -25,7 +25,7 @@ For local development we do have the choice to either run our Kafka services via
 If you want to use the Quarkus Devservices simply remove the line `kafka.bootstrap.servers=localhost:9092` in your `applications.properties` file. This will set up a [Redpanda](https://vectorized.io/redpanda) container for your development environment.
 
 {{% details title="Without Devservices" %}}
-If you choose to test your local services with a Kafka broker you can use a small docker-compose file `solution/kafka/docker/docker-compose.yml`
+If you choose to test your local services with a Kafka broker you can use a small docker-compose file `solution/kafka-stack/docker/docker-compose.yml`
 to start a Kafka cluster:
 
 ```yaml
@@ -66,7 +66,7 @@ services:
 Start your cluster with:
 
 ```s
-~$ docker-compose -f solution/kafka/docker/docker-compose.yml up -d
+~$ docker-compose -f solution/kafka-stack/docker/docker-compose.yml up -d
 ```
 {{% /details %}}
 
