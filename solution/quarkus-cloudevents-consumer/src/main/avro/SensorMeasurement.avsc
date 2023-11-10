@@ -1,0 +1,11 @@
+{
+  "namespace": "ch.puzzle.quarkustechlab.cloudevents",
+  "type": "record",
+  "name": "SensorMeasurement",
+  "fields": [
+    {
+      "name": "data",
+      "type": "double"
+    }
+  ]
+}
