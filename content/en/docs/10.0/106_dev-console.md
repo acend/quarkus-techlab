@@ -23,11 +23,12 @@ Further we create a dedicated configuration page to display various config sourc
 
 ![Appinfo Extension Dev UI](../devui.png)
 
+
 ### Task {{% param sectionnumber %}}.1 - Static Information
 
-Quarkus knows various ways to easily display information in the [Dev Ui Guide](https://quarkus.io/guides/dev-ui). 
+Quarkus knows various ways to easily display information in the [Dev Ui Guide](https://quarkus.io/guides/dev-ui).
 
-We will create a simple Java POJO which extends the `SimpleBuildItem` in our deployment module to expose the static information. 
+We will create a simple Java POJO which extends the `SimpleBuildItem` in our deployment module to expose the static information.
 
 ```java
 package ch.puzzle.quarkustechlab.extensions.appinfo.deployment;
@@ -85,20 +86,24 @@ public class AppinfoDevUiProcessor {
 
         CardPageBuildItem cardPageBuildItem = new CardPageBuildItem();
 
+        // Show our StaticMetadataBuildItem
         cardPageBuildItem.addPage(Page.rawDataPageBuilder("Custom BuildConfig Dump")
                 .icon("font-awesome-solid:sitemap")
                 .buildTimeDataKey("smd"));
 
+        // Link to the Appinfo Endpoint
         cardPageBuildItem.addPage(Page.externalPageBuilder("Appinfo Endpoint")
                 .url(rootPath.resolvePath("appinfo"))
                 .doNotEmbed()
                 .icon("font-awesome-solid:link"));
 
+        // Link to Extension Guide
         cardPageBuildItem.addPage(Page.externalPageBuilder("Write Your Own Extension Guide")
                 .url("https://quarkus.io/guides/writing-extensions", "https://quarkus.io/guides/writing-extensions")
                 .doNotEmbed()
                 .icon("font-awesome-solid:book"));
 
+        // Add the StaticMetadataBuildItem to our Dev UI Card
         cardPageBuildItem.addBuildTimeData("smd", smd);
 
 
@@ -108,9 +113,10 @@ public class AppinfoDevUiProcessor {
 ```
 
 The `createAppInfoCard` class does the following:
+
 * Registering our POJO as build time data
 * Create a page in the dev ui showing the content of our POJO using a `Page.RawDataPageBuilder`
-* Show a link to our Appinfo Servlet 
+* Show a link to our Appinfo Servlet
 * Show an external Link to the quarkus guide for writing extensions
 
 To test our dev ui integration you need to rebuild your extension
@@ -120,9 +126,10 @@ mvn clean package install
 
 Then make sure you restart the `quarkus-appinfo-application` application which includes your extension.
 
+
 ### Task {{% param sectionnumber %}}.2 - Dynamic Information
 
-To show runtime data we use a JsonRPC which allows to simply fetch or stream data. 
+To show runtime data we use a JsonRPC which allows to simply fetch or stream data.
 We need two parts for this - the java part and then the usage in the web component.
 
 Our java part will reside in the runtime module as a `ConfigSourceJsonRPCService`. This Service will query our configuration and return the details as a json response to the ui.
@@ -185,47 +192,18 @@ import { QwcHotReloadElement, html, css} from 'qwc-hot-reload-element';
 import { JsonRpc } from 'jsonrpc';
 
 import '@vaadin/details';
-import '@vaadin/horizontal-layout';
-import 'echarts-gauge-grade';
 import 'qui-badge';
-import 'qwc-no-data';
 
-import '@vaadin/grid';
-import '@vaadin/grid/vaadin-grid-sort-column.js';
-
-/**
- * This component shows the Rest Easy Reactive Endpoint scores
- */
 export class AppinfoConfigSources extends QwcHotReloadElement {
     jsonRpc = new JsonRpc(this);
 
-    // Component style
     static styles = css`
-        .heading{
-            width: 100em;
-            padding: 15px;
-            background: var(--lumo-contrast-5pct);
-            border-bottom: 1px solid var(--lumo-contrast-10pct);
-        }
-        .heading-details {
-            display: flex;
-            gap:10px;
-            padding-top: 10px;
-            font-size: 0.8em;
-        }
-        .property {
-            width: 100em;
-            text-align: left;
-            padding-left: 20px;
-            padding-right: 20px;
-            color: var(--lumo-contrast-70pct);
-        }
-        .props {
-            color: var(--lumo-primary-text-color);
-        }
+        .heading { width: 100em; padding: 15px; background: var(--lumo-contrast-5pct); border-bottom: 1px solid var(--lumo-contrast-10pct); }
+        .heading-details { display: flex; gap:10px; padding-top: 10px; font-size: 0.8em; }
+        .property { width: 100em; text-align: left; padding-left: 20px; padding-right: 20px; color: var(--lumo-contrast-70pct); }
+        .props { color: var(--lumo-primary-text-color); }
     `;
 
-    // Component properties
     static properties = {
         _configsources: {state: true}
     };
@@ -235,20 +213,11 @@ export class AppinfoConfigSources extends QwcHotReloadElement {
         this._configsources = null;
     }
 
-    // Components callbacks
-
-    /**
-     * Called when displayed
-     */
     connectedCallback() {
         super.connectedCallback();
         this.hotReload();
     }
 
-    /**
-     * Called when it needs to render the components
-     * @returns {*}
-     */
     render() {
         if(this._configsources) {
             return html`${this._configsources.map(cs=>{
@@ -259,10 +228,7 @@ export class AppinfoConfigSources extends QwcHotReloadElement {
         }
     }
 
-    // View / Templates
     _renderConfigSource(cs) {
-        // let level = this._getLevel(cs.size);
-        
         return html`
             <vaadin-details theme="reverse">
                 <div class="heading" slot="summary">
@@ -298,9 +264,67 @@ export class AppinfoConfigSources extends QwcHotReloadElement {
 customElements.define('appinfo-config-sources', AppinfoConfigSources);
 ```
 
+Finally, we have to configure our dev ui card to create and link to our configuration page. This time we use a `Page.webComponentPageBuilder`.
+
+```java
+        // Show Configuration Page
+        cardPageBuildItem.addPage(Page.webComponentPageBuilder()
+                .title("Configuration Sources")
+                .componentLink("appinfo-config-sources.js")
+                .icon("font-awesome-solid:gears"));
+```
+
+{{% details title="Complete AppinfoDevUiProcessor" %}}
+
+```java
+public class AppinfoDevUiProcessor {
+
+    @BuildStep(onlyIf = IsDevelopment.class)
+    CardPageBuildItem createAppInfoCard(HttpRootPathBuildItem rootPath, StaticMetadataBuildItem smd) {
+
+        CardPageBuildItem cardPageBuildItem = new CardPageBuildItem();
+
+        // Show our StaticMetadataBuildItem
+        cardPageBuildItem.addPage(Page.rawDataPageBuilder("Custom BuildConfig Dump")
+                .icon("font-awesome-solid:sitemap")
+                .buildTimeDataKey("smd"));
+
+        // Show Configuration Page
+        cardPageBuildItem.addPage(Page.webComponentPageBuilder()
+                .title("Configuration Sources")
+                .componentLink("appinfo-config-sources.js")
+                .icon("font-awesome-solid:gears"));
+
+        // Link to the Appinfo Endpoint
+        cardPageBuildItem.addPage(Page.externalPageBuilder("Appinfo Endpoint")
+                .url(rootPath.resolvePath("appinfo"))
+                .doNotEmbed()
+                .icon("font-awesome-solid:link"));
+
+        // Link to Extension Guide
+        cardPageBuildItem.addPage(Page.externalPageBuilder("Write Your Own Extension Guide")
+                .url("https://quarkus.io/guides/writing-extensions", "https://quarkus.io/guides/writing-extensions")
+                .doNotEmbed()
+                .icon("font-awesome-solid:book"));
+
+        // Add the StaticMetadataBuildItem to our Dev UI Card
+        cardPageBuildItem.addBuildTimeData("smd", smd);
+
+        return cardPageBuildItem;
+    }
+
+    @BuildStep(onlyIf = IsDevelopment.class)
+    JsonRPCProvidersBuildItem createJsonRPCServiceForConfigSources() {
+        return new JsonRPCProvidersBuildItem(ConfigSourceJsonRPCService.class);
+    }
+}
+```
+{{% /details %}}
+
+
 ### Task {{% param sectionnumber %}}.3 - Rebuild extension
 
 Since you changed the extension code you have to rebuild the extension. Head over to the previous section
-to find the instructions. You also have to restart the `appinfo-app` service to pickup the new dependency.
+to find the instructions. You also have to restart the `quarkus-appinfo-application` service to pickup the new changes.
 
 Now navigate to [localhost:8080/q/dev](http://localhost:8080/q/dev) to see the output.
