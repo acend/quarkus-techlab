@@ -26,9 +26,9 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extens
 ```
 
 {{% alert color="warning" %}}
-We will use the prefix `techlab-` for our extension. Extensions starting with `quarkus-` are usually meant to be official 
-extensions built and supported by the quarkus core team. Therefore, you should not prefix your own extensions with `quarkus-`.
+We will use the prefix `techlab-` for our extension. Extensions starting with `quarkus-` are usually meant to be official extensions built and supported by the quarkus core team. Therefore, you should not prefix your own extensions with `quarkus-`.
 {{% /alert %}}
+
 
 ## Extension Structure
 

@@ -12,7 +12,7 @@ description: >
 The simple extension provides a very basic servlet to expose some application information. The required code for exposing
 this information will be wrapped in a quarkus extension. The extension will also provide an integration in the Quarkus Dev UI.
 
-This extension will be used in another application as dependency to show its functionality. 
+This extension will be used in another application as dependency to show its functionality.
 
 
 ## Quarkus Application Bootstrap
