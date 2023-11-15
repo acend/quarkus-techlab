@@ -17,7 +17,6 @@ As a developer we can focus ourselves on the business logic rather than troublyi
 We are going to write and define several beans in the following excercises, an example of a bean might look like this:
 
 ```java
-
 @ApplicationScoped
 public class DummyService {
 
@@ -28,7 +27,6 @@ public class DummyService {
         return "dummy";
     }
 }
-
 ```
 
 This example defines a `DummyService` bean. The annotation `@ApplicationScoped` tells the container to create a single bean instance for the application and will be used by all other beans that inject `DummyService`.
@@ -36,7 +34,6 @@ This example defines a `DummyService` bean. The annotation `@ApplicationScoped` 
 The CDI process of matching beans to injection points is type-safe. Each bean defines set of bean types. In our example the defined `DummyService` has two types: `DummyService` and `java.lang.Object`. Exactly one bean must be assignable to the injection point, otherwise your build will fail with an `UnsatisfiedResolutionException` when none are assignable and with `AmbiguousResolutionException` when multiple are assignable. You can use the `jakarta.enterprise.inject.Instance` to resolve ambiguities at runtime and iterate over all beans implementing a given type:
 
 ```java
-
 public class Translator {
 
     @Inject
@@ -48,7 +45,6 @@ public class Translator {
       }
     }
 }
-
 ```
 
 
@@ -62,7 +58,6 @@ You have several possibilities available to inject your beans into your classes.
 You can inject your beans with the field injection. This is the most used and most straight forward method for injection:
 
 ```java
-
 @ApplicationScoped
 public class DummyService {
 
@@ -71,7 +66,6 @@ public class DummyService {
     
     //...
 }
-
 ```
 
 
@@ -80,7 +74,6 @@ public class DummyService {
 The constructor injection defines the injectable beans as injectable parameters in the constructor of your class. It is not necessary to use the `@Inject` annotation if your definition only has one no-args constructor defined.
 
 ```java
-
 @ApplicationScoped
 public class DummyService {
 
@@ -92,7 +85,6 @@ public class DummyService {
     
     //...
 }
-
 ```
 
 
@@ -101,7 +93,6 @@ public class DummyService {
 The third option is using the setter injection. Instead of defining your dependencies in the class as `@Injected` fields you can annotate a method which sets your dependencies.
 
 ```java
-
 @ApplicationScoped
 public class DummyService {
 
@@ -114,7 +105,6 @@ public class DummyService {
     
     //...
 }
-
 ```
 
 
@@ -147,7 +137,6 @@ Synthetic beans are not going to be covered in this lab.
 But let's take a look at producers. Producer methods and field are useful if you need more control over the instantiation of a bean. They are also useful when integrating third-party libraries where you don’t control the class source and may not add additional annotations etc.
 
 ```java
-
 @ApplicationScoped
 public class Producers {
 
@@ -175,7 +164,6 @@ public class Consumer {
 
    // ...
 }
-
 ```
 
 
@@ -189,7 +177,6 @@ So far we have seen that we can inject our beans into classes and do not need to
 A bean class may declare lifecylce callbacks: `@PostConstruct` and `@PreDestroy`. With these two annotations the lifecycle of the bean can be altered and controlled. The `@PostConstruct` annotated callback is invoked before the bean is put into service and can be used to do initializing work. The `@PreDestroy` callback is invoked before a bean is destroyed to do cleanup tasks.
 
 ```java
-
 import jakarta.annotation.PostConstruct;;
 import jakarta.annotation.PreDestroy;
 
@@ -206,7 +193,6 @@ public class Translator {
       // ...
     }
 }
-
 ```
 
 
@@ -217,20 +203,17 @@ Interceptors are a helpful tool to separate cross-cutting concerns from business
 For demonstration purposes we can check out a small example. We create the annotation `@Logged` as an `@InterceptorBinding` which should indicate that some logging will be done at invokation time.
 
 ```java
-
 @Inherited
 @InterceptorBinding
 @Retention(RUNTIME)
 @Target({METHOD, TYPE})
 public @interface Logged {
 }
-
 ```
 
 Then we can create the interceptor:
 
 ```java
-
 @Logged
 @Interceptor
 public class LoggedInterceptor implements Serializable {
@@ -248,7 +231,6 @@ public class LoggedInterceptor implements Serializable {
         return invocationContext.proceed();
     }
 }
-
 ```
 
 
@@ -259,7 +241,6 @@ Beans may also produce and consume events to interact in a completely decoupled 
 For example you can control behaviour at startup times by observing the `StartupEvent`.
 
 ```java
-
 @ApplicationScoped
 public class DummyService {
 
@@ -268,5 +249,4 @@ public class DummyService {
     }
 
 }
-
 ```

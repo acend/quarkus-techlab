@@ -17,17 +17,14 @@ Vert.x provides multiple APIs. For starters we are going to take a look at the '
 Due to the reactive nature of Vert.x, the API contains mostly asynchronous methods. They follow all a similar syntax:
 
 ```java
-
 public void doSomething(param1, param2, Handler<AsyncResult<T>> handler) {
     // ...
 }
-
 ```
 
 Interesting here is the last parameter of the `doSomething` method. It is a function that will be used as a callback whenever the opertion succeeds or fails. Let's look at the example here:
 
 ```java
-
 vertx.fileSystem()
     .readFile("my-file.txt", ar -> {
         if (ar.failed()) {
@@ -36,7 +33,6 @@ vertx.fileSystem()
             System.out.println("File content is: " + ar.result());
         }
     });
-
 ```
 
 The code reads a file as an asynchronous operation and invokes the callback when the file is read. The `Handler<AsyncResult<T>>` handles the file read and provides methods (`cause()`, `failed()`, `result()`) to compute the file read.
@@ -61,7 +57,6 @@ Mutiny defines two reactive types:
 Their usages might look like this:
 
 ```java
-
 Multi.createFrom().items("a", "b", "c")
   .onItem().transform(String::toUpperCase)
   .subscribe().with(
@@ -75,17 +70,14 @@ Uni.createFrom().item("a")
     item -> System.out.println("Received: " + item),
     failure -> System.out.println("Failed with " + failure)
 );
-
 ```
 
 The transformed code example from above to Mutiny will look like this:
 
 ```java
-
 Uni<Buffer> uni = vertx.fileSystem().readFile("my-file.txt");
 uni.subscribe()
   .with(it -> System.out.println("File content is: " + it));
-
 ```
 
 To dive further into the Mutiny framework consider checking their [documentation](https://smallrye.io/smallrye-mutiny/guides).
