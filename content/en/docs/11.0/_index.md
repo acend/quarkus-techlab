@@ -1,6 +1,7 @@
 ---
 title: "11. Serverless"
 weight: 11
+onlyWhenNot: mobi
 sectionnumber: 11
 description: >
   Testing the serverless abilities of Quarkus.
