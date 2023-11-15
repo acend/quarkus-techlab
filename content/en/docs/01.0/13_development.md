@@ -239,6 +239,8 @@ Each extension is able to provide custom information shown on the dev ui. Extens
 * Custom pages with or without actions to interact the application
   * If you are using Flyway you may for example clean and migrate your database using the Dev UI
 
+Example of an ChaosMonkey extension which allows to inject random errors in your rest endpoints.
+
 ![Quarkus Dev UI](../dev-ui-monkeys.png)
 
 With the provided Configuration tool, you are able to change the runtime config for example the quarkus log level
@@ -265,11 +267,12 @@ On Windows using Powershell:
 iex "& { $(iwr https://ps.jbang.dev) } app install --fresh --force quarkus@quarkusio"
 ```
 
-If jbang has already been installed, you can it directly:
+If jbang has already been installed, you can install it directly:
 
 ```s
 # This can also be used to update to the latest version
 jbang app install --fresh --force quarkus@quarkusio
+
 # Use the latest (or locally built) snapshot (with qss as an alias)
 jbang app install --force --name qss ~/.m2/repository/io/quarkus/quarkus-cli/999-SNAPSHOT/quarkus-cli-999-SNAPSHOT-runner.jar
 ```
@@ -289,7 +292,6 @@ Check out `quarkus --help` to get a help information with all the available comm
 To create a new Quarkus project simply run the `create` command of the CLI:
 
 ```s
-
 quarkus create app test-name
 
 -----------
@@ -308,7 +310,6 @@ applying codestarts...
 --> <pwd>/test-name
 -----------
 Navigate into this directory and get started: quarkus dev
-
 ```
 
 To check out the options for project creation see `quarkus create app --help`.
@@ -320,7 +321,6 @@ The Quarkus CLI will give you quality of life features when working with extensi
 You can list your installed extensions in a Quarkus project by invoking
 
 ```s
-
 quarkus ext ls
 
 Looking for the newly published extensions in registry.quarkus.io
@@ -329,13 +329,11 @@ Current Quarkus extensions installed:
 quarkus-resteasy                                  
 
 To get more information, append `--full` to your command line.
-
 ```
 
 When looking for new extensions to install you can use the `--installable / -i` option. This will simply list all extensions available. You can also filter your query by using the `--search / -s <key>` for the keyword `<key>`.
 
 ```s
-
 quarkus ext ls -is openshift
 
 Current Quarkus extensions installable: 
@@ -347,27 +345,22 @@ To get more information, append `--full` to your command line.
 To list only extensions from specific category, append `--category "categoryId"` to your command line.
 
 Add an extension to your project by adding the dependency to your pom.xml or use `quarkus extension add "artifactId"`
-
 ```
 
 When you have found your desired extension you can add the extension with
 
 ```s
-
 quarkus ext add smallrye-health
 
 [SUCCESS] ✅  Extension io.quarkus:quarkus-smallrye-health has been installed
-
 ```
 
 Or to remove extensions use
 
 ```s
-
 quarkus ext rm smallrye-health
 
 [SUCCESS] ✅  Extension io.quarkus:quarkus-smallrye-health has been uninstalled
-
 ```
 
 
@@ -376,17 +369,13 @@ quarkus ext rm smallrye-health
 Building your project with the Quarkus CLI is as simple as:
 
 ```s
-
 quarkus build
-
 ```
 
 To start up your application in dev mode you can use:
 
 ```s
-
 quarkus dev
-
 ```
 
 {{% details title="Hint" %}}
@@ -394,9 +383,7 @@ quarkus dev
 They say cool kids use:
 
 ```s
-
 alias q=quarkus
-
 ```
 
 {{% /details %}}
