@@ -2,6 +2,7 @@
 title: "11.1 Quarkus serverless with Funqy"
 linkTitle: "11.1 Quarkus serverless with Funqy"
 weight: 1110
+onlyWhenNot: mobi
 sectionnumber: 11.1
 description: >
     Quarkus serverless with Funqy
