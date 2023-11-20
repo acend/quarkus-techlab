@@ -125,7 +125,7 @@ jobs:
           mkdir -p $HOME/.kube
           echo "$KUBE_CONFIG" > $HOME/.kube/config
       -
-        name: Deploy acend Helm Release
+        name: Deploy acend mobi Helm Release
         env:
           TRAINING_HELM_RELEASE: 'latest'
           TRAINING_NAMESPACE: 'acend-quarkus-training-prod'
@@ -133,11 +133,11 @@ jobs:
         run: |
           helm upgrade $TRAINING_HELM_RELEASE acend-training-chart --install --wait --kubeconfig $HOME/.kube/config  --namespace=$TRAINING_NAMESPACE --set=app.name=$HELM_RELEASE --set=app.version=$TRAINING_VERSION --repo=https://acend.github.io/helm-charts/ --values=helm-chart/values-acend.yaml --atomic
       -
-        name: Redeploy acend Deployments
+        name: Redeploy acend mobi Deployments
         env:
           TRAINING_HELM_RELEASE: 'latest'
-          TRAINING_HELM_NAME: 'quarkus-lab'
+          TRAINING_HELM_NAME: 'quarkus-techlab'
           TRAINING_NAMESPACE: 'acend-quarkus-training-prod'
         run: |
-          kubectl rollout restart deployment/${TRAINING_HELM_RELEASE}-${TRAINING_HELM_NAME}-acend --kubeconfig $HOME/.kube/config --namespace $TRAINING_NAMESPACE
+          kubectl rollout restart deployment/${TRAINING_HELM_RELEASE}-${TRAINING_HELM_NAME}-mobi --kubeconfig $HOME/.kube/config --namespace $TRAINING_NAMESPACE
 
