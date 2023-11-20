@@ -13,9 +13,6 @@ description: >
 
 [CNCF](https://www.cncf.io/projects/cloudevents/) Incubating project since 2018.
 
-![Quarkus](img/quarkus.png)
-![CloudEvents](img/cloudevents.png)
-
 Standardization is a general need in all fields after some technique is widely used. In the last few years the trend for scalable, event-driven systems grew massively. Everybody and everything is communicating in events. And all systems face the same question at some point - what should our events look like. If you were smart enough you asked the question rather earlier than later. If not, at some point you will face the truth that you will have to refactor a lot to achieve consistency in your events throughout your distributed system. This is where you would have wished to know CloudEvents already.
 
 CloudEvents brings a specification to describe events in a common way. The common language increases consistency, accessibility and portability in distributed systems. Major programming languages like Java, Go, JavaScript, Ruby, Rust, Python have SDKs and APIs to implement CloudEvents in a simple way. At it's core it will bring us a blueprint or language to define a set of metadata to describe the event.
