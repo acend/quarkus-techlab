@@ -127,12 +127,15 @@ public class ApplicationImpl extends Application {
     /* removed for simplicity */
 
     static {
+        DisabledInitialContextManager.register();
         System.setProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager");
-        System.setProperty("io.netty.allocator.maxOrder", "1");
-        System.setProperty("io.netty.machineId", "e2:dd:dc:62:56:a3:ba:f8");
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.threadFactory", "io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory");
+        System.setProperty("logging.initial-configurator.min-level", "500");
+        System.setProperty("io.netty.allocator.maxOrder", "3");
+        System.setProperty("io.netty.machineId", "a2:a0:88:71:ba:49:9f:1a");
         ProfileManager.setLaunchMode(LaunchMode.NORMAL);
         StepTiming.configureEnabled();
-        Timing.staticInitStarted();
+        Timing.staticInitStarted(false);
         Config.ensureInitialized();
         LOG = Logger.getLogger("io.quarkus.application");
         StartupContext var0 = new StartupContext();
@@ -140,37 +143,47 @@ public class ApplicationImpl extends Application {
 
         try {
             StepTiming.configureStart();
-            ((StartupTask)(new setupLoggingStaticInit-1235809433())).deploy(var0);
+            ((StartupTask) (new MutinyProcessor.buildTimeInit521613965())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new ioThreadDetector-1463825589())).deploy(var0);
+            ((StartupTask) (new VertxCoreProcessor.ioThreadDetector1463825589())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new blockingOP558072755())).deploy(var0);
+            ((StartupTask) (new BlockingOperationControlBuildStep.blockingOP558072755())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new build163995889())).deploy(var0);
+            ((StartupTask) (new LoggingResourceProcessor.setupLoggingStaticInit2062061316())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new staticInit-1777814589())).deploy(var0);
+            ((StartupTask) (new VirtualThreadsProcessor.setup657958880())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new initStatic1190120725())).deploy(var0);
+            ((StartupTask) (new ResteasyReactiveProcessor.addDefaultAuthFailureHandler1457820534())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new generateResources-1025303321())).deploy(var0);
+            ((StartupTask) (new SmallRyeContextPropagationProcessor.buildStatic677493008())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new setupResteasyInjection2143006352())).deploy(var0);
+            ((StartupTask) (new NativeImageConfigBuildStep.build282698227())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new staticInit-210558872())).deploy(var0);
+            ((StartupTask) (new VertxProcessor.currentContextFactory166049300())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask) (new JacksonProcessor.jacksonSupport1959914842())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask) (new SyntheticBeansProcessor.initStatic1190120725())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask) (new ArcProcessor.generateResources844392269())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask) (new ResteasyReactiveProcessor.setupEndpoints1082683577())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask) (new ResteasyReactiveProcessor.serverSerializers168685733())).deploy(var0);
+            StepTiming.printStepTime(var0);
+            ((StartupTask) (new ResteasyReactiveProcessor.setupDeployment713137389())).deploy(var0);
             StepTiming.printStepTime(var0);
         } catch (Throwable var2) {
             ApplicationStateNotification.notifyStartupFailed(var2);
             var0.close();
-            throw (Throwable)(new RuntimeException("Failed to start quarkus", var2));
+            throw (Throwable) (new RuntimeException("Failed to start quarkus", var2));
         }
     }
 }
 ```
 
-Our application contains a RESTEasy endpoint. You may find a line containing `setupResteasyInjection` in the static block.
-Where does this come from? Open the file defining this class from the `io/quarkus/deployment/steps` folder. You may find
-a deploy block something like this:
-
+Our application contains RESTEasy Reactive endpoints and uses different Serializers. You may find a line containing `((StartupTask) (new ResteasyReactiveProcessor.serverSerializers168685733())).deploy(var0);` in the static block.
+Where does this come from? Open the file `ResteasyReactiveProcessor$serverSerializers...` from the `io/quarkus/deployment/steps` folder. You may find the deploy code for the resteasy de-/serializers.
 ```java
 // $FF: synthetic class
 public class ResteasyCommonProcessor$setupResteasyInjection2143006352 implements StartupTask {
@@ -178,12 +191,17 @@ public class ResteasyCommonProcessor$setupResteasyInjection2143006352 implements
     /* removed for simplicity */
 
     public void deploy(StartupContext var1) {
-        var1.setCurrentBuildStepName("ResteasyCommonProcessor.setupResteasyInjection");
-        Object[] var2 = new Object[5];
+        var1.setCurrentBuildStepName("ResteasyReactiveProcessor.serverSerializers");
+        Object[] var2 = this.$quarkus$createArray();
         this.deploy_0(var1, var2);
+    }
+
+    public void deploy_0(StartupContext var1, Object[] var2) {
+        ResteasyReactiveRecorder var4 = new ResteasyReactiveRecorder();
+        ServerSerialisers var3 = var4.createServerSerialisers();
+        // ...
     }
 }
 ```
 
-This leads us to the method `setupResteasyInjection` from the `ResteasyCommonProcessor` which is packed in the resteasy
-extension. To find the resteasy deployment code have a look at the GitHub Quarkus Extensions Source of the [ResteasyCommonProcessor](https://github.com/quarkusio/quarkus/blob/main/extensions/resteasy-classic/resteasy-common/deployment/src/main/java/io/quarkus/resteasy/common/deployment/ResteasyCommonProcessor.java).
+If you are wondering where the code from this deploy block comes from: Check the resteasy reactive quarkus extension code on Github [ResteasyCommonProcessor](https://github.com/quarkusio/quarkus/blob/b7135d81d36fa9f713ca8aed4b482e08b0ac7f51/extensions/resteasy-reactive/quarkus-resteasy-reactive/deployment/src/main/java/io/quarkus/resteasy/reactive/server/deployment/ResteasyReactiveProcessor.java#L1025C69-L1025C69). 
