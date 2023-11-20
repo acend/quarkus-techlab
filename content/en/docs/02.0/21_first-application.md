@@ -204,4 +204,5 @@ public class ResteasyCommonProcessor$setupResteasyInjection2143006352 implements
 }
 ```
 
-If you are wondering where the code from this deploy block comes from: Check the resteasy reactive quarkus extension code on Github [ResteasyCommonProcessor](https://github.com/quarkusio/quarkus/blob/b7135d81d36fa9f713ca8aed4b482e08b0ac7f51/extensions/resteasy-reactive/quarkus-resteasy-reactive/deployment/src/main/java/io/quarkus/resteasy/reactive/server/deployment/ResteasyReactiveProcessor.java#L1025C69-L1025C69). 
+If you are wondering where the code from this deploy block comes from: Check the resteasy reactive quarkus extension code on Github [ResteasyCommonProcessor](https://github.com/quarkusio/quarkus/blob/b7135d81d36fa9f713ca8aed4b482e08b0ac7f51/extensions/resteasy-reactive/quarkus-resteasy-reactive/deployment/src/main/java/io/quarkus/resteasy/reactive/server/deployment/ResteasyReactiveProcessor.java#L1025C69-L1025C69).
+
