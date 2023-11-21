@@ -382,13 +382,13 @@ curl -X POST localhost:8080/data -d "{\"data\":0.1, \"time\":\"2022-01-01T00:00:
 
 We have learned how to implement a reactive REST API to serve data in a complete reactive non-blocking way. Now it's time to take a look at the opposite, how do we reactively consume the API.
 
-Create another Quarkus project with the following extensions: `quarkus-resteasy-reactive-jackson`, `quarkus-rest-client-reactive-jackson`, `quarkus-resteasy-mutiny`:
+Create another Quarkus project with the following extensions: `quarkus-resteasy-reactive-jackson`, `quarkus-rest-client-reactive-jackson`:
 
 ```bash
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-reactive-rest-consumer \
-    -Dextensions="quarkus-resteasy-reactive-jackson,quarkus-rest-client-jackson,quarkus-resteasy-mutiny" \
+    -Dextensions="quarkus-resteasy-reactive-jackson,quarkus-rest-client-reactive-jackson" \
     -DprojectVersion=1.0.0 \
     -DclassName="ch.puzzle.quarkustechlab.reactiverest.consumer.boundary.DataResource"
 ```
