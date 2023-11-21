@@ -7,7 +7,7 @@ description: >
    Solution code for the Quarkus Techlabs
 ---
 
-We have provided solution code for the labs in the folder `solution` of this `quarkus-techlab` project.
+We have provided solution code for the labs in the folder `solution` of this `quarkus-techlab` project. You can find the source code of the `quarkus-techlab` on [GitHub]({{% param "github_repo" %}})
 
 {{% alert color="warning" %}}
 Be aware that in some solution projects like `quarkus-rest-data-producer` you'll find the solution code for multiple labs.

@@ -23,7 +23,7 @@ integration, RESTeasy-JAX-RS, dev mode and many more features.
 
 Quarkus provides a list of extensions and frameworks which can be included into
 your Quarkus project. Extensions (Hibernate ORM, Liquibase, Flyway, SmallRye
-Reactive Messageing, and many others) are minified and customized to work with
+Reactive Messaging, and many others) are minified and customized to work with
 the minimal resource consuming framework.
 
 Due to the optimization of extensions and the framework itself, Quarkus can be
@@ -74,7 +74,7 @@ be used again.
 
 In summary:
 
-* Too much classes beeing loaded
+* Too much classes being loaded
 * Too much metadata processing for annotations, cdi, reflection, proxies, ...
 
 This is where Quarkus does things differently. It moves everything possible to the build-time phase instead of run-time
