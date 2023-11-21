@@ -86,6 +86,22 @@ phase.
 * Reflection and proxies behavior can be analyzed and turned into bytecode as well
 
 
+### Creating a Quarkus Service
+
+If you want to test out the following you can create a simple quarkus service with:
+
+
+```bash
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
+    -DprojectGroupId=ch.puzzle \
+    -DprojectArtifactId=quarkus-introduction-service \
+    -DclassName="ch.puzzle.quarkustechlab.IntroductionResource" \
+    -Dpath="/hello"
+```
+
+Your project is now ready in the `quarkus-introduction-service` folder.
+
+
 ### Record and replay
 
 How Quarkus solves the movement from run-time to built-time is with the concept of recording and replay.
@@ -123,17 +139,18 @@ In the class `io/quarkus/runner/ApplicationImpl.class` you can see the invocatio
 ```java
 // $FF: synthetic class
 public class ApplicationImpl extends Application {
+
     static Logger LOG;
     public static StartupContext STARTUP_CONTEXT;
 
     public ApplicationImpl() {
+        super(false);
     }
 
-    /* Phase STATIC_INIT */
     static {
-        System.setProperty("io.netty.allocator.maxOrder", "1");
-        System.setProperty("io.netty.machineId", "e9:71:7b:30:45:7b:fa:40");
         System.setProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager");
+        System.setProperty("io.netty.allocator.maxOrder", "1");
+        System.setProperty("io.netty.machineId", "e2:dd:dc:62:56:a3:ba:f8");
         ProfileManager.setLaunchMode(LaunchMode.NORMAL);
         StepTiming.configureEnabled();
         Timing.staticInitStarted();
@@ -144,17 +161,15 @@ public class ApplicationImpl extends Application {
 
         try {
             StepTiming.configureStart();
-            ((StartupTask)(new syntheticBean1188624218())).deploy(var0);
+            ((StartupTask)(new setupLoggingStaticInit-1235809433())).deploy(var0);
             StepTiming.printStepTime(var0);
             ((StartupTask)(new ioThreadDetector-1463825589())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask)(new setupLoggingStaticInit-1235809433())).deploy(var0);
             StepTiming.printStepTime(var0);
             ((StartupTask)(new blockingOP558072755())).deploy(var0);
             StepTiming.printStepTime(var0);
             ((StartupTask)(new build163995889())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new servletContextBean-1962634234())).deploy(var0);
+            ((StartupTask)(new staticInit-1777814589())).deploy(var0);
             StepTiming.printStepTime(var0);
             ((StartupTask)(new initStatic1190120725())).deploy(var0);
             StepTiming.printStepTime(var0);
@@ -162,7 +177,7 @@ public class ApplicationImpl extends Application {
             StepTiming.printStepTime(var0);
             ((StartupTask)(new setupResteasyInjection2143006352())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new build-649634386())).deploy(var0);
+            ((StartupTask)(new staticInit-210558872())).deploy(var0);
             StepTiming.printStepTime(var0);
         } catch (Throwable var2) {
             ApplicationStateNotification.notifyStartupFailed(var2);
@@ -175,6 +190,8 @@ public class ApplicationImpl extends Application {
     protected final void doStart(String[] var1) {
         /* ... */
     }
+    
+    /* removed for simplicity */
 }
 ```
 
