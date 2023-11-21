@@ -90,7 +90,7 @@ phase.
 
 If you want to test out the following you can create a simple quarkus service with:
 
-## 
+
 ```bash
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
