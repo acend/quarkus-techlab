@@ -88,6 +88,17 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
       -DprojectVersion=1.0.0
 ```
 
+{{% alert color="warning" title="Quarkus DEV-UI in producer" %}}
+As we do not include resteasy in your producer the producer does not have a ui at all and is not able to serve the dev-ui. If you want to use the quarkus dev-ui in your producer you have to add the following dependency to your `pom.xml`:
+```
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx-http</artifactId>
+    </dependency>
+```
+{{% /alert %}}
+
+
 Next, create the SensorMeasurement in both project.
 
 ```java
@@ -152,15 +163,10 @@ mp.messaging.outgoing.data.value.serializer=io.quarkus.kafka.client.serializatio
 
 We define the connector which we are going to use to communicate, the topic in which the data will be sent to and the serializer for the value.
 
-To check if your producer is producing data correctly, you can use the kafka container with its console utilities! Inside the kafka container you can use the script `bin/kafka-console-consumer.sh` with the parameters `--bootstrap-server localhost:9092 --topic data --from-beginning` to read the messages inside the `data` topic.
-
-{{% details title="Hint" %}}
-
+To check if your producer is producing data correctly, you can use basic tooling available in your kafka container or use the quarkus dev-ui (remember to add the `quarkus-vertx-http` dependency in your producer). You need to find the name of your kafka container using `docker ps`. Be aware that this will only work if you are using the kafka stack and not the dev-services.
 ```s
 docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic data --from-beginning
 ```
-
-{{% /details %}}
 
 
 ### {{% param sectionnumber %}}.4: Consuming messages
