@@ -74,7 +74,7 @@ be used again.
 
 In summary:
 
-* Too much classes beeing loaded
+* Too much classes being loaded
 * Too much metadata processing for annotations, cdi, reflection, proxies, ...
 
 This is where Quarkus does things differently. It moves everything possible to the build-time phase instead of run-time
