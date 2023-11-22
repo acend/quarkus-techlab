@@ -65,7 +65,7 @@ Your dependency block in the deplyoment `pom.xml` should look like this:
     </dependency>
     <dependency>
       <groupId>ch.puzzle</groupId>
-      <artifactId>quarkus-extension-appinfo</artifactId>
+      <artifactId>techlab-extension-appinfo</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
