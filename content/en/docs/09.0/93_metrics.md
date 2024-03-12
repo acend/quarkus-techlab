@@ -37,7 +37,7 @@ Let's test these impelementations in our producing application.
 
 ### {{% param sectionnumber %}}.1.1: Timer
 
-We start by implementing a timer which tracks the time of our default `/data` endpoint to process a requst. We can simply annotate the function we want the timer to record with `@Timed` and the metric will be collected and exposed. Metrics will allow us to give them custom names, describe them and tag them for better readability. The annotation can be provided with the fields `value, description, extraTags` for this purpose.
+We start by implementing a timer which tracks the time of our default `/data` endpoint to process a request. We can simply annotate the function we want the timer to record with `@Timed` and the metric will be collected and exposed. Metrics will allow us to give them custom names, describe them and tag them for better readability. The annotation can be provided with the fields `value, description, extraTags` for this purpose.
 
 Add the annotation to your endpoint and test your endpoint to see the result afterwards exposed to the `/q/metrics` endpoint.
 
