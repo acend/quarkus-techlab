@@ -45,7 +45,7 @@ If you read this example it's pretty clear what is happening. We are connecting 
 Connector can:
 
 * retrieve messages from a remote broker (inbound)
-* send messages to a remove broker (outbound)
+* send messages to a remote broker (outbound)
 
 A connector can, of course, implement both directions.
 
