@@ -32,6 +32,17 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 Which creates a generated getting-started application bootstrapped for you. The
 application holds at the moment a rest resource called `GreetingResource.java`
 which exposes a REST resource for you.
+
+{{% alert color="primary" %}}
+Be aware that if you are creating your application using GitBash the shell actually transforms the Path `/hello` to something like `/C:/Program Files/Git/hello` (due to MinGWs Posix Path Conversion).
+
+you can fix this if you specify the path as following:
+`-Dpath="hello"` (remove slash)
+
+Issue: <https://github.com/quarkusio/quarkus/issues/2149>
+{{% /alert %}}
+
+
 To test the application you can start the application in dev-mode by executing
 
 ```bash
