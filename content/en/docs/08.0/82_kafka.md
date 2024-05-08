@@ -163,7 +163,7 @@ mp.messaging.outgoing.data.value.serializer=io.quarkus.kafka.client.serializatio
 
 We define the connector which we are going to use to communicate, the topic in which the data will be sent to and the serializer for the value.
 
-To check if your producer is producing data correctly, you can use basic tooling available in your kafka container or use the quarkus dev-ui (remember to add the `quarkus-vertx-http` dependency in your producer). You need to find the name of your kafka container using `docker ps`. Be aware that this will only work if you are using the kafka stack and not the dev-services.
+To check if your producer is producing data correctly, you can use basic tooling available in your kafka container or use the quarkus dev-ui (remember to add the `quarkus-vertx-http` dependency in your producer). You need to find the name of your kafka container using `docker ps`. Be aware that this will only work if you are using the kafka stack and not the dev-services and you probably have to check the actual container name which might be different.
 ```s
 docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic data --from-beginning
 ```
