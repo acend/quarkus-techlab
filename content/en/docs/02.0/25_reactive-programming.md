@@ -26,7 +26,7 @@ We will start similar to the previous example with a producer which exposes data
 
 ### Task {{% param sectionnumber %}}.1.1: Create producer project
 
-Start by creating a project `quarkus-reactive-rest-producer`. Add the extensions `quarkus-resteasy-reactive-jackson` to the project.
+Start by creating a project `quarkus-reactive-rest-producer`. Add the extensions `quarkus-rest-jackson` to the project.
 
 {{% details title="Hint" %}}
 

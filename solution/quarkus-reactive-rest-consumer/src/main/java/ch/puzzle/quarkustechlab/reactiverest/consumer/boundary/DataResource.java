@@ -8,18 +8,12 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-@Path("/hello")
+@Path("/data")
 public class DataResource {
 
     @Inject
     @RestClient
     DataService dataService;
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "Hello from RESTEasy Reactive";
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

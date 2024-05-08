@@ -35,7 +35,7 @@ Jackson functionalities for our REST interfaces.
 To add an extension to your existing Quarkus application simply use:
 
 ```bash
-./mvnw quarkus:add-extension -Dextensions="quarkus-resteasy-reactive-jackson"
+./mvnw quarkus:add-extension -Dextensions="quarkus-rest-jackson"
 ```
 
 To see the available extensions you can use:
@@ -106,7 +106,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectArtifactId=quarkus-rest-data-consumer \
     -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumerResource" \
     -Dpath="/data" \
-    -Dextensions="rest-client-reactive-jackson"
+    -Dextensions="rest-rest-jackson"
 
 ```
 
@@ -208,6 +208,6 @@ When you have both microservices running, try sending a request to the consumer.
 
 {{% details title="Hint" %}}
 
-To get the full json output you have to add the `resteasy-reactive-jackson` extension and make sure the media type is set to json.
+To get the full json output you have to add the `rest-jackson` extension and make sure the media type is set to json.
 
 {{% /details %}}
