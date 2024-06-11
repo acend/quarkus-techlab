@@ -21,6 +21,20 @@ Apache Kafka is an event streaming platform used to collect, process, store, and
 
 ### {{% param sectionnumber %}}.2: Local Development
 
+
+#### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`.
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+##### Producer
+{{< csvtable csv="/solution/quarkus-reactive-messaging-producer/dependencies.csv" class="dependencies" >}}
+
+##### Consumer
+{{< csvtable csv="/solution/quarkus-reactive-messaging-consumer/dependencies.csv" class="dependencies" >}}
+
+#### Implementation
+
 For local development we do have the choice to either run our Kafka services via Quarkus Devservices or with docker-compose.
 If you want to use the Quarkus Devservices simply remove the line `kafka.bootstrap.servers=localhost:9092` in your `applications.properties` file. This will set up a [Redpanda](https://vectorized.io/redpanda) container for your development environment.
 
@@ -29,38 +43,19 @@ If you choose to test your local services with a Kafka broker you can use a smal
 to start a Kafka cluster:
 
 ```yaml
-
-version: '3'
+version: '2'
 
 services:
-
-  zookeeper:
-    image: {{% param "strimziVersion" %}}
-    command: [
-        "sh", "-c",
-        "bin/zookeeper-server-start.sh config/zookeeper.properties"
-    ]
-    ports:
-      - "2181:2181"
-    environment:
-      LOG_DIR: /tmp/logs
-
   kafka:
     image: {{% param "strimziVersion" %}}
     command: [
-        "sh", "-c",
-        "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
+      "sh", "-c",
+      "./bin/kafka-storage.sh format -t $$(./bin/kafka-storage.sh random-uuid) -c ./config/kraft/server.properties && ./bin/kafka-server-start.sh ./config/kraft/server.properties"
     ]
-    depends_on:
-      - zookeeper
     ports:
-      - "9092:9092"
+    - "9092:9092"    
     environment:
       LOG_DIR: "/tmp/logs"
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-
 ```
 
 Start your cluster with:
@@ -70,21 +65,22 @@ Start your cluster with:
 ```
 {{% /details %}}
 
-Create again two Quarkus projects `quarkus-reactive-messaging-consumer` and `quarkus-reactive-messaging-producer`.
+Create two Quarkus projects `quarkus-reactive-messaging-consumer` and `quarkus-reactive-messaging-producer`.
 
 ```s
 # Create producer application
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
       -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-producer \
-      -Dextensions="smallrye-reactive-messaging-kafka,quarkus-jackson,quarkus-jsonb" \
+      -Dextensions="quarkus-messaging-kafka,quarkus-jackson,quarkus-jsonb" \
       -DprojectVersion=1.0.0
 
 # Create consumer application
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
       -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-consumer \
-      -Dextensions="smallrye-reactive-messaging-kafka,quarkus-resteasy-reactive-jackson,quarkus-resteasy-reactive-jsonb" \
+      -Dextensions="quarkus-messaging-kafka,quarkus-rest-jackson,quarkus-rest-jsonb" \
+      -DclassName="ch.puzzle.quarkustechlab.messaging.consumer.boundary.DataResource"
       -DprojectVersion=1.0.0
 ```
 
@@ -99,7 +95,7 @@ As we do not include resteasy in your producer the producer does not have a ui a
 {{% /alert %}}
 
 
-Next, create the SensorMeasurement in both project.
+Next, create the SensorMeasurement in both project in the package `ch.puzzle.quarkustechlab.messaging.[producer|consumer].entity`.
 
 ```java
 public class SensorMeasurement {
@@ -153,8 +149,8 @@ public class ReactiveDataProducer {
 To ensure the connection from the connector to your message broker we need some configuration in our `application.properties`.
 
 ```s
-# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
-kafka.bootstrap.servers=localhost:9092
+# Uncomment if you do not want to use the devservices redpanda container.
+# kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.outgoing.data.connector=smallrye-kafka
 mp.messaging.outgoing.data.topic=data
@@ -224,8 +220,8 @@ After creating the deserializer we need to set up the connectors for the consume
 ```s
 quarkus.http.port=8081
 
-# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
-kafka.bootstrap.servers=localhost:9092
+# Uncomment if you do not want to use the devservices redpanda container.
+# kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.incoming.data.connector=smallrye-kafka
 mp.messaging.incoming.data.topic=data

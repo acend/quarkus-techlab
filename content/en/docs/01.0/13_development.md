@@ -7,7 +7,6 @@ description: >
   Quarkus from the development perspective
 ---
 
-
 ## Development Mode
 
 Quarkus comes with a built-in development mode. Run your application with:
@@ -66,7 +65,11 @@ jar, do not attempt to run normal devmode.
 Now you need to connect your local agent to the remote host, using the `remote-dev` command:
 
 ```s
-./mvnw quarkus:remote-dev -Ddebug=false -Dquarkus.package.type=mutable-jar -Dquarkus.live-reload.url=http://my-remote-host:8080 -Dquarkus.live-reload.password=changeit
+./mvnw quarkus:remote-dev \
+  -Ddebug=false \
+  -Dquarkus.package.type=mutable-jar \
+  -Dquarkus.live-reload.url=http://my-remote-host:8080 \
+  -Dquarkus.live-reload.password=changeit
 ```
 
 Now every time you refresh the browser you should see any changes you have made locally immediately visible in the
@@ -144,24 +147,9 @@ the code in the `{{% param solution_code_basedir %}}dev-services` folder. The ex
 provision some data and uses the `hibernate-orm-panache` implementation which we will not cover any further. However,
 this does not change how the devservices work.
 
-Our pom.xml looks like this:
-```xml
-  <dependencies>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-postgresql</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-flyway</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm-panache</artifactId>
-    </dependency>
-    <!-- ... -->
-  </dependencies>
-```
+The dev-services `pom.xml` contains the following dependencies:
+
+{{< csvtable csv="/solution/dev-services/dependencies.csv" class="dependencies" >}}
 
 In our application properties we have configured the datasource type:
 ```properties

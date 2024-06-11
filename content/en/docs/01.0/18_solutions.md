@@ -26,5 +26,5 @@ Chapter | Chapter Name                   | Solution Project
 8.2  | Reactive messaging with Kafka  | `quarkus-reactive-messaging-producer`, `quarkus-reactive-messaging-consumer` and `kafka-stack`
 8.3  | Cloud Events                   | `quarkus-cloudevents-producer`, `quarkus-cloudevents-consumer` and `kafka-stack`
 9.2  | Tracing with Jaeger            | `quarkus-opentelemetry-jaeger` and `opentelemetry-stack`
-9.3  | Metrics with micrometer        | `quarkus-metrics-data-producer` and `opentelemetry-stack`
+9.3  | Metrics with micrometer        | `quarkus-metrics-data-producer`, `quarkus-metrics-data-consumer` and `opentelemetry-stack`
 10   | Quarkus Extensions             | `techlab-extension-appinfo` and `quarkus-appinfo-application`

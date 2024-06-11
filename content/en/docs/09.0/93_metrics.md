@@ -11,7 +11,24 @@ description: >
 
 Knowing about the state of your applications in a microservice architecture is crucial. We will learn in this chapter how to use the metrics extension to get insights about our applications.
 
-You can start by copying the rest application `data-producer` and `data-consumer` or you can just use these project and enhance them with metrics. Add the `micrometer-registry-prometheus` to both of your projects. This will add the micrometer as well as the according prometheus extension to your project.
+You can start by copying the rest application `quarkus-rest-data-producer` and `quarkus-rest-data-consumer` or you can just use these project and enhance them with metrics. 
+
+
+#### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`.
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+##### Producer
+{{< csvtable csv="/solution/quarkus-metrics-data-producer/dependencies.csv" class="dependencies" >}}
+
+##### Consumer
+{{< csvtable csv="/solution/quarkus-metrics-data-consumer/dependencies.csv" class="dependencies" >}}
+
+
+### Implementation
+
+Add the `quarkus-micrometer-registry-prometheus` extension to both of your projects. This will add the micrometer as well as the according prometheus extension to your project.
 
 {{% details title="Hint" %}}
 
@@ -146,10 +163,28 @@ As you can see we already have a timed function which exposes it's metric, but w
 {{% details title="Hint" %}}
 
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.boundary;
+
+import ch.puzzle.quarkustechlab.restconsumer.control.HealthService;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.function.Supplier;
+
 @Path("/data")
 public class DataConsumerResource {
 
-    private final Logger logger = Logger.getLogger(DataConsumerResource.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(DataConsumerResource.class);
     private final MeterRegistry registry;
 
     @RestClient

@@ -19,3 +19,5 @@ META-INF
 **.iml
 .hugo_build.lock
 target
+/.quarkus
+/diff-update

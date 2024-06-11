@@ -109,6 +109,8 @@ the information on the servlet. However, for simplicity of the lab it is suffici
 Create the following `AppinfoNames.java` class:
 
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
+
 public class AppinfoNames {
   public static final String EXTENSION_NAME = "appinfo";
   public static final String CONFIG_PREFIX = "quarkus."+ EXTENSION_NAME;
@@ -119,6 +121,8 @@ public class AppinfoNames {
 Your `Appinfo.java` class should look something like this:
 
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
+
 public class Appinfo {
 
     String buildTime;
@@ -157,6 +161,8 @@ public class Appinfo {
 
 Your `BuildInfo.java` class should look something like this:
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
+
 public class BuildInfo {
 
     String time;
@@ -248,6 +254,21 @@ Arc.container().instance(BuildInfo.class).get();
 Completing the TODOs in the `AppinfoService.java` the class should look like below.
 
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
+
+import jakarta.inject.Singleton;
+import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.spi.CDI;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
+import org.eclipse.microprofile.config.spi.ConfigSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.Instant;
+import java.util.Map;
+
 @Singleton
 public class AppinfoService {
 
@@ -332,6 +353,16 @@ public class AppinfoServlet extends HttpServlet {
 {{% details title="Task hint" %}}
 Your class should look like this:
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
+
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
 @WebServlet
 public class AppinfoServlet extends HttpServlet {
 

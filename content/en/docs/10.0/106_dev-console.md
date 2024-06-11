@@ -277,6 +277,17 @@ Finally, we have to configure our dev ui card to create and link to our configur
 {{% details title="Complete AppinfoDevUiProcessor" %}}
 
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.deployment.devui;
+
+import ch.puzzle.quarkustechlab.extensions.appinfo.deployment.StaticMetadataBuildItem;
+import ch.puzzle.quarkustechlab.extensions.appinfo.runtime.ConfigSourceJsonRPCService;
+import io.quarkus.deployment.IsDevelopment;
+import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.devui.spi.JsonRPCProvidersBuildItem;
+import io.quarkus.devui.spi.page.CardPageBuildItem;
+import io.quarkus.devui.spi.page.Page;
+import io.quarkus.vertx.http.deployment.HttpRootPathBuildItem;
+
 public class AppinfoDevUiProcessor {
 
     @BuildStep(onlyIf = IsDevelopment.class)

@@ -80,4 +80,4 @@ uni.subscribe()
   .with(it -> System.out.println("File content is: " + it));
 ```
 
-To dive further into the Mutiny framework consider checking their [documentation](https://smallrye.io/smallrye-mutiny/guides).
+To dive further into the Mutiny framework consider checking their [documentation](https://smallrye.io/smallrye-mutiny/latest/guides/imperative-to-reactive/).

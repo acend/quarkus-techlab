@@ -11,12 +11,23 @@ description: >
 
 In this section we learn how microservices can communicate through REST. In this example we want to build a microservice
 which produces random data when it's REST interface is called. Another microservice consumes then the data and exposes
-it on it's own endpoint.
+it on its own endpoint.
 
 
 ### {{% param sectionnumber %}}.2: Producing Data
 
-Create a new Quarkus application like shown before called `data-producer`. The application should expose a `DataResource` on the path `/data` which provides the user with a `SensorMeasurement` holding a random double when requested.
+#### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`:
+
+{{< csvtable csv="/solution/quarkus-rest-data-producer/dependencies.csv" class="dependencies" >}}
+
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+
+#### Implementation 
+
+Create a new Quarkus application like shown before called `quarkus-rest-data-producer`. The application should expose a `DataResource` on the path `/data` which provides the user with a `SensorMeasurement` holding a random double when requested.
 
 {{% details title="Hint" %}}
 
@@ -30,7 +41,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 
 {{% /details %}}
 
-To write better APIs and share data over our defined resources, we need the `resteasy-reactive-jackson` extension which provides us with
+To write better APIs and share data over our defined resources, we need the `quarkus-rest-jackson` extension which provides us with
 Jackson functionalities for our REST interfaces.
 To add an extension to your existing Quarkus application simply use:
 
@@ -89,14 +100,25 @@ public class DataResource {
 
 Please update or delete the generated tests which Quarkus provides when generating a project. They will not be needed any further and only have demonstration purposes.
 
-Start up your API and test your endpoint manually. If your data-producer works, let's continue consuming the data we just provided.
+Start up your API and test your endpoint manually. If your `quarkus-rest-data-producer` works, let's continue consuming the data we just provided.
 
 For more information about writing REST APIs with Quarkus see the [documentation](https://quarkus.io/guides/rest-json)
 
 
 ### {{% param sectionnumber %}}.3: Consuming Data
 
-With another microservice we would like to consume the data served by our data-producer. Create another quarkus application called `data-consumer` with the follwing extensions: `rest-client-reactive-jackson`.
+#### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`:
+
+{{< csvtable csv="/solution/quarkus-rest-data-producer/dependencies.csv" class="dependencies" >}}
+
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+
+#### Implementation
+
+With another microservice we would like to consume the data served by our `quarkus-rest-data-producer`. Create another quarkus application called `quarkus-rest-data-consumer` with the follwing extensions: `quarkus-rest-client-jackson`.
 
 {{% details title="Hint" %}}
 
@@ -106,13 +128,13 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectArtifactId=quarkus-rest-data-consumer \
     -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumerResource" \
     -Dpath="/data" \
-    -Dextensions="rest-rest-jackson"
+    -Dextensions="quarkus-rest-client-jackson"
 
 ```
 
 {{% /details %}}
 
-In the data-consumer microservice we will have another resource on the path `/data` which serves for now as a proxy to our `data-producer`. We will consume the data-producer microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the data-producer's DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
+In the `quarkus-rest-data-consumer` microservice we will have another resource on the path `/data` which serves for now as a proxy to our `quarkus-rest-data-producer`. We will consume the `quarkus-rest-data-producer` microservices API with a service called `DataProducerService`. To achieve that, generate an interface called `DataProducerService` which mirrors the `quarkus-rest-data-producer` DataResource. Annotate the `DataProducerService` with the MicroProfile annotation `@RegisterRestClient` to allow Quarkus to acces the interface for CDI Injection as a REST client.
 
 ```java
 package ch.puzzle.quarkustechlab.restconsumer.boundary;
@@ -135,7 +157,7 @@ public interface DataProducerService {
 }
 ```
 
-Implement the same POJO `SensorMeasurement` as in the producer again for the `data-consumer` project but with an empty constructor.
+Implement the same POJO `SensorMeasurement` as in the producer again for the `quarkus-rest-data-consumer` project but with an empty constructor.
 
 {{% details title="Hint" %}}
 
@@ -177,7 +199,7 @@ quarkus.rest-client.data-producer-api.scope=jakarta.inject.Singleton
 ```
 
 To use the registered RestClient in our application inject it into the `DataConsumerResource` and simply call the defined interface's method. To inject a RestClient into your desired class create a field of type `DataProducerService dataProducerService` and annotate it with `@RestClient`.
-You can edit our resource in the `data-consumer` to use the `DataProducerService` to create a proxy consuming the API of the `data-producer` and return it.
+You can edit our resource in the `quarkus-rest-data-consumer` to use the `DataProducerService` to create a proxy consuming the API of the `quarkus-rest-data-producer` and return it.
 
 ```java
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -204,10 +226,10 @@ public class DataConsumerResource {
 
 To run both microservices you have to alter the `application.properties` of the consumer and change its default port. Simply add `quarkus.http.port=8081` to your `application.properties` and the default port will be changed.
 
-When you have both microservices running, try sending a request to the consumer. You will see that we receive a `SensorMeasurement`, which the `data-producer` produced. Probably you'll only see the generated object reference like this `SensorMeasurement@4c7758a8`. Do you remember what we did in the producer to get the json output?
+When you have both microservices running, try sending a request to the consumer. You will see that we receive a `SensorMeasurement`, which the `quarkus-rest-data-producer` produced. Probably you'll only see the generated object reference like this `SensorMeasurement@4c7758a8`. Do you remember what we did in the producer to get the json output?
 
 {{% details title="Hint" %}}
 
-To get the full json output you have to add the `rest-jackson` extension and make sure the media type is set to json.
+To get the full json output you have to add the `quarkus-rest-jackson` extension and make sure the media type is set to json.
 
 {{% /details %}}

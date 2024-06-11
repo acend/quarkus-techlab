@@ -31,6 +31,7 @@ To build a Quarkus application to be run with the JVM you can use the provided D
 ~/quarkus-rest-data-consumer$ ./mvnw clean package
 
 ~$ docker build -f quarkus-rest-data-producer/src/main/docker/Dockerfile.jvm -t quarkus-rest-data-producer:latest quarkus-rest-data-producer/.
+
 ~$ docker build -f quarkus-rest-data-consumer/src/main/docker/Dockerfile.jvm -t quarkus-rest-data-consumer:latest quarkus-rest-data-consumer/.
 ```
 

@@ -34,7 +34,19 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -Dpath="/demo"
 ```
 
-This simple Quarkus application needs to have the following dependency:
+
+#### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`:
+
+{{< csvtable csv="/solution/quarkus-appinfo-application/dependencies.csv" class="dependencies" >}}
+
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+
+### Implementation
+
+If you started with your own Application make sure you add the following dependency:
 ```xml
     <dependency>
       <groupId>ch.puzzle</groupId>

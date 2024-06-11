@@ -58,6 +58,17 @@ time | Timestamp [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) | Tim
 
 In addition to the specification of CloudEvents itself, there are extensions giving extra flexibility for other meta fields to enrich your event. For example OpenTracing header fields can be added by the [Distributed Tracing](https://github.com/cloudevents/spec/blob/main/cloudevents/extensions/distributed-tracing.md) extension.
 
+### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`.
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+#### Producer
+{{< csvtable csv="/solution/quarkus-cloudevents-producer/dependencies.csv" class="dependencies" >}}
+
+#### Consumer
+{{< csvtable csv="/solution/quarkus-cloudevents-consumer/dependencies.csv" class="dependencies" >}}
+
 
 ### {{% param sectionnumber %}}.2: Implementation
 
@@ -74,13 +85,13 @@ We create two new Quarkus projects:
 mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-cloudevents-producer \
-    -Dextensions="resteasy-reactive,smallrye-reactive-messaging-kafka"
+    -Dextensions="quarkus-rest,quarkus-messaging-kafka"
 
 # Create consumer application
 mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-cloudevents-consumer \
-    -Dextensions="resteasy-reactive,smallrye-reactive-messaging-kafka"
+    -Dextensions="quarkus-rest,quarkus-messaging-kafka"
 ```
 
 Remove the test classes and add the following extensions to your projects' `pom.xml`:
@@ -202,8 +213,8 @@ public class MeasurementsResource {
 Of course, we need some configuration in the `application.properties` to emit the events to our Kafka broker.
 
 ```properties
-# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
-kafka.bootstrap.servers=localhost:9092
+# Uncomment if you do not want to use the devservices redpanda container.
+# kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.outgoing.measurements.connector=smallrye-kafka
 mp.messaging.outgoing.measurements.value.serializer=io.confluent.kafka.serializers.KafkaAvroSerializer
@@ -302,6 +313,7 @@ public class EventListener {
         
         return message.ack();
     }
+}
 ```
 
 Add the following properties to the `application.properties` file:
@@ -309,8 +321,8 @@ Add the following properties to the `application.properties` file:
 ```properties
 quarkus.http.port=8081
 
-# If you'd like to use Redpanda from the devservices instead of a docker-compose kafka cluster simply comment or remove the line below
-kafka.bootstrap.servers=localhost:9092
+# Uncomment if you do not want to use the devservices redpanda container.
+# kafka.bootstrap.servers=localhost:9092
 
 mp.messaging.incoming.measurements.connector=smallrye-kafka
 mp.messaging.incoming.measurements.topic=measurements

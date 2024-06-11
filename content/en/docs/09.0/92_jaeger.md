@@ -12,13 +12,25 @@ We are going to test the OpenTelemetry API live with Jaeger as our tracing servi
 
 ## Task {{% param sectionnumber %}}.1: Create the new service
 
+
+#### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`:
+
+{{< csvtable csv="/solution/quarkus-opentelemetry-jaeger/dependencies.csv" class="dependencies" >}}
+
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+
+### Implementation
+
 Create a new Quarkus application, in this example we are going to use a simple reactive rest application:
 
 ```bash
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
   -DprojectGroupId=ch.puzzle \
   -DprojectArtifactId=quarkus-opentelemetry-jaeger \
-  -Dextensions="resteasy-reactive,quarkus-opentelemetry" \
+  -Dextensions="quarkus-rest,quarkus-opentelemetry" \
   -DprojectVersion=1.0.0 \
   -DclassName="ch.puzzle.quarkustechlab.opentelemetry.jaeger.boundary.TracedResource"
 ```
@@ -58,7 +70,7 @@ public class TracedResource {
     @Produces(MediaType.TEXT_PLAIN)
     @WithSpan
     public String hello() {
-        return "Hello from RESTEasy Reactive";
+        return "Hello from Quarkus REST";
     }
 }
 ```

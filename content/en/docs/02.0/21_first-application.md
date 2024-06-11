@@ -15,6 +15,13 @@ To create your first Quarkus application you have several possibilities:
 * Create your application with the Quickstart UI [code.quarkus.io](https://code.quarkus.io/)
 * Use IntelliJ or eclipse plugins which will assist creating projects (these are usually also based on code.quarkus.io)
 
+### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`:
+
+{{< csvtable csv="/solution/quarkus-getting-started/dependencies.csv" class="dependencies" >}}
+
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
 
 ### Task {{% param sectionnumber %}}.1: Create your application with maven
 
@@ -57,7 +64,7 @@ live reloading on each API call. Try hitting the API and test the
 curl http://localhost:8080/hello
 ```
 
-You should get the `Hello from RESTEasy Reactive` response in your console. Other RESTeasy functionalities work like they always do.
+You should get the `Hello from Quarkus REST` response in your console. Other RESTeasy functionalities work like they always do.
 For further information on basic REST interaction with Quarkus see [Documentation](https://quarkus.io/guides/rest-json).
 
 
@@ -139,13 +146,15 @@ public class ApplicationImpl extends Application {
 
     static {
         DisabledInitialContextManager.register();
-        System.setProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager");
         System.setProperty("java.util.concurrent.ForkJoinPool.common.threadFactory", "io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory");
-        System.setProperty("logging.initial-configurator.min-level", "500");
         System.setProperty("io.netty.allocator.maxOrder", "3");
-        System.setProperty("io.netty.machineId", "a2:a0:88:71:ba:49:9f:1a");
-        ProfileManager.setLaunchMode(LaunchMode.NORMAL);
+        System.setProperty("logging.initial-configurator.min-level", "500");
+        System.setProperty("io.netty.machineId", "80:90:28:d0:a0:e1:64:c8");
+        System.setProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager");
+        System.setProperty("io.quarkus.security.http.test-if-basic-auth-implicitly-required", "true");
+        LaunchMode.set(LaunchMode.NORMAL);
         StepTiming.configureEnabled();
+        ExecutionModeManager.staticInit();
         Timing.staticInitStarted(false);
         Config.ensureInitialized();
         LOG = Logger.getLogger("io.quarkus.application");
@@ -154,50 +163,34 @@ public class ApplicationImpl extends Application {
 
         try {
             StepTiming.configureStart();
-            ((StartupTask) (new MutinyProcessor.buildTimeInit521613965())).deploy(var0);
+            ((StartupTask)(new NativeImageConfigBuildStep.build282698227())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask) (new VertxCoreProcessor.ioThreadDetector1463825589())).deploy(var0);
+            ((StartupTask)(new VertxCoreProcessor.ioThreadDetector1463825589())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask) (new BlockingOperationControlBuildStep.blockingOP558072755())).deploy(var0);
+            /* ... */
+            ((StartupTask)(new ResteasyReactiveProcessor.serverSerializers1997124575())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask) (new LoggingResourceProcessor.setupLoggingStaticInit2062061316())).deploy(var0);
+            ((StartupTask)(new ResteasyReactiveProcessor.setupEndpoints615463616())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask) (new VirtualThreadsProcessor.setup657958880())).deploy(var0);
+            ((StartupTask)(new ResteasyReactiveProcessor.setupDeployment713137389())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask) (new ResteasyReactiveProcessor.addDefaultAuthFailureHandler1457820534())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new SmallRyeContextPropagationProcessor.buildStatic677493008())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new NativeImageConfigBuildStep.build282698227())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new VertxProcessor.currentContextFactory166049300())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new JacksonProcessor.jacksonSupport1959914842())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new SyntheticBeansProcessor.initStatic1190120725())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new ArcProcessor.generateResources844392269())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new ResteasyReactiveProcessor.setupEndpoints1082683577())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new ResteasyReactiveProcessor.serverSerializers168685733())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask) (new ResteasyReactiveProcessor.setupDeployment713137389())).deploy(var0);
+            ((StartupTask)(new ResteasyReactiveProcessor.addDefaultAuthFailureHandler1048820038())).deploy(var0);
             StepTiming.printStepTime(var0);
         } catch (Throwable var2) {
             ApplicationStateNotification.notifyStartupFailed(var2);
             var0.close();
-            throw (Throwable) (new RuntimeException("Failed to start quarkus", var2));
+            throw (Throwable)(new RuntimeException("Failed to start quarkus", var2));
         }
     }
+    /* ... */
 }
 ```
 
-Our application contains RESTEasy Reactive endpoints and uses different Serializers. You may find a line containing `((StartupTask) (new ResteasyReactiveProcessor.serverSerializers168685733())).deploy(var0);` in the static block.
+Our application contains REST endpoints and uses different Serializers. You may find a line containing `((StartupTask)(new ResteasyReactiveProcessor.serverSerializers1997124575())).deploy(var0);` in the static block.
 Where does this come from? Open the file `ResteasyReactiveProcessor$serverSerializers...` from the `io/quarkus/deployment/steps` folder. You may find the deploy code for the resteasy de-/serializers.
 ```java
 // $FF: synthetic class
-public class ResteasyCommonProcessor$setupResteasyInjection2143006352 implements StartupTask {
+public class ResteasyReactiveProcessor$serverSerializers1997124575 implements StartupTask {
 
     /* removed for simplicity */
 
