@@ -16,6 +16,7 @@ it on its own endpoint.
 
 ### {{% param sectionnumber %}}.2: Producing Data
 
+
 #### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`:
@@ -25,7 +26,7 @@ The solution for this lab uses the following dependencies in the `pom.xml`:
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
 
 
-#### Implementation 
+#### Implementation
 
 Create a new Quarkus application like shown before called `quarkus-rest-data-producer`. The application should expose a `DataResource` on the path `/data` which provides the user with a `SensorMeasurement` holding a random double when requested.
 
@@ -106,6 +107,7 @@ For more information about writing REST APIs with Quarkus see the [documentation
 
 
 ### {{% param sectionnumber %}}.3: Consuming Data
+
 
 #### Maven dependencies reference
 

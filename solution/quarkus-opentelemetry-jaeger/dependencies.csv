@@ -1,0 +1,6 @@
+groupId,artifactId,version,scope
+io.quarkus,quarkus-rest,,
+io.quarkus,quarkus-opentelemetry,,
+io.quarkus,quarkus-arc,,
+io.quarkus,quarkus-junit5,,test
+io.rest-assured,rest-assured,,test

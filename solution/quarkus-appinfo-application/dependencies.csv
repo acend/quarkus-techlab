@@ -1,0 +1,6 @@
+groupId,artifactId,version,scope
+io.quarkus,quarkus-arc,,
+io.quarkus,quarkus-rest,,
+ch.puzzle,techlab-extension-appinfo,1.0.0-SNAPSHOT,
+io.quarkus,quarkus-junit5,,test
+io.rest-assured,rest-assured,,test

@@ -1,0 +1,6 @@
+groupId,artifactId,version,scope
+io.quarkus,quarkus-jackson,,
+io.quarkus,quarkus-jsonb,,
+io.quarkus,quarkus-messaging-kafka,,
+io.quarkus,quarkus-arc,,
+io.quarkus,quarkus-junit5,,test

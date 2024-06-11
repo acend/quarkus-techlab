@@ -1,0 +1,9 @@
+groupId,artifactId,version,scope
+io.quarkus,quarkus-arc,,
+io.quarkus,quarkus-rest,,
+io.quarkus,quarkus-smallrye-fault-tolerance,,
+io.quarkus,quarkus-rest-jackson,,
+io.quarkus,quarkus-smallrye-health,,
+io.quarkus,quarkus-junit5,,test
+io.rest-assured,rest-assured,,test
+io.quarkus,quarkus-junit5-mockito,,test

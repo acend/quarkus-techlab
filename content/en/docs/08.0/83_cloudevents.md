@@ -58,15 +58,20 @@ time | Timestamp [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) | Tim
 
 In addition to the specification of CloudEvents itself, there are extensions giving extra flexibility for other meta fields to enrich your event. For example OpenTracing header fields can be added by the [Distributed Tracing](https://github.com/cloudevents/spec/blob/main/cloudevents/extensions/distributed-tracing.md) extension.
 
+
 ### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`.
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
 
+
 #### Producer
+
 {{< csvtable csv="/solution/quarkus-cloudevents-producer/dependencies.csv" class="dependencies" >}}
 
+
 #### Consumer
+
 {{< csvtable csv="/solution/quarkus-cloudevents-consumer/dependencies.csv" class="dependencies" >}}
 
 

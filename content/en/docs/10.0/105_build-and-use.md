@@ -35,7 +35,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
 ```
 
 
-#### Maven dependencies reference
+### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`:
 

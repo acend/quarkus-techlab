@@ -11,18 +11,22 @@ description: >
 
 Knowing about the state of your applications in a microservice architecture is crucial. We will learn in this chapter how to use the metrics extension to get insights about our applications.
 
-You can start by copying the rest application `quarkus-rest-data-producer` and `quarkus-rest-data-consumer` or you can just use these project and enhance them with metrics. 
+You can start by copying the rest application `quarkus-rest-data-producer` and `quarkus-rest-data-consumer` or you can just use these project and enhance them with metrics.
 
 
-#### Maven dependencies reference
+### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`.
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
 
-##### Producer
+
+#### Producer
+
 {{< csvtable csv="/solution/quarkus-metrics-data-producer/dependencies.csv" class="dependencies" >}}
 
-##### Consumer
+
+#### Consumer
+
 {{< csvtable csv="/solution/quarkus-metrics-data-consumer/dependencies.csv" class="dependencies" >}}
 
 

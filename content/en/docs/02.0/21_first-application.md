@@ -15,6 +15,7 @@ To create your first Quarkus application you have several possibilities:
 * Create your application with the Quickstart UI [code.quarkus.io](https://code.quarkus.io/)
 * Use IntelliJ or eclipse plugins which will assist creating projects (these are usually also based on code.quarkus.io)
 
+
 ### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`:
@@ -22,6 +23,7 @@ The solution for this lab uses the following dependencies in the `pom.xml`:
 {{< csvtable csv="/solution/quarkus-getting-started/dependencies.csv" class="dependencies" >}}
 
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
 
 ### Task {{% param sectionnumber %}}.1: Create your application with maven
 

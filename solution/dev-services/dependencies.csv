@@ -1,0 +1,10 @@
+groupId,artifactId,version,scope
+io.quarkus,quarkus-arc,,
+io.quarkus,quarkus-resteasy,,
+io.quarkus,quarkus-resteasy-jsonb,,
+org.flywaydb,flyway-database-postgresql,,
+io.quarkus,quarkus-jdbc-postgresql,,
+io.quarkus,quarkus-flyway,,
+io.quarkus,quarkus-hibernate-orm-panache,,
+io.quarkus,quarkus-junit5,,test
+io.rest-assured,rest-assured,,test
