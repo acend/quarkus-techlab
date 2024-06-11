@@ -148,12 +148,18 @@ public class ApplicationImpl extends Application {
     }
 
     static {
+        DisabledInitialContextManager.register();
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.threadFactory",
+         "io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory");
         System.setProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager");
-        System.setProperty("io.netty.allocator.maxOrder", "1");
-        System.setProperty("io.netty.machineId", "e2:dd:dc:62:56:a3:ba:f8");
-        ProfileManager.setLaunchMode(LaunchMode.NORMAL);
+        System.setProperty("io.netty.machineId", "d5:17:d2:22:b3:dd:20:8a");
+        System.setProperty("io.netty.allocator.maxOrder", "3");
+        System.setProperty("logging.initial-configurator.min-level", "500");
+        System.setProperty("io.quarkus.security.http.test-if-basic-auth-implicitly-required", "true");
+        LaunchMode.set(LaunchMode.NORMAL);
         StepTiming.configureEnabled();
-        Timing.staticInitStarted();
+        ExecutionModeManager.staticInit();
+        Timing.staticInitStarted(false);
         Config.ensureInitialized();
         LOG = Logger.getLogger("io.quarkus.application");
         StartupContext var0 = new StartupContext();
@@ -163,21 +169,14 @@ public class ApplicationImpl extends Application {
             StepTiming.configureStart();
             ((StartupTask)(new setupLoggingStaticInit-1235809433())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new ioThreadDetector-1463825589())).deploy(var0);
+            /* ... */
+            ((StartupTask)(new ResteasyReactiveProcessor.serverSerializers1997124575())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new blockingOP558072755())).deploy(var0);
+            ((StartupTask)(new ResteasyReactiveProcessor.setupEndpoints615463616())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new build163995889())).deploy(var0);
+            ((StartupTask)(new ResteasyReactiveProcessor.setupDeployment713137389())).deploy(var0);
             StepTiming.printStepTime(var0);
-            ((StartupTask)(new staticInit-1777814589())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask)(new initStatic1190120725())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask)(new generateResources-1025303321())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask)(new setupResteasyInjection2143006352())).deploy(var0);
-            StepTiming.printStepTime(var0);
-            ((StartupTask)(new staticInit-210558872())).deploy(var0);
+            ((StartupTask)(new ResteasyReactiveProcessor.addDefaultAuthFailureHandler1048820038())).deploy(var0);
             StepTiming.printStepTime(var0);
         } catch (Throwable var2) {
             ApplicationStateNotification.notifyStartupFailed(var2);

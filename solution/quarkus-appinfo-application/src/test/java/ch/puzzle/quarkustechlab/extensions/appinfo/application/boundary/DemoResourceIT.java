@@ -1,8 +1,8 @@
-package ch.puzzle.quarkustechlab.reactiverest.consumer.boundary;
+package ch.puzzle.quarkustechlab.extensions.appinfo.application.boundary;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-public class DataResourceIT extends DataResourceTest {
+class DemoResourceIT extends DemoResourceTest {
     // Execute the same tests but in packaged mode.
 }

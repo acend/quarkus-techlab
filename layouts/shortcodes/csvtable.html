@@ -1,0 +1,29 @@
+<!--layouts/shortcodes/csv-table.html-->
+<!--must contain header row-->
+{{- $rows := "" -}}
+{{- $del := "," -}}
+{{- $class := .Get "class" -}}
+{{- $options := dict "delimiter" $del -}}
+{{- $csv := .Get "csv" | readFile -}}
+{{- $rows := $csv | transform.Unmarshal $options -}}
+{{- $headerRow := index $rows 0 -}}
+{{- $dataRows := after 1 $rows -}}
+<table class="{{$class}}">
+  <thead>
+  <tr>
+    {{- range $headerRow -}}
+    <th scope="col">{{ . }}</th>
+    {{- end -}}
+  </tr>
+  </thead>
+  <tbody>
+  {{- range $rowIndex, $columns := $dataRows -}}
+  <tr>
+    {{- range $index, $col := $columns -}}
+    <td {{ if eq $index 0 }}scope="row"{{end}} data-label="{{index $headerRow $index}}">{{ . }}</td>
+    {{- end -}}
+  </tr>
+  {{- end -}}
+  </tbody>
+</table>
+

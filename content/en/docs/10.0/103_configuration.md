@@ -67,6 +67,13 @@ public class AppinfoBuildTimeConfig {
 The build-time configuration looks like this:
 
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.deployment;
+
+import ch.puzzle.quarkustechlab.extensions.appinfo.runtime.AppinfoNames;
+import io.quarkus.runtime.annotations.ConfigItem;
+import io.quarkus.runtime.annotations.ConfigPhase;
+import io.quarkus.runtime.annotations.ConfigRoot;
+
 @ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.BUILD_TIME)
 public class AppinfoBuildTimeConfig {
 
@@ -117,6 +124,12 @@ public class AppinfoRunTimeConfig {
 The run-time configuration looks like this:
 
 ```java
+package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
+
+import io.quarkus.runtime.annotations.ConfigItem;
+import io.quarkus.runtime.annotations.ConfigPhase;
+import io.quarkus.runtime.annotations.ConfigRoot;
+
 @ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.RUN_TIME)
 public class AppinfoRunTimeConfig {
 

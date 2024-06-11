@@ -34,47 +34,39 @@ JUnit 5 changed some annotations in comparison to it's predecessor. One imoprtan
 
 JUnit 4:
 ```java
-
 @Test(expected = Exception.class)
 public void shouldRaiseAnException() throws Exception {
     // ...
 }
-
 ```
 
 Instead we use the `assertThrows` method:
 
 ```java
-
 public void shouldRaiseAnException() throws Exception {
     Assertions.assertThrows(Exception.class, () -> {
         //...
     });
 }
-
 ```
 
 The same goes for the `timeout` attribute in JUnit 4:
 
 ```java
-
 @Test(timeout = 1)
 public void shouldFailBecauseTimeout() throws InterruptedException {
     Thread.sleep(10);
 }
-
 ```
 
 Now, the assertTimeout method in JUnit 5:
 
 
 ```java
-
 @Test
 public void shouldFailBecauseTimeout() throws InterruptedException {
     Assertions.assertTimeout(Duration.ofMillis(1), () -> Thread.sleep(10));
 }
-
 ```
 
 Some other annotations were renamed for readability reasons:
@@ -91,20 +83,17 @@ Some other annotations were renamed for readability reasons:
 In JUnit 5 assertions can now be written in a lambda expression:
 
 ```java
-
 @Test
 public void shouldFailBecauseTheNumbersAreNotEqual_lazyEvaluation() {
     Assertions.assertTrue(
       2 == 3, 
       () -> "Numbers " + 2 + " and " + 3 + " are not equal!");
 }
-
 ```
 
 Additionally we can group assertions in JUnit 5:
 
 ```java
-
 @Test
 public void shouldAssertAllTheGroup() {
     List<Integer> list = Arrays.asList(1, 2, 4);
@@ -113,7 +102,6 @@ public void shouldAssertAllTheGroup() {
         () -> Assertions.assertEquals(list.get(1).intValue(), 2),
         () -> Assertions.assertEquals(list.get(2).intValue(), 3));
 }
-
 ```
 
 
@@ -122,7 +110,6 @@ public void shouldAssertAllTheGroup() {
  With JUnit 5, you can add the `@DisplayName` annotation to classes and methods. The name is used when generating reports, which makes it easier to describe the purpose of tests and track down failures, for example:
 
  ```java
-
 @DisplayName("Test MyClass")
 class MyClassTest {
     @Test
@@ -131,5 +118,4 @@ class MyClassTest {
         // ...
     }
 }
-
  ```

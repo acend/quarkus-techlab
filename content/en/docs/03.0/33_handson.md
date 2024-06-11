@@ -12,13 +12,28 @@ In this section we are going to extend our created REST microservices and create
 
 ## Task {{% param sectionnumber %}}.1: Testing your Quarkus producer
 
-Start can start with your `quarkus-rest-data-producer` project. Add tests for verifying your producing interfaces. Try to use the different techniques for mocking your injected beans.
+You can start with your `quarkus-rest-data-producer` project. Add tests for verifying your producing interfaces. Try to use the different techniques for mocking your injected beans.
 
-For demonstration purposes we implement a new endpoint `/dummy` which simply returns a String `dummy` with the help of an injected `DummyService`.
+#### Maven dependencies reference
+
+The solution for this lab uses the following dependencies in the `pom.xml`:
+
+{{< csvtable csv="/solution/quarkus-rest-data-producer/dependencies.csv" class="dependencies" >}}
+
+Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+
+
+#### Implementation
+
+For demonstration purposes we implement a new endpoint `/data/dummy` which simply returns a String `dummy` with the help of an injected `DummyService`.
 
 It could look something like this:
 
 ```java
+package ch.puzzle.quarkustechlab.restproducer.control;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
 @ApplicationScoped
 public class DummyService {
 

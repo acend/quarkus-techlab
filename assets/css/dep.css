@@ -1,0 +1,27 @@
+table.dependencies {
+    font-size: 0.8em;
+    margin-bottom: 15px;
+    border-collapse: collapse;
+    padding: 0;
+    width: 100%;
+}
+
+table.dependencies caption {
+    font-size: 1.5em;
+    color: #1E5A96;
+    margin: 0.5em 0 0.75em;
+}
+
+table.dependencies tr {
+    padding: 0.35em;
+}
+
+table.dependencies td,
+table.dependencies th {
+    padding: 5px 15px 5px 15px;
+}
+
+table.dependencies th {
+    font-weight: bold;
+    text-transform: uppercase;
+}

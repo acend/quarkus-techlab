@@ -45,14 +45,12 @@ public class GreetingResourceTest {
                 .when().get("/hello")
                 .then()
                 .statusCode(200)
-                .body(is("Hello from RESTEasy Reactive"));
+                .body(is("Hello from Quarkus REST"));
     }
-
-
 }
 ```
 
-If you are familiar with the JUnit 5 framework there are no big surprises here. The annotation `@QuarkusTest` instructs JUnit to start the application before the tests. The above shown test simply tests if the GET request to the `/hello` endpoint returns a response with HTTP status code 200 and body `"Hello from RESTEasy Reactive"` - nothing fancy.
+If you are familiar with the JUnit 5 framework there are no big surprises here. The annotation `@QuarkusTest` instructs JUnit to start the application before the tests. The above shown test simply tests if the GET request to the `/hello` endpoint returns a response with HTTP status code 200 and body `"Hello from Quarkus REST"` - nothing fancy.
 
 You can run your tests using Maven:
 

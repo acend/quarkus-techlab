@@ -22,7 +22,7 @@ public class StaticContentTest {
     public void testIndexHtml() throws Exception {
         try (InputStream in = url.openStream()) {
             String contents = readStream(in);
-            Assertions.assertTrue(contents.contains("<title>getting-started"));
+            Assertions.assertTrue(contents.contains("<title>quarkus-getting-started"));
         }
     }
 

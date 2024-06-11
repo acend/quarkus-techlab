@@ -12,7 +12,7 @@ In this section we will add health checks to our microservices.
 
 ## Adding Health checks
 
-We will be using the `smallrye-health` quarkus extension which relies on the MicroProfile Health specification.
+We will be using the `quarkus-smallrye-health` quarkus extension which relies on the MicroProfile Health specification.
 
 This extension will expose the following REST endpoints:
 
@@ -50,11 +50,11 @@ A simple health response may look like this
 
 ### Task {{% param sectionnumber %}}.1: Adding the dependency
 
-Add the `smallrye-health` extension to your data-producer and data-consumer service.
+Add the `quarkus-smallrye-health` extension to your `quarkus-rest-data-producer` and `quarkus-rest-data-consumer` service.
 
 {{% details title="Hint" %}}
 ```s
-./mvnw quarkus:add-extension -Dextensions="smallrye-health"
+./mvnw quarkus:add-extension -Dextensions="quarkus-smallrye-health"
 ```
 
 If you are manually importing the health extension use the following dependency:
@@ -89,8 +89,8 @@ curl localhost:8080/q/health
 
 ## Custom health check
 
-As a simple example we will write a custom health check observing the last SensorMeasurement fetched from the
-data-producer service. It should switch to failed state if the last fetched Measurement has some defined age.
+As a simple example we will write a custom health check observing the last `SensorMeasurement` fetched from the
+`quarkus-rest-data-producer` service. It should switch to failed state if the last fetched Measurement has some defined age.
 
 A health check is usually evaluated based on its http response code. The main target for health checks is providing a
 technical interface used by an underlying platform. Beside the http response code the health check can also provide some
@@ -99,10 +99,15 @@ information in the response body. However, it is not evaluated to determine if t
 
 ### Task {{% param sectionnumber %}}.3: Write a custom liveness check
 
-Create a `HealthService` which records the last message received from the data-producer.
+Create a `HealthService` which records the last message received from the `quarkus-rest-data-producer`.
 
 {{% details title="HealthService Hint" %}}
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.control;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import java.time.Instant;
+
 @ApplicationScoped
 public class HealthService {
 
@@ -119,14 +124,26 @@ public class HealthService {
 ```
 {{% /details %}}
 
-Inject the `HealthService` to the `DataConsumerResource` and register the invocation to the data-producer.
+Inject the `HealthService` to the `DataConsumerResource` and register the invocation to the remote `quarkus-rest-data-producer`.
 
 {{% details title="DataConsumerResource Hint" %}}
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.boundary;
+
+import ch.puzzle.quarkustechlab.restconsumer.control.HealthService;
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 @Path("/data")
 public class DataConsumerResource {
 
-    /* stripped for simplicity */
+    @RestClient
+    DataProducerService dataProducerService;
 
     @Inject
     HealthService healthService;
@@ -144,13 +161,24 @@ public class DataConsumerResource {
 
 Write a `RecentMessageHealthCheck` which implements `HealthCheck`.
 
-* Fail the health check if the last fetched `SensorMeasurement` from the data-producer is older than 60 seconds.
+* Fail the health check if the last fetched `SensorMeasurement` from the `quarkus-rest-data-producer` is older than 60 seconds.
 * Add the time the last message was fetched to the health check response
-* Add the age of the last fetched SensorMeasurement to the health check response.
+* Add the age of the last fetched `SensorMeasurement` to the health check response.
 
 You may start your `RecentMessageHealthCheck` with the following Template:
 
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.control;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Liveness;
+
+import java.time.Instant;
+
 @Liveness
 @ApplicationScoped
 public class RecentMessageHealthCheck implements HealthCheck {
@@ -170,6 +198,17 @@ public class RecentMessageHealthCheck implements HealthCheck {
 
 {{% details title="RecentMessageHealthCheck Hint" %}}
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.control;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Liveness;
+
+import java.time.Instant;
+
 @Liveness
 @ApplicationScoped
 public class RecentMessageHealthCheck implements HealthCheck {
@@ -198,7 +237,7 @@ public class RecentMessageHealthCheck implements HealthCheck {
 
 ## Health UI
 
-The smallrye-health extension ships with a simple health ui. Point your browser to <http://localhost:8081/q/health-ui/>
+The `quarkus-smallrye-health` extension ships with a simple health ui. Point your browser to <http://localhost:8081/q/health-ui/>
 and explore the health ui.
 
 ![Health UI](../health-ui.png)

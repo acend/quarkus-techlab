@@ -56,7 +56,8 @@ cannot annotate them.
 For this to achieve we could create a simple extension:
 
 ```s
-mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extension -N -DgroupId=ch.puzzle.quarkustechlab -DextensionId=message-converter-as-beans -DwithoutTests
+mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extension -N \
+  -DgroupId=ch.puzzle.quarkustechlab -DextensionId=message-converter-as-beans -DwithoutTests
 ```
 
 In this simple extensions we only need the deployment module.
