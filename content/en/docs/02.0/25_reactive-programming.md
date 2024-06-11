@@ -23,14 +23,14 @@ If you are not familiar with reactive programming and are interested to go furth
 
 We will start similar to the previous example with a producer which exposes data on his REST endpoint.
 
-#### Maven dependencies reference
+
+### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`:
 
 {{< csvtable csv="/solution/quarkus-reactive-rest-producer/dependencies.csv" class="dependencies" >}}
 
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
-
 
 
 ### Task {{% param sectionnumber %}}.1.1: Create producer project
@@ -405,6 +405,7 @@ curl -X POST localhost:8080/data -d "{\"data\":0.1, \"time\":\"2022-01-01T00:00:
 
 We have learned how to implement a reactive REST API to serve data in a complete reactive non-blocking way. Now it's time to take a look at the opposite, how do we reactively consume the API.
 
+
 #### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`:
@@ -412,7 +413,6 @@ The solution for this lab uses the following dependencies in the `pom.xml`:
 {{< csvtable csv="/solution/quarkus-reactive-rest-consumer/dependencies.csv" class="dependencies" >}}
 
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
-
 
 
 #### Implementation

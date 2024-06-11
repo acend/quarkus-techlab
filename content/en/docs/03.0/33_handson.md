@@ -14,7 +14,8 @@ In this section we are going to extend our created REST microservices and create
 
 You can start with your `quarkus-rest-data-producer` project. Add tests for verifying your producing interfaces. Try to use the different techniques for mocking your injected beans.
 
-#### Maven dependencies reference
+
+### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`:
 
@@ -23,7 +24,7 @@ The solution for this lab uses the following dependencies in the `pom.xml`:
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
 
 
-#### Implementation
+### Implementation
 
 For demonstration purposes we implement a new endpoint `/data/dummy` which simply returns a String `dummy` with the help of an injected `DummyService`.
 

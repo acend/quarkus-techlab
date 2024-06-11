@@ -13,7 +13,7 @@ We are going to test the OpenTelemetry API live with Jaeger as our tracing servi
 ## Task {{% param sectionnumber %}}.1: Create the new service
 
 
-#### Maven dependencies reference
+### Maven dependencies reference
 
 The solution for this lab uses the following dependencies in the `pom.xml`:
 

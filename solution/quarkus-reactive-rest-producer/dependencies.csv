@@ -1,0 +1,7 @@
+groupId,artifactId,version,scope
+io.quarkus,quarkus-rest-jackson,,
+io.quarkus,quarkus-arc,,
+io.quarkus,quarkus-rest,,
+io.quarkus,quarkus-reactive-pg-client,,
+io.quarkus,quarkus-junit5,,test
+io.rest-assured,rest-assured,,test

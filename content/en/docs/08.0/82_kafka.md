@@ -27,11 +27,16 @@ Apache Kafka is an event streaming platform used to collect, process, store, and
 The solution for this lab uses the following dependencies in the `pom.xml`.
 Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
 
+
 ##### Producer
+
 {{< csvtable csv="/solution/quarkus-reactive-messaging-producer/dependencies.csv" class="dependencies" >}}
 
+
 ##### Consumer
+
 {{< csvtable csv="/solution/quarkus-reactive-messaging-consumer/dependencies.csv" class="dependencies" >}}
+
 
 #### Implementation
 
