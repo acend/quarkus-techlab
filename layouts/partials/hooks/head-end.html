@@ -1,4 +1,4 @@
-{{ $dep := resources.Get "css/dep.css" }}
-<link rel="stylesheet" href="{{ $dep.RelPermalink }}">
-<!-- this should not be here -->
-<link href="/scss/site.css" rel="stylesheet">
+{{ $custom := resources.Get "css/custom.css" }}
+<link rel="stylesheet" href="{{ $custom.RelPermalink }}">
+{{ $site := resources.Get "css/site.css" }}
+<link rel="stylesheet" href="{{ $site.RelPermalink }}">

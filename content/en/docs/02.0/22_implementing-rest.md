@@ -19,11 +19,7 @@ it on its own endpoint.
 
 #### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`:
-
-{{< csvtable csv="/solution/quarkus-rest-data-producer/dependencies.csv" class="dependencies" >}}
-
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+{{< solutionref project="quarkus-rest-data-producer" class="dependencies" >}}
 
 
 #### Implementation
@@ -111,11 +107,7 @@ For more information about writing REST APIs with Quarkus see the [documentation
 
 #### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`:
-
-{{< csvtable csv="/solution/quarkus-rest-data-producer/dependencies.csv" class="dependencies" >}}
-
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+{{< solutionref project="quarkus-rest-data-producer" class="dependencies" >}}
 
 
 #### Implementation

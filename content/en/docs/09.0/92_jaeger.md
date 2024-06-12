@@ -15,11 +15,7 @@ We are going to test the OpenTelemetry API live with Jaeger as our tracing servi
 
 ### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`:
-
-{{< csvtable csv="/solution/quarkus-opentelemetry-jaeger/dependencies.csv" class="dependencies" >}}
-
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+{{< solutionref project="quarkus-opentelemetry-jaeger" class="dependencies" >}}
 
 
 ### Implementation

@@ -149,7 +149,7 @@ this does not change how the devservices work.
 
 The dev-services `pom.xml` contains the following dependencies:
 
-{{< csvtable csv="/solution/dev-services/dependencies.csv" class="dependencies" >}}
+{{< solutionref project="dev-services" class="dependencies" >}}
 
 In our application properties we have configured the datasource type:
 ```properties
