@@ -6,12 +6,18 @@ version=unset
 project=unset
 diffonly=unset
 
+REQ=(xsltproc quarkus mvn git getopt)
+
+for R in ${REQ[@]}; do
+	command -v ${R} >/dev/null 2>&1 || { echo >&2 "This script requires '${R}' but it's not installed. Aborting."; exit 1; }
+done
+
 usage() {
 >&2 cat << EOF
 Usage: $0
    [ -p | --project input (e.g. quarkus-rest-data-consumer) ]
    [ -v | --version input (e.g. 3.11.0) ]
-   [ -d | --diff ]
+   [ -d | --diffonly ]
    [ -h | --help ] 
 EOF
 exit 1
@@ -28,7 +34,7 @@ run_diff() {
    done
 }
 
-args=$(getopt -a -o p:v:dh --long project:,version:,diff,help -- "$@")
+args=$(getopt -a -o p:v:dh --long project:,version:,diffonly,help -- "$@")
 if [[ $? -gt 0 ]]; then
   usage
 fi
