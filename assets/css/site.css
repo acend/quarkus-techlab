@@ -1,0 +1,140 @@
+/* import variables from docsy */
+/*
+
+Bootstrap variables overrides for theme.
+See https://github.com/twbs/bootstrap/pull/23260
+*/
+@fa-font-path :        "../webfonts";
+/* copy button */
+.highlight {
+    position: relative; }
+
+.highlight pre {
+    padding-right: 75px; }
+
+.highlight-copy-btn {
+    position: absolute;
+    bottom: 7px;
+    right: 7px;
+    border: 0;
+    border-radius: 4px;
+    padding: 1px;
+    font-size: 0.7em;
+    line-height: 1.8;
+    color: #fff;
+    background-color: #797676;
+    min-width: 55px;
+    text-align: center; }
+
+.highlight-copy-btn:hover {
+    background-color: #495057; }
+
+/* details elements */
+details {
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+    margin-bottom: 1em; }
+
+summary {
+    font-size: 1.1rem;
+    line-height: 1.2;
+    font-weight: 500;
+    margin: -.5em -.5em 0;
+    padding: 0.5em; }
+
+details[open].normalmode {
+    border: 0px solid #eee;
+    border-radius: 0px;
+    padding: 0em;
+    margin: 0em; }
+
+details[open].normalmode > summary {
+    display: none; }
+
+/* mode switcher */
+.mode-switch-item label {
+    color: rgba(255, 255, 255, 0.5); }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px; }
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px; }
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%; }
+
+input:checked + .slider {
+    background-color: #498ac1; }
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #498ac1; }
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px); }
+
+/* pdf styling */
+.pdf-title p {
+    text-align: center;
+    font-size: xx-large; }
+
+.pdf-header {
+    margin-top: 10px; }
+
+.pdf-header p {
+    text-align: center;
+    font-size: medium; }
+
+.pdf-footer {
+    margin-top: 10px; }
+
+.pdf-footer p {
+    border-top: 1px solid #074761;
+    text-align: right;
+    font-size: smaller; }
+
+.pdf-keep-together {
+    page-break-inside: avoid;
+    display: block;
+    clear: both; }
+
+.pdf-break-before {
+    page-break-before: always;
+    display: block;
+    clear: both; }
+
+.pdf-break-after {
+    page-break-after: always;
+    display: block;
+    clear: both; }
+
+/*# sourceMappingURL=site.css.map */

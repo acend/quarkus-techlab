@@ -16,18 +16,15 @@ You can start by copying the rest application `quarkus-rest-data-producer` and `
 
 ### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`.
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
-
 
 #### Producer
 
-{{< csvtable csv="/solution/quarkus-metrics-data-producer/dependencies.csv" class="dependencies" >}}
+{{< solutionref project="quarkus-metrics-data-producer" class="dependencies" >}}
 
 
 #### Consumer
 
-{{< csvtable csv="/solution/quarkus-metrics-data-consumer/dependencies.csv" class="dependencies" >}}
+{{< solutionref project="quarkus-metrics-data-consumer" class="dependencies" >}}
 
 
 ### Implementation

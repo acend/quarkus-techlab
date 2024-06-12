@@ -40,3 +40,7 @@ button.highlight-copy-btn {
     min-width: 55px;
     text-align: center;
 }
+
+p.small {
+    font-size: 0.8em;
+}

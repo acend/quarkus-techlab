@@ -1,0 +1,35 @@
+<!--layouts/shortcodes/csv-table.html-->
+<!--must contain header row-->
+{{- $rows := "" -}}
+{{- $del := "," -}}
+{{- $class := .Get "class" -}}
+{{- $options := dict "delimiter" $del -}}
+{{- $project := .Get "project" -}}
+{{- $csvfile := (printf "%s/%s/%s" "solution" $project "dependencies.csv" ) -}}
+{{- $rows := $csvfile | readFile | transform.Unmarshal $options -}}
+{{- $headerRow := index $rows 0 -}}
+{{- $dataRows := after 1 $rows -}}
+{{- $qv := .Site.Params.quarkusVersion -}}
+{{- $src := (printf "%s%s%s%s" .Site.Params.github_repo "/tree/master" .Site.Params.solution_code_basedir $project ) -}}
+
+<p>The <a href="{{$src}}">{{$project}} solution</a> has <code>quarkus.platform.version</code> and <code>quarkus-plugin.version</code> set to <code>{{$qv}}</code> and uses the following dependencies in the <code>pom.xml</code>:</p>
+
+<table class="{{$class}}">
+  <thead>
+  <tr>
+    {{- range $headerRow -}}
+    <th scope="col">{{ . }}</th>
+    {{- end -}}
+  </tr>
+  </thead>
+  <tbody>
+  {{- range $rowIndex, $columns := $dataRows -}}
+  <tr>
+    {{- range $index, $col := $columns -}}
+    <td {{ if eq $index 0 }}scope="row"{{end}} data-label="{{index $headerRow $index}}">{{ . }}</td>
+    {{- end -}}
+  </tr>
+  {{- end -}}
+  </tbody>
+</table>
+<p class="small">If the version is not set it is inherited from the quarkus bom.</p>

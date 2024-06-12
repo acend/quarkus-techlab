@@ -61,18 +61,15 @@ In addition to the specification of CloudEvents itself, there are extensions giv
 
 ### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`.
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
-
 
 #### Producer
 
-{{< csvtable csv="/solution/quarkus-cloudevents-producer/dependencies.csv" class="dependencies" >}}
+{{< solutionref project="quarkus-cloudevents-producer" class="dependencies" >}}
 
 
 #### Consumer
 
-{{< csvtable csv="/solution/quarkus-cloudevents-consumer/dependencies.csv" class="dependencies" >}}
+{{< solutionref project="quarkus-cloudevents-consumer" class="dependencies" >}}
 
 
 ### {{% param sectionnumber %}}.2: Implementation

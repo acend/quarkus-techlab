@@ -17,11 +17,7 @@ You can start with your `quarkus-rest-data-producer` project. Add tests for veri
 
 ### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`:
-
-{{< csvtable csv="/solution/quarkus-rest-data-producer/dependencies.csv" class="dependencies" >}}
-
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+{{< solutionref project="quarkus-rest-data-producer" class="dependencies" >}}
 
 
 ### Implementation

@@ -26,11 +26,7 @@ We will start similar to the previous example with a producer which exposes data
 
 ### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`:
-
-{{< csvtable csv="/solution/quarkus-reactive-rest-producer/dependencies.csv" class="dependencies" >}}
-
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+{{< solutionref project="quarkus-reactive-rest-producer" class="dependencies" >}}
 
 
 ### Task {{% param sectionnumber %}}.1.1: Create producer project
@@ -408,11 +404,7 @@ We have learned how to implement a reactive REST API to serve data in a complete
 
 #### Maven dependencies reference
 
-The solution for this lab uses the following dependencies in the `pom.xml`:
-
-{{< csvtable csv="/solution/quarkus-reactive-rest-consumer/dependencies.csv" class="dependencies" >}}
-
-Be aware that `quarkus.platform.version` and `quarkus-plugin.version` should be set to `{{% param "quarkusVersion" %}}` in your `pom.xml`.
+{{< solutionref project="quarkus-reactive-rest-consumer" class="dependencies" >}}
 
 
 #### Implementation
