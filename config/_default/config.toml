@@ -80,7 +80,7 @@ solution_code_basedir = "/solution/"
 #versions
 quarkusVersion = "3.11.1"
 mutinyVersion = "2.5.1"
-confluentKafkaAvroVersion = "7.6.1"
+confluentKafkaAvroVersion = "7.5.1"
 openJdkImage = "registry.access.redhat.com/ubi8/openjdk-21:1.19"
 ubiQuarkusNativeImage = "quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21"
 quarkusMicroImage = "quay.io/quarkus/quarkus-micro-image:2.0"
