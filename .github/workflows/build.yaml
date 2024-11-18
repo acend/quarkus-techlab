@@ -42,23 +42,6 @@ jobs:
           tags: |
             registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
 
-      - name: Run vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: 'registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}'
-          format: 'table'
-          output: 'trivy-results.txt'
-          exit-code: '0'
-          ignore-unfixed: true
-          vuln-type: 'os'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Archive vulnerability scan results
-        uses: actions/upload-artifact@v3
-        with:
-          name: trivy-results-build
-          path: trivy-results.txt
-
       - name: Build Mobi Version
         uses: docker/build-push-action@v5
         with:
