@@ -43,7 +43,7 @@ jobs:
             registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
 
       - name: Run vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: 'registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}'
           format: 'table'
