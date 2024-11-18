@@ -78,7 +78,7 @@ lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
 
 #versions
-quarkusVersion = "3.11.1"
+quarkusVersion = "3.16.3"
 mutinyVersion = "2.5.1"
 confluentKafkaAvroVersion = "7.5.1"
 openJdkImage = "registry.access.redhat.com/ubi8/openjdk-21:1.19"
