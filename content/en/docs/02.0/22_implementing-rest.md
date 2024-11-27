@@ -107,7 +107,7 @@ For more information about writing REST APIs with Quarkus see the [documentation
 
 #### Maven dependencies reference
 
-{{< solutionref project="quarkus-rest-data-producer" class="dependencies" >}}
+{{< solutionref project="quarkus-rest-data-consumer" class="dependencies" >}}
 
 
 #### Implementation

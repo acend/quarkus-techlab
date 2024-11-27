@@ -62,7 +62,7 @@ live reloading on each API call. Try hitting the API and test the
 curl http://localhost:8080/hello
 ```
 
-You should get the `Hello from Quarkus REST` response in your console. Other RESTeasy functionalities work like they always do.
+You should get the `Hello from RESTEasy Reactive` response in your console. Other RESTEasy functionalities work like they always do.
 For further information on basic REST interaction with Quarkus see [Documentation](https://quarkus.io/guides/rest-json).
 
 
