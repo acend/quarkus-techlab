@@ -25,7 +25,24 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create-extens
   -DwithoutTests 
 ```
 
-{{% alert color="warning" %}}
+{{% alert color="warning" title="ConfigRoot" %}}
+This extension lab uses a legacy annotation `@ConfigRoot` for the configuration class. Make sure your `maven-compiler-plugin` in your `techlab-extension-appinfo/pom.xml` looks like this:
+
+```xml
+<plugin>    
+    <artifactId>maven-compiler-plugin</artifactId>    
+    <version>${compiler-plugin.version}</version>    
+    <configuration>    
+        <parameters>true</parameters>    
+         <compilerArgs>    
+            <arg>-AlegacyConfigRoot=true</arg>    
+        </compilerArgs>    
+    </configuration>    
+</plugin>
+```
+{{% /alert %}}
+
+{{% alert color="info" title="Naming" %}}
 We will use the prefix `techlab-` for our extension. Extensions starting with `quarkus-` are usually meant to be official extensions built and supported by the quarkus core team. Therefore, you should not prefix your own extensions with `quarkus-`.
 {{% /alert %}}
 
