@@ -42,18 +42,7 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-confluent-registry-avro</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.confluent</groupId>
-      <artifactId>kafka-avro-serializer</artifactId>
-      <version>7.5.1</version>
-      <exclusions>
-        <exclusion>
-          <groupId>jakarta.ws.rs</groupId>
-          <artifactId>jakarta.ws.rs-api</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>quarkus-apicurio-registry-avro</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

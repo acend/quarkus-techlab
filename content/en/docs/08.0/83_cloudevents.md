@@ -101,33 +101,17 @@ Remove the test classes and add the following extensions to your projects' `pom.
 > Dependencies in `pom.xml`
 
 ```xml
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-confluent-registry-avro</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.confluent</groupId>
-      <artifactId>kafka-avro-serializer</artifactId>
-      <version>{{% param "confluentKafkaAvroVersion" %}}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>jakarta.ws.rs</groupId>
-          <artifactId>jakarta.ws.rs-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
 
-...
-
-  <repositories>
-    <repository>
-      <id>confluent</id>
-      <url>https://packages.confluent.io/maven/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-apicurio-registry-avro</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
 
 ```
 
@@ -218,6 +202,7 @@ Of course, we need some configuration in the `application.properties` to emit th
 # Uncomment if you do not want to use the devservices redpanda container.
 # kafka.bootstrap.servers=localhost:9092
 
+mp.messaging.outgoing.measurements.apicurio.registry.auto-register=true
 mp.messaging.outgoing.measurements.connector=smallrye-kafka
 mp.messaging.outgoing.measurements.value.serializer=io.confluent.kafka.serializers.KafkaAvroSerializer
 mp.messaging.outgoing.measurements.topic=measurements
