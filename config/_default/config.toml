@@ -85,7 +85,7 @@ openJdkImage = "registry.access.redhat.com/ubi8/openjdk-21:1.19"
 ubiQuarkusNativeImage = "quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21"
 quarkusMicroImage = "quay.io/quarkus/quarkus-micro-image:2.0"
 strimziVersion = "quay.io/strimzi/kafka:0.41.0-kafka-3.7.0"
-jaegerTracingImage = " quay.io/jaegertracing/all-in-one:1.57.0"
+jaegerTracingImage = " quay.io/jaegertracing/jaeger:2.1.0"
 grafanaImage = "docker.io/grafana/grafana:latest"
 prometheusImage = "quay.io/prometheus/prometheus:latest"
 
