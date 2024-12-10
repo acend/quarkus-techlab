@@ -1,15 +1,15 @@
 package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
 
-import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
+import io.smallrye.config.ConfigMapping;
 
-@ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.RUN_TIME)
-public class AppinfoRunTimeConfig {
+@ConfigMapping(prefix = AppinfoNames.CONFIG_PREFIX)
+@ConfigRoot(phase = ConfigPhase.RUN_TIME)
+public interface AppinfoRunTimeConfig {
 
     /**
      * Simple runBy information string
      */
-    @ConfigItem
-    String runBy;
+    String runBy();
 }

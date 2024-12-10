@@ -40,10 +40,10 @@ class TechlabExtensionAppinfoProcessor {
                        BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
 
         if(shouldInclude(launchMode, appinfoConfig)) {
-            String buildTime = appinfoConfig.recordBuildTime ? Instant.now().toString() : null;
-            String builtFor = appinfoConfig.builtFor;
+            String buildTime = appinfoConfig.recordBuildTime() ? Instant.now().toString() : null;
+            String builtFor = appinfoConfig.builtFor();
 
-            logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime, builtFor);
+            logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime(), builtFor);
 
             syntheticBeans.produce(SyntheticBeanBuildItem.configure(BuildInfo.class).scope(Singleton.class)
                     .runtimeValue(recorder.createBuildInfo(buildTime, builtFor))
@@ -58,7 +58,7 @@ class TechlabExtensionAppinfoProcessor {
                        BuildProducer<ServletBuildItem> additionalBean) {
 
         if(shouldInclude(launchMode, appinfoConfig)) {
-            String basePath = appinfoConfig.basePath;
+            String basePath = appinfoConfig.basePath();
             if(basePath.startsWith("/")) {
                 basePath = basePath.replaceFirst("/", "");
             }
@@ -89,13 +89,13 @@ class TechlabExtensionAppinfoProcessor {
     @BuildStep
     StaticMetadataBuildItem createStaticMetadata(AppinfoBuildTimeConfig appInfoBuildTimeConfig) {
         return new StaticMetadataBuildItem(Version.getVersion(),
-                appInfoBuildTimeConfig.builtFor,
-                appInfoBuildTimeConfig.alwaysInclude,
-                appInfoBuildTimeConfig.basePath,
-                appInfoBuildTimeConfig.recordBuildTime);
+                appInfoBuildTimeConfig.builtFor(),
+                appInfoBuildTimeConfig.alwaysInclude(),
+                appInfoBuildTimeConfig.basePath(),
+                appInfoBuildTimeConfig.recordBuildTime());
     }
 
     private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoBuildTimeConfig appinfoConfig) {
-        return launchMode.getLaunchMode().isDevOrTest() || appinfoConfig.alwaysInclude;
+        return launchMode.getLaunchMode().isDevOrTest() || appinfoConfig.alwaysInclude();
     }
 }
