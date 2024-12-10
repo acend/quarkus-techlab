@@ -33,7 +33,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-rest-data-producer \
     -DclassName="ch.puzzle.quarkustechlab.restproducer.boundary.DataResource" \
-    -Dpath="/data"
+    -Dpath="data"
 ```
 
 {{% /details %}}
@@ -121,7 +121,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-rest-data-consumer \
     -DclassName="ch.puzzle.quarkustechlab.restconsumer.boundary.DataConsumerResource" \
-    -Dpath="/data" \
+    -Dpath="data" \
     -Dextensions="quarkus-rest-client-jackson"
 
 ```

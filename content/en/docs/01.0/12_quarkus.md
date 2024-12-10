@@ -96,7 +96,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-introduction-service \
     -DclassName="ch.puzzle.quarkustechlab.IntroductionResource" \
-    -Dpath="/hello"
+    -Dpath="hello"
 ```
 
 Your project is now ready in the `quarkus-introduction-service` folder.

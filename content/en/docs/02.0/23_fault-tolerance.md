@@ -21,8 +21,6 @@ The microprofile `fault-tolerance` (Quarkus extension: `quarkus-smallrye-fault-t
 </dependency>
 ```
 
-**Hint:** Maybe it's a good time to tag your repositories for the consumer and producer at this point. We are going to intentionally break some code and test fault tolerance which we will revert after each example.
-
 
 ### {{% param sectionnumber %}}.1.1: Resilience through Retries
 
