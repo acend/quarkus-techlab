@@ -31,7 +31,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-getting-started \
     -DclassName="ch.puzzle.quarkustechlab.GreetingResource" \
-    -Dpath="/hello"
+    -Dpath="hello"
 ```
 
 Which creates a generated getting-started application bootstrapped for you. The

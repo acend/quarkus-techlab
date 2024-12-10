@@ -31,7 +31,7 @@ mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-appinfo-application \
     -DclassName="ch.puzzle.quarkustechlab.extensions.appinfo.application.boundary.DemoResource" \
-    -Dpath="/demo"
+    -Dpath="demo"
 ```
 
 
