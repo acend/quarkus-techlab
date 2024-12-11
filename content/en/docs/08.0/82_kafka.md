@@ -47,6 +47,11 @@ Add the following line to your `applications.properties` to switch to strimzi te
 ```yaml
 quarkus.kafka.devservices.provider=strimzi
 ```
+
+You can also configure a specific docker image with the following property:
+```shell
+quarkus.kafka.devservices.image-name=docker.redpanda.com/redpandadata/redpanda:v24.3.1
+```
 {{% /alert %}}
 
 {{% details title="Without Devservices" %}}
