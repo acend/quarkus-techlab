@@ -70,7 +70,7 @@ Outbound connectors are responsible for:
 ### {{% param sectionnumber %}}.2.2: Method signatures
 
 Due to the abstraction of the technical part by simply adding annotations to a function, some implementation specific details are connected to the actual method signatures.
-If you read the documentation of [Smallrye Reactive Messaging](https://smallrye.io/smallrye-reactive-messaging/latest/concepts/signatures/) you can compare the different type of method signatures and their inferred behavior. 
+If you read the documentation of [Smallrye Reactive Messaging](https://smallrye.io/smallrye-reactive-messaging/latest/concepts/signatures/) you can compare the different type of method signatures and their inferred behavior.
 For example if we define the following method signature to read messages from a topic:
 
 ```java
