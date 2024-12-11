@@ -67,7 +67,21 @@ Outbound connectors are responsible for:
 * Acknowledging the Reactive Messaging Message when the broker has accepted / acknowledged the message.
 
 
-### {{% param sectionnumber %}}.2.2: Connectors Event Driven Architecture
+### {{% param sectionnumber %}}.2.2: Method signatures
+
+Due to the abstraction of the technical part by simply adding annotations to a function, some implementation specific details are connected to the actual method signatures.
+If you read the documentation of [Smallrye Reactive Messaging](https://smallrye.io/smallrye-reactive-messaging/latest/concepts/signatures/) you can compare the different type of method signatures and their inferred behavior. 
+For example if we define the following method signature to read messages from a topic:
+
+```java
+@Incoming 
+Uni<?> method(Message<I> msg)
+```
+
+We can see in the documentation that the available acknowledgement strategies are `MANUAL, NONE, PRE_PROCESSING` and the method is called sequentially for every message received. If you look even closer, you can see that the _MANUAL_ is written in italics - this tells you that the default acknowledgement strategy is `MANUAL`.
+
+
+### {{% param sectionnumber %}}.2.3: Connectors Event Driven Architecture
 
 With this reactive messaging approach we can build our applications on an event driven approach. Some interaction or trigger emits an event to a certain channel. Subscribers of this channel consume the message and react based on the event received. This loosens the coupling in our application and lowers the cohesion between logically seperated components.
 
@@ -76,16 +90,16 @@ In an event driven approach everything that happens in our application gets trig
 Some typical patterns in event-driven architecture:
 
 
-### {{% param sectionnumber %}}.2.3: Connectors Event notification
+### {{% param sectionnumber %}}.2.4: Connectors Event notification
 
 In this approach, microservices emit events through channels to trigger behaviour or notify other components about the change of a state in the application. Notification events do not carry too much data and are very light weight. This results in a very effective and ressource friendly communication between the microservices.
 
 
-### {{% param sectionnumber %}}.2.4: Connectors Event-carried state transfer
+### {{% param sectionnumber %}}.2.5: Connectors Event-carried state transfer
 
 Instead of only notifying about events this approach sends a payload as a message to another component containing every information needed to perform actions triggered by this event. This model comes very close to the typical RESTful approach and can be implemented very similar. Depending on the amount of data in the payload the network traffic might suffer under the amount of data transferred.
 
 
-### {{% param sectionnumber %}}.2.4: Connectors Event-sourcing
+### {{% param sectionnumber %}}.2.6: Connectors Event-sourcing
 
 The goal of event-sourcing is to represent every change in a system's state as an emitted event in chronological order. The event stream becomes the principle source of truth about the applications state. Changes in state, as sequences of events, are persisted in the event stream and can be 'replayed'.
