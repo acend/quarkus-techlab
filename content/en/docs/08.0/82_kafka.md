@@ -38,7 +38,7 @@ Apache Kafka is an event streaming platform used to collect, process, store, and
 #### Implementation
 
 For local development we do have the choice to either run our Kafka services via Quarkus Devservices or with docker-compose.
-If you want to use the Quarkus Dev Services simply remove the line `kafka.bootstrap.servers=localhost:9092` in your `applications.properties` file. This will set up a [Redpanda](https://vectorized.io/redpanda) container for your development environment.
+If you want to use the Quarkus Dev Services simply remove the line `kafka.bootstrap.servers=localhost:9092` in your `applications.properties` file. This will set up a [Redpanda](https://www.redpanda.com/) container for your development environment.
 
 {{% alert color="primary" title="Redpanda Docker Image" %}}
 Dev Services defaults to Redpanda images from `vectorized/redpanda`. If you do have problems downloading the Redpanda kafka image you can switch to a different provider like Strimzi.

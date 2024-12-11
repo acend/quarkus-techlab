@@ -96,7 +96,7 @@ mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:crea
     -Dextensions="quarkus-rest,quarkus-messaging-kafka"
 ```
 
-Remove the test classes and add the following extensions to your projects' `pom.xml`:
+Remove the test classes and add the following extensions to the `pom.xml` of the projects `quarkus-cloudevents-producer` and `quarkus-cloudevents-consumer`:
 
 > Dependencies in `pom.xml`
 
