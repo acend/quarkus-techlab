@@ -204,7 +204,6 @@ Of course, we need some configuration in the `application.properties` to emit th
 
 mp.messaging.outgoing.measurements.apicurio.registry.auto-register=true
 mp.messaging.outgoing.measurements.connector=smallrye-kafka
-mp.messaging.outgoing.measurements.value.serializer=io.confluent.kafka.serializers.KafkaAvroSerializer
 mp.messaging.outgoing.measurements.topic=measurements
 mp.messaging.outgoing.measurements.cloud-events-source=event-producer
 mp.messaging.outgoing.measurements.cloud-events-type=measurement-emitted
