@@ -153,14 +153,13 @@ Test if you can drop your table if it exists, re-create the table and fill it wi
 ```java
 package ch.puzzle.quarkustechlab.reactiverest.producer.boundary;
 
-import ch.puzzle.quarkustechlab.reactiverest.producer.entity.SensorMeasurement;
-import io.smallrye.mutiny.Multi;
+import io.quarkus.runtime.StartupEvent;
 import io.vertx.mutiny.pgclient.PgPool;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class DBInit {
@@ -222,6 +221,7 @@ In our `DataResource` we have to inject a `io.vertx.mutiny.pgclient.PgPool`. Alt
 ```java
 package ch.puzzle.quarkustechlab.reactiverest.producer.boundary;
 
+import ch.puzzle.quarkustechlab.reactiverest.producer.entity.SensorMeasurement;
 import io.smallrye.mutiny.Multi;
 import io.vertx.mutiny.pgclient.PgPool;
 
@@ -384,16 +384,25 @@ public Uni<SensorMeasurement> create(SensorMeasurement sensorMeasurement) {
 
 Test your API again to ensure all your implemented REST endpoints work.
 
+Get data
 ```bash
-#GET
 curl localhost:8080/data/1
+```
 
-=> {"id":1,"data":0.1,"time":"2022-08-29T14:17:32.069072Z"}
+Result
+```
+{"id":1,"data":0.1,"time":"2022-08-29T14:17:32.069072Z"}
+```
 
-#POST
-curl -X POST localhost:8080/data -d "{\"data\":0.1, \"time\":\"2022-01-01T00:00:00.000000Z\"}" -H "Content-Type: application/json"
+Create a new Measurement
+```
+curl -X POST localhost:8080/data -H "Content-Type: application/json" \
+   -d '{"data":0.1, "time":"2022-01-01T00:00:00.000000Z"}'
+```
 
-=> {"id":null,"data":0.1,"time":"2022-01-01T00:00:00Z"}%
+Result
+```
+{"id":null,"data":0.1,"time":"2022-01-01T00:00:00Z"}%
 ```
 
 
@@ -574,8 +583,6 @@ Start by creating the endpoint for receiving the latest `SensorMeasurement`. Cre
 
 **...producer.boundary.DataResource:**
 ```java
-    [...]
-
     @GET
     @Path("/latest")
     @Produces(MediaType.SERVER_SENT_EVENTS)
@@ -584,21 +591,15 @@ Start by creating the endpoint for receiving the latest `SensorMeasurement`. Cre
         return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
                 .onItem().transform(i -> SensorMeasurement.getLatest(client).await().indefinitely());
     }
-
-    [...]
 ```
 
 **...producer.entity.SensorMeasurement:**
 ```java
-    [...]
-
     public static Uni<SensorMeasurement> getLatest(PgPool client) {
         return client.query("SELECT id, data, time from sensormeasurements where time = (SELECT max(time) from sensormeasurements) limit 1").execute()
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? new SensorMeasurement(iterator.next()) : null);
     }
-
-    [...]
 ```
 {{% /details %}}
 
@@ -609,8 +610,6 @@ Can you implement the similar API endpoint for calculating the average?
 {{% details title="Hint" %}}
 **...producer.boundary.DataResource:**
 ```java
-    [...]
-
     @GET
     @Path("/average")
     @Produces(MediaType.SERVER_SENT_EVENTS)
@@ -619,14 +618,10 @@ Can you implement the similar API endpoint for calculating the average?
         return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
                 .onItem().transform(i -> SensorMeasurement.getAverage(client).await().indefinitely());
     }
-
-    [...]
 ```
 
 **...producer.entity.SensorMeasurement:**
 ```java
-    [...]
-
     public static Uni<SensorMeasurement> getAverage(PgPool client) {
         return client.query("SELECT 0 as id, avg(data) as data, NOW() as time from sensormeasurements").execute()
                 .onItem().transform(RowSet::iterator)

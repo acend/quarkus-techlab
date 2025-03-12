@@ -62,7 +62,7 @@ live reloading on each API call. Try hitting the API and test the
 curl http://localhost:8080/hello
 ```
 
-You should get the `Hello from RESTEasy Reactive` response in your console. Other RESTEasy functionalities work like they always do.
+You should get the `Hello from Quarkus REST` response in your console. Other RESTEasy functionalities work like they always do.
 For further information on basic REST interaction with Quarkus see [Documentation](https://quarkus.io/guides/rest-json).
 
 
@@ -77,7 +77,7 @@ performs the live reload.
 * Point your browser to the Development UI at [http://localhost:8080/q/dev-ui](http://localhost:8080/q/dev). Explore the
 provided information.
 * Try to change the log level using the configuration editor in the development ui.
-* Check the invocation trees from the ArC panel. You first have to enable this feature via `ARC-Panel`-> `Config-Editor` -> `quarkus.arc.dev-mode.monitoring-enabled` and rebuild the app. What happens if you invoke your `/hello` endpoint?
+* Check the invocation trees from the ArC panel. You first have to enable this feature via `Configuration` -> `quarkus.arc.dev-mode.monitoring-enabled` and restart the app. What happens if you invoke your `/hello` endpoint?
 * When was the application started? (tip: check the fired events)
 * Check the details about your runtime environment (environment variables and system properties) in the configuration
 editor.
@@ -104,7 +104,7 @@ public class GreetingResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
         logger.debug("Info log");
-        return "Hello from RESTEasy Reactive";
+        return "Hello from Quarkus REST";
     }
 }
 ```

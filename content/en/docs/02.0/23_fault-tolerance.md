@@ -33,6 +33,7 @@ In the `quarkus-rest-data-producer` project let's change our REST endpoint, whic
 ```java
 package ch.puzzle.quarkustechlab.restproducer.boundary;
 
+import ch.puzzle.quarkustechlab.restproducer.entity.SensorMeasurement;
 import java.util.Random;
 
 import jakarta.ws.rs.GET;
@@ -72,6 +73,7 @@ In our `quarkus-rest-data-consumer` project we will add the retry mechanism. Add
 ```java
 package ch.puzzle.quarkustechlab.restconsumer.boundary;
 
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -88,7 +90,7 @@ public interface DataProducerService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 10)
-    SensorMeasurement getSensorMeasurment();
+    SensorMeasurement getSensorMeasurement();
     
 }
 ```
@@ -105,6 +107,7 @@ We update our `quarkus-rest-data-producer` to take a random amount of time to an
 ```java
 package ch.puzzle.quarkustechlab.restproducer.boundary;
 
+import ch.puzzle.quarkustechlab.restproducer.entity.SensorMeasurement;
 import java.util.Random;
 
 import jakarta.ws.rs.GET;
@@ -138,6 +141,7 @@ Then update the `DataProducerService` of our `quarkus-rest-data-consumer` to tim
 ```java
 package ch.puzzle.quarkustechlab.restconsumer.boundary;
 
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -154,7 +158,7 @@ public interface DataProducerService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Timeout(500)
-    SensorMeasurement getSensorMeasurment();
+    SensorMeasurement getSensorMeasurement();
     
 }
 ```

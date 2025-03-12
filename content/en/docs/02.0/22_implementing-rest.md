@@ -196,6 +196,8 @@ To use the registered RestClient in our application inject it into the `DataCons
 You can edit our resource in the `quarkus-rest-data-consumer` to use the `DataProducerService` to create a proxy consuming the API of the `quarkus-rest-data-producer` and return it.
 
 ```java
+package ch.puzzle.quarkustechlab.restconsumer.boundary;
+
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;

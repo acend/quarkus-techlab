@@ -17,6 +17,6 @@ public class GreetingResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
         logger.debug("Info log");
-        return "Hello from RESTEasy Reactive";
+        return "Hello from Quarkus REST";
     }
 }

@@ -158,7 +158,7 @@ quarkus.datasource.db-kind=postgresql
 
 # DevServices
 quarkus.datasource.devservices.port=5432
-quarkus.datasource.devservices.image-name=postgres:13.4
+quarkus.datasource.devservices.image-name={{% param devservicesPostgresImage %}}
 
 # Flyway
 quarkus.flyway.baseline-description=Initial version
@@ -173,7 +173,7 @@ quarkus.datasource.db-kind=postgresql
 ```
 
 With specifying `quarkus.datasource.devservices.port` we control and fix the port the spinned up datasource will use. If
-we do not specify it quarkus will us a random port. With `quarkus.datasource.devservices.image-name` we can control the
+we do not specify it quarkus will use a random port. With `quarkus.datasource.devservices.image-name` we can control the
 database image quarkus will use.
 
 We further have an entity Employee ([view source](https://github.com/puzzle/quarkus-techlab/blob/master/solution/dev-services/src/main/java/ch/puzzle/quarkustechlab/entity/Employee.java)) and some database initialize scripts ([view db folder](https://github.com/puzzle/quarkus-techlab/tree/master/solution/dev-services/src/main/resources/db)) to add some data.
@@ -194,19 +194,19 @@ INFO  [org.tes.DockerClientFactory] (build-25) Ryuk started - will monitor and t
 INFO  [org.tes.DockerClientFactory] (build-25) Checking the system...
 INFO  [org.tes.DockerClientFactory] (build-25) ✔︎ Docker server version should be at least 1.6.0
 INFO  [org.tes.DockerClientFactory] (build-25) ✔︎ Docker environment should have more than 2GB free disk space
-INFO  [🐳 .2]] (build-25) Creating container for image: postgres:13.2
-INFO  [🐳 .2]] (build-25) Starting container with ID: 8ced042125623cb84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
-INFO  [🐳 .2]] (build-25) Container postgres:13.2 is starting: 8ced042125623cb84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
-INFO  [🐳 .2]] (build-25) Container postgres:13.2 started in PT1.575032S
+INFO  [🐳 .2]] (build-25) Creating container for image: {{% param devservicesPostgresImage %}}
+INFO  [🐳 .2]] (build-25) Starting container with ID: 8ced042125623b84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
+INFO  [🐳 .2]] (build-25) Container {{% param devservicesPostgresImage %}} is starting: 8ced042125623cb84d25e679f748927c729deb45b88da1d4f6ae130e391ad7c3
+INFO  [🐳 .2]] (build-25) Container {{% param devservicesPostgresImage %}} started in PT1.575032S
 __  ____  __  _____   ___  __ ____  ______ 
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
  -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
 INFO  [org.fly.cor.int.lic.VersionPrinter] (Quarkus Main Thread) Flyway Community Edition 7.7.3 by Redgate
-INFO  [org.fly.cor.int.dat.bas.DatabaseType] (Quarkus Main Thread) Database: jdbc:postgresql://localhost:5432/default (PostgreSQL 13.2)
+INFO  [org.fly.cor.int.dat.bas.DatabaseType] (Quarkus Main Thread) Database: jdbc:postgresql://localhost:5432/default ({{% param devservicesPostgresImage %}})
 ```
 
-We may also see the docker container using the docker command line tools. The database will us the port `5432` as
+We may also see the docker container using the docker command line tools. The database will use the port `5432` as
 specified in the `application.properties`. If you want to connect to the database using your favourite tool use the
 following properties:
 
