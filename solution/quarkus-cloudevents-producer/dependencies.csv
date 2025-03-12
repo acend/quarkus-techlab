@@ -2,8 +2,6 @@ groupId,artifactId,version,scope
 io.quarkus,quarkus-rest,,
 io.quarkus,quarkus-messaging-kafka,,
 io.quarkus,quarkus-arc,,
-io.quarkus,quarkus-confluent-registry-avro,,
-io.confluent,kafka-avro-serializer,7.5.1,
-org.apache.avro,avro,1.11.1,
+io.quarkus,quarkus-apicurio-registry-avro,,
 io.quarkus,quarkus-junit5,,test
 io.rest-assured,rest-assured,,test
