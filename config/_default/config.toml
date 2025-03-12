@@ -55,7 +55,7 @@ weight = 1
 
 [[Languages.en.menu.main]]
 weight = 3
-name = "Puzzle ITC GmbH"
+name = "Puzzle ITC AG"
 url = "https://www.puzzle.ch"
 
 [markup]
@@ -70,7 +70,7 @@ url = "https://www.puzzle.ch"
   guessSyntax = "true"
 
 [params]
-copyright = "Puzzle ITC GmbH"
+copyright = "Puzzle ITC AG"
 github_repo = "https://github.com/acend/quarkus-techlab"
 github_branch = "master"
 
@@ -78,7 +78,7 @@ lab_code_basedir = "/code/"
 solution_code_basedir = "/solution/"
 
 #versions
-quarkusVersion = "3.16.3"
+quarkusVersion = "3.19.2"
 mutinyVersion = "2.5.1"
 confluentKafkaAvroVersion = "7.5.1"
 openJdkImage = "registry.access.redhat.com/ubi8/openjdk-21:1.19"

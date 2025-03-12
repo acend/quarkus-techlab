@@ -62,7 +62,7 @@ quarkus.appinfo.record-build-time=true
 quarkus.appinfo.built-for=quarkus-training
 
 # runtime (changeable at runtime)
-quarkus.appinfo.run-by=Puzzle ITC GmbH
+quarkus.appinfo.run-by=Puzzle ITC AG
 ```
 
 

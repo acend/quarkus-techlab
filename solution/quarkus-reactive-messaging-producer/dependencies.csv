@@ -1,4 +1,5 @@
 groupId,artifactId,version,scope
+io.quarkus,quarkus-rest,,
 io.quarkus,quarkus-jackson,,
 io.quarkus,quarkus-jsonb,,
 io.quarkus,quarkus-messaging-kafka,,

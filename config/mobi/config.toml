@@ -2,7 +2,7 @@ title = "Quarkus Training"
 languageCode = "en-us"
 
 [params]
-copyright = "Puzzle ITC GmbH"
+copyright = "Puzzle ITC AG"
 imagePrefix = "puzzle_"
 
 enabledModule = "base mobi"
@@ -13,8 +13,8 @@ title = "Quarkus Training"
 
 [[Languages.en.menu.main]]
 weight = 3
-name = "Puzzle ITC GmbH"
-copyright = "Puzzle ITC GmbH"
+name = "Puzzle ITC AG"
+copyright = "Puzzle ITC AG"
 url = "https://www.puzzle.ch"
 
 # puzzle design
