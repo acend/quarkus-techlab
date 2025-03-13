@@ -17,8 +17,7 @@ Standardization is a general need in all fields after some technique is widely u
 
 CloudEvents brings a specification to describe events in a common way. The common language increases consistency, accessibility and portability in distributed systems. Major programming languages like Java, Go, JavaScript, Ruby, Rust, Python have SDKs and APIs to implement CloudEvents in a simple way. At it's core it will bring us a blueprint or language to define a set of metadata to describe the event.
 
-> Example CloudEvent
-
+Example CloudEvent:
 ```json
 {
     "specversion" : "1.0",
@@ -78,18 +77,16 @@ Let's try to get our hands dirty and test the CloudEvent specification to fire s
 
 As it just happens the Smallrye reactive messaging extension supports CloudEvents out of the box!
 
-We create two new Quarkus projects:
-
-> Creation of Quarkus projects
-
-```shell
-# Create producer application
+We create two new Quarkus projects. Create producer application with:
+```s
 mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-cloudevents-producer \
     -Dextensions="quarkus-rest,quarkus-messaging-kafka"
+```
 
-# Create consumer application
+Create consumer application:
+```s
 mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
     -DprojectGroupId=ch.puzzle \
     -DprojectArtifactId=quarkus-cloudevents-consumer \
@@ -98,10 +95,8 @@ mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:crea
 
 Remove the test classes and add the following extensions to the `pom.xml` of the projects `quarkus-cloudevents-producer` and `quarkus-cloudevents-consumer`:
 
-> Dependencies in `pom.xml`
-
+Dependencies in `pom.xml`:
 ```xml
-
     <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-apicurio-registry-avro</artifactId>
@@ -112,7 +107,6 @@ Remove the test classes and add the following extensions to the `pom.xml` of the
             </exclusion>
         </exclusions>
     </dependency>
-
 ```
 
 For demonstration purposes we use a Avro-schema, which is the most common approach to manage schemas with Kafka.
@@ -136,7 +130,9 @@ Create an AVRO Schema `src/main/avro/SensorMeasurement.avsc` with the following 
 }
 ```
 {{% alert color="primary" title="Generated Java Class" %}}
-According to this AVRO Schema the Java class will be generated when you run `mvn compile`. You'll find the generated class in the `target/generated-sources/avsc` directory. Now is a good time to have this class generated.
+According to this AVRO Schema the Java class will be generated when you run `mvn compile`. You'll find the generated class in the `target/generated-sources/avsc` directory.  
+
+Now is a good time to have this class generated with `mvn compile`. It might be required to add the folder `target/generated-sources` as `Generated Sources Root` in your IDE.
 {{% /alert %}}
 
 This represents a simple Java POJO to hold some information about measurements we want to emit.
@@ -314,11 +310,7 @@ mp.messaging.incoming.measurements.connector=smallrye-kafka
 mp.messaging.incoming.measurements.topic=measurements
 ```
 
-And that's all you need to have your application up and running! If you have Docker installed, starting the application will also start a mock Kafka broker and connect your applications automatically. If you don't have Docker installed you will need to configure the connection to a Kafka broker yourself by adding the following property to the applications:
-
-```properties
-kafka.bootstrap.servers=localhost:9092
-```
+And that's all you need to have your application up and running!
 
 
 ### {{% param sectionnumber %}}.2.3: Test your events
@@ -332,7 +324,7 @@ Start both of your applications in your favorite IDE or shell:
 Fire some requests against your producer and test your CloudEvents getting emitted and consumed!
 
 ```s
-~$ curl -X POST localhost:8080/measurements
+curl -X POST localhost:8080/measurements
 ```
 
 Your consumer should log the received Event
