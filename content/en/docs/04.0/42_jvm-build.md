@@ -50,7 +50,7 @@ docker build -f quarkus-rest-data-consumer/src/main/docker/Dockerfile.jvm -t qua
 Depending on your docker version you have to specify the output format. If you get a warning that there is no output specified for docker-container driver just add `-o type=docker` to your command line.
 {{% /alert %}}
 
-The image will be produced and tagged as `quarkus-rest-data-producer:latest` / `quarkus-rest-data-consumer:latest`. 
+The image will be produced and tagged as `quarkus-rest-data-producer:latest` / `quarkus-rest-data-consumer:latest`.
 
 Start the `quarkus-rest-data-producer` with the following commands:
 ```s
