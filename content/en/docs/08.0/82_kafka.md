@@ -37,24 +37,26 @@ Apache Kafka is an event streaming platform used to collect, process, store, and
 
 #### Implementation
 
-For local development we do have the choice to either run our Kafka services via Quarkus Devservices or with docker-compose.
+For local development we do have the choice to either run our Kafka services via Quarkus dev-services or with docker-compose.
 If you want to use the Quarkus Dev Services simply remove the line `kafka.bootstrap.servers=localhost:9092` in your `applications.properties` file. This will set up a [Redpanda](https://www.redpanda.com/) container for your development environment.
 
-{{% alert color="primary" title="Redpanda Docker Image" %}}
-Dev Services defaults to Redpanda images from `vectorized/redpanda`. If you do have problems downloading the Redpanda kafka image you can switch to a different provider like Strimzi.
+We do recommend to use the dev-services.
 
-Add the following line to your `applications.properties` to switch to strimzi test containers.
-```yaml
-quarkus.kafka.devservices.provider=strimzi
-```
+[//]: # ({{% alert color="primary" title="Redpanda Docker Image" %}})
+[//]: # (Dev Services defaults to Redpanda images from `vectorized/redpanda`. If you do have problems downloading the Redpanda kafka image you can switch to a different provider like Strimzi.)
+[//]: # ()
+[//]: # (Add the following line to your `applications.properties` to switch to strimzi test containers.)
+[//]: # (```yaml)
+[//]: # (quarkus.kafka.devservices.provider=strimzi)
+[//]: # (```)
+[//]: # ()
+[//]: # (You can also configure a specific docker image with the following property:)
+[//]: # (```shell)
+[//]: # (quarkus.kafka.devservices.image-name=docker.redpanda.com/redpandadata/redpanda:v24.3.1)
+[//]: # (```)
+[//]: # ({{% /alert %}})
 
-You can also configure a specific docker image with the following property:
-```shell
-quarkus.kafka.devservices.image-name=docker.redpanda.com/redpandadata/redpanda:v24.3.1
-```
-{{% /alert %}}
-
-{{% details title="Without Devservices" %}}
+{{% details title="Run without dev-services" %}}
 If you choose to test your local services with a Kafka broker you can use a small docker-compose file `solution/kafka-stack/docker/docker-compose.yml`
 to start a Kafka cluster:
 
@@ -83,20 +85,22 @@ Start your cluster with:
 
 Create two Quarkus projects `quarkus-reactive-messaging-consumer` and `quarkus-reactive-messaging-producer`.
 
+Create producer application
 ```s
-# Create producer application
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
       -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-producer \
       -Dextensions="quarkus-messaging-kafka,quarkus-jackson,quarkus-jsonb" \
       -DprojectVersion=1.0.0
+```
 
-# Create consumer application
+Create consumer application
+```s
 mvn io.quarkus:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:create \
       -DprojectGroupId=ch.puzzle \
       -DprojectArtifactId=quarkus-reactive-messaging-consumer \
       -Dextensions="quarkus-messaging-kafka,quarkus-rest-jackson,quarkus-rest-jsonb" \
-      -DclassName="ch.puzzle.quarkustechlab.messaging.consumer.boundary.DataResource"
+      -DclassName="ch.puzzle.quarkustechlab.messaging.consumer.boundary.DataResource" \
       -DprojectVersion=1.0.0
 ```
 
@@ -175,7 +179,17 @@ mp.messaging.outgoing.data.value.serializer=io.quarkus.kafka.client.serializatio
 
 We define the connector which we are going to use to communicate, the topic in which the data will be sent to and the serializer for the value.
 
-To check if your producer is producing data correctly, you can use basic tooling available in your kafka container or use the quarkus dev-ui (remember to add the `quarkus-vertx-http` dependency in your producer). You need to find the name of your kafka container using `docker ps`. Be aware that this will only work if you are using the kafka stack and not the dev-services and you probably have to check the actual container name which might be different.
+If you are using the dev-services for you kafka cluster you can use the dev-ui to check the messages (remember to add the `quarkus-vertx-http` dependency in your producer).
+Head over to the dev-ui and select "Topics" from the Apache Kafka Client card. When clicking on the topic-name "data", you'll see the produced messages. You'll find something like this:
+
+```
+129     0   13/02/2025 15:38:45     {"data":0.3588087861484209,"time":"2025-03-13T14:38:45.956236432Z"}
+128     0   13/02/2025 15:38:43     {"data":0.7354823691119821,"time":"2025-03-13T14:38:43.956618972Z"}
+127     0   13/02/2025 15:38:41     {"data":0.8793867438783177,"time":"2025-03-13T14:38:41.956167120Z"}
+...
+```
+
+Whenever you are using the docker-compose kafka stack you have to use the basic tooling available in the docker container. You will need to find the name of your kafka container using `docker ps`.  Then consume the data with:
 ```s
 docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic data --from-beginning
 ```
@@ -183,7 +197,7 @@ docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh --bootstrap-server 
 
 ### {{% param sectionnumber %}}.4: Consuming messages
 
-On the other side of the system we want to consume the messages and stream them again to a REST API. Create a class `..consumer.boundary.ReactiveDataConsumer` and similar to the producer create a function which takes a `SensorMeasurement` as parameter and returns a `SensorMeasurement`. For simplicity reasons the function will only return the received measurement again. Annotate your created function with the connectors `@Incoming("data")` and `@Outgoing("in-memory-stream")`. Additionally we can annotate the function with `@Acknowledgment(Acknowledgment.Strategy.POST_PROCESSING)` to ensure the acknowledgement of the messages received.
+On the other side of the system we want to consume the messages and stream them again to a REST API. Create a class `ch.puzzle.quarkustechlab.messaging.consumer.boundary.ReactiveDataConsumer` and similar to the producer create a function which takes a `SensorMeasurement` as parameter and returns a `SensorMeasurement`. For simplicity reasons the function will only return the received measurement again. Annotate your created function with the connectors `@Incoming("data")` and `@Outgoing("in-memory-stream")`. Additionally we can annotate the function with `@Acknowledgment(Acknowledgment.Strategy.POST_PROCESSING)` to ensure the acknowledgement of the messages received.
 
 {{% details title="Hint" %}}
 
@@ -246,7 +260,7 @@ mp.messaging.incoming.data.value.deserializer=ch.puzzle.quarkustechlab.messaging
 
 As you might have noticed, we defined a `@Outgoing("in-memory-stream")` which does not have any connectors defined in the `application.properties`. This is an in-memory stream and we are going to use it to produce the data in our REST API.
 
-Create or update your `..consumer.boundary.DataResource` to expose an endpoint `/data`. Create a `@GET` annotated endpoint to emit a `Multi<SensorMeasurement>` as a stream of data. To read the data from the in-memory stream create an injected field `@Channel(in-memory-stream") Multi<SensorMeasurement> channel` and simply return this channel in your API. Set up the annotations for your reactive rest-easy endpoint to convert the data to JSON.
+Create or update your consumers `DataResource` class to expose an endpoint `/data`. Create a `@GET` annotated endpoint to emit a `Multi<SensorMeasurement>` as a stream of data. To read the data from the in-memory stream create an injected field `@Channel(in-memory-stream") Multi<SensorMeasurement> channel` and simply return this channel in your API. Set up the annotations for your reactive rest-easy endpoint to convert the data to JSON.
 
 {{% details title="Hint" %}}
 
@@ -281,13 +295,14 @@ public class DataResource {
 
 {{% /details %}}
 
-Start up your kafka cluster with the created docker-compose file and your two microservices and test your API.
-
-The result should look similar to this:
+Start your two microservices and test your API with:
 
 ```s
-$ curl -N localhost:8081/data
+curl -N localhost:8081/data
+```
 
+The result should look similar to this:
+```
 data:{"data":0.838331984637051,"time":"2021-03-23T10:52:11.563830Z"}
 
 data:{"data":0.21252592222197708,"time":"2021-03-23T10:52:13.563800Z"}
