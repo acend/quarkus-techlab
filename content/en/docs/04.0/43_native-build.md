@@ -37,8 +37,8 @@ As the name says, native builds will run the Quarkus application as a native exe
 
 For now, we simply want to build native images to be fast as lightning!
 
-There are multiple ways to build native images. One possibility is to install the GraalVM and use Maven locally with `./mvnw package -Pnative` then use the Dockerfile.native to create your image.
-The lazy way is simpler. We create a multistage Dockerfile to do both steps in our docker build process.
+There are multiple ways to build native images. One possibility is to install the GraalVM and use Maven locally with `./mvnw package -Pnative` then use the `Dockerfile.native` to create your image.
+The lazy way is simpler. We create a multistage Dockerfile `Dockerfile.multistage.native` to do both steps in our docker build process.
 
 ```Dockerfile
 ## Stage 1 : build with maven builder image with native capabilities
@@ -71,22 +71,28 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 Now you can create your own native executable with:
 
+Build the `quarkus-rest-data-producer`:
 ```s
-~/quarkus-rest-data-producer$ ./mvnw clean package
-~/quarkus-rest-data-consumer$ ./mvnw clean package
+docker build -f quarkus-rest-data-producer/src/main/docker/Dockerfile.multistage.native -t quarkus-rest-data-producer:native quarkus-rest-data-producer/.
+```
 
-~$ docker build -f quarkus-rest-data-producer/src/main/docker/Dockerfile.multistage -t quarkus-rest-data-producer:native quarkus-rest-data-producer/.
-~$ docker build -f quarkus-rest-data-consumer/src/main/docker/Dockerfile.multistage -t quarkus-rest-data-consumer:native quarkus-rest-data-consumer/.
+Build the `quarkus-rest-data-consumer`:
+```s
+docker build -f quarkus-rest-data-consumer/src/main/docker/Dockerfile.multistage.native -t quarkus-rest-data-consumer:native quarkus-rest-data-consumer/.
 ```
 
 Now start the built native images. You will realize that the startup time is almost instantaneous.
 
 ```s
+docker run --network host quarkus-rest-data-producer:native
+```
+
+```
 __  ____  __  _____   ___  __ ____  ______
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
  -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/
-2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) quarkus-rest-data-consumer 1.0-SNAPSHOT native (powered by Quarkus {{% param "quarkusVersion" %}}) started in 0.031s. Listening on: http://0.0.0.0:8080
+2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) quarkus-rest-data-consumer 1.0-SNAPSHOT native (powered by Quarkus {{% param "quarkusVersion" %}}) started in 0.018s. Listening on: http://0.0.0.0:8080
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Profile prod activated.
 2020-08-31 15:02:53,244 INFO  [io.quarkus] (main) Installed features: [cdi, rest-client, resteasy, resteasy-jsonb, smallrye-health]
 ```
