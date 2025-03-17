@@ -28,7 +28,7 @@ Further we create a dedicated configuration page to display various config sourc
 
 Quarkus knows various ways to easily display information in the [Dev Ui Guide](https://quarkus.io/guides/dev-ui).
 
-We will create a simple Java POJO which extends the `SimpleBuildItem` in our deployment module to expose the static information.
+We will create a simple Java POJO `StaticMetadataBuildItem` which extends the `SimpleBuildItem` in our deployment module to expose the static information.
 
 ```java
 package ch.puzzle.quarkustechlab.extensions.appinfo.deployment;
@@ -59,11 +59,11 @@ This POJO needs to be filled by a `BuildStep` which is run at build time. Add th
 ```java
     @BuildStep
     StaticMetadataBuildItem createStaticMetadata(AppinfoBuildTimeConfig appInfoBuildTimeConfig) {
-            return new StaticMetadataBuildItem(Version.getVersion(),
-            appInfoBuildTimeConfig.builtFor,
-            appInfoBuildTimeConfig.alwaysInclude,
-            appInfoBuildTimeConfig.basePath,
-            appInfoBuildTimeConfig.recordBuildTime);
+        return new StaticMetadataBuildItem(Version.getVersion(),
+            appInfoBuildTimeConfig.builtFor(),
+            appInfoBuildTimeConfig.alwaysInclude(),
+            appInfoBuildTimeConfig.basePath(),
+            appInfoBuildTimeConfig.recordBuildTime());
     }
 ```
 

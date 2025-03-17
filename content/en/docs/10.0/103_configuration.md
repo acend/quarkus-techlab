@@ -31,19 +31,20 @@ We will define our build-time configuration to contain the following properties:
 * **builtFor:** Simple string
 * **recordBuildTime:** Boolean whether the collection of information at build time should run or not
 * **alwaysInclude:** Boolean if the extension should always be included or only for prod and test profile.
+* **basePath:** Basepath of the extension endpoint.
 
 Use the template below for creating the `AppinfoBuildTimeConfig.java` in your **deployment** module:
 
 Things to complete
 
-* Annotate the class with the `@ConfigRoot` annotation
-  * Set the correct value for name (hint: extension name)
-  * Set correct and phase (hint: have a look at the `ConfigPhase` class)
+* Annotate the interface with the `@ConfigMapping` and `@ConfigRoot` annotation
+  * Set correct prefix the `@ConfigMapping` (hint: refer to our class `AppinfoNames.java`)
+  * Set correct and phase for the `@ConfigRoot` (hint: have a look at the `ConfigPhase` class)
 * Define config items from the list above
 
 ```java
 // TODO: annotate class
-public class AppinfoBuildTimeConfig {
+public interface AppinfoBuildTimeConfig {
 
     /**
      * Simple builtFor information string
@@ -52,14 +53,22 @@ public class AppinfoBuildTimeConfig {
 
     /**
      * Include build time collection feature in build
+     * Default should be true
      */
     // TODO: define recordBuildTime as config item with reasonable default
 
     /**
      * Always include this. By default this will only be included in dev and test.
      * Setting this to true will also include this in Prod
+     * Default should be false
      */
     // TODO: define alwaysInclude as config item with reasonable default
+
+    /**
+     * Specify basePath for extension endpoint
+     * The default should be appinfo (hint: refer to the AppinfoNames.java class)
+     */
+    // TODO: define basePath
 }
 ```
 
@@ -70,31 +79,38 @@ The build-time configuration looks like this:
 package ch.puzzle.quarkustechlab.extensions.appinfo.deployment;
 
 import ch.puzzle.quarkustechlab.extensions.appinfo.runtime.AppinfoNames;
-import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
 
-@ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.BUILD_TIME)
-public class AppinfoBuildTimeConfig {
+@ConfigMapping(prefix = AppinfoNames.CONFIG_PREFIX)
+@ConfigRoot(phase = ConfigPhase.BUILD_TIME)
+public interface AppinfoBuildTimeConfig {
 
-    /**
-     * Simple builtFor information string
-     */
-    @ConfigItem
-    String builtFor;
+  /**
+   * Simple builtFor information string
+   */
+  String builtFor();
 
-    /**
-     * Include build time collection feature in build
-     */
-    @ConfigItem(defaultValue = "true")
-    boolean recordBuildTime;
+  /**
+   * Include build time collection feature in build
+   */
+  @WithDefault("true")
+  boolean recordBuildTime();
 
-    /**
-     * Always include this. By default this will only be included in dev and test.
-     * Setting this to true will also include this in Prod
-     */
-    @ConfigItem(defaultValue = "false")
-    boolean alwaysInclude;
+  /**
+   * Always include this. By default this will only be included in dev and test.
+   * Setting this to true will also include this in Prod
+   */
+  @WithDefault("false")
+  boolean alwaysInclude();
+
+  /**
+   * Specify basePath for extension endpoint
+   */
+  @WithDefault(AppinfoNames.EXTENSION_NAME)
+  String basePath();
 }
 ```
 {{% /details %}}
@@ -103,14 +119,14 @@ public class AppinfoBuildTimeConfig {
 ### Task {{% param sectionnumber %}}.2 - Defining run time configuration
 
 Our extension uses the runtime configuration `quarkus.appinfo.run-by`. Therefore, we also define this configuration
-in our runtime module. If we do not specify this config as part of the extension Quarkus will run but complain about
-unrecognized configuration keys.
+in our runtime module. 
 
-Use the template below for creating the `AppinfoRunTimeConfig.java` in your **runtime** module.
+Use the template below for creating the `AppinfoRunTimeConfig.java` config interface in your **runtime** module. Do not
+forget to annotate the interface with correct values for `@ConfigMapping` and `@ConfigRoot`.
 
 ```java
 // TODO: annotate class
-public class AppinfoRunTimeConfig {
+public interface AppinfoRunTimeConfig {
 
    /**
      * Simple runBy information string
@@ -126,18 +142,19 @@ The run-time configuration looks like this:
 ```java
 package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
 
-import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
+import io.smallrye.config.ConfigMapping;
 
-@ConfigRoot(name = AppinfoNames.EXTENSION_NAME, phase = ConfigPhase.RUN_TIME)
-public class AppinfoRunTimeConfig {
+@ConfigMapping(prefix = AppinfoNames.CONFIG_PREFIX)
+@ConfigRoot(phase = ConfigPhase.RUN_TIME)
+public interface AppinfoRunTimeConfig {
 
-    /**
-     * Simple runBy information string
-     */
-    @ConfigItem
-    String runBy;
+  /**
+   * Simple runBy information string
+   */
+  String runBy();
 }
+
 ```
 {{% /details %}}

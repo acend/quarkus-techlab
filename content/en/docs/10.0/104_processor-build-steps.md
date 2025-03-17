@@ -117,7 +117,7 @@ The build step does the following:
 
 * Produces a `SyntheticBeanBuildItem` using a `BuildProducer`
 * Consumes (hint: these are the method arguments)
-  * `AppinfoConfig` for accessing the build time config properties
+  * `AppinfoConfig` for accessing the build time config
   * The `LaunchModeBuildItem` which contains the mode quarkus is started.
   * The `AppinfoRecorder` to record the invocation
   * A `BuildProducer<SyntheticBeanBuildItem>` object
@@ -135,11 +135,10 @@ void syntheticBean(/* TODO: method arguments */) {
 
     // depending on launchMode and alwaysInclude property: should the functionality be ignored?
     if(shouldInclude(launchMode, appinfoConfig)) {
-        // collect build time?
-        String buildTime = appinfoConfig.recordBuildTime ? Instant.now().toString() : null;
-        String builtFor = appinfoConfig.builtFor;
+        String buildTime = appinfoConfig.recordBuildTime() ? Instant.now().toString() : null;
+        String builtFor = appinfoConfig.builtFor();
 
-        logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime, builtFor);
+        logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime(), builtFor);
 
         syntheticBeans.produce(SyntheticBeanBuildItem.configure(/* TODO: destination class */).scope(Singleton.class)
                 .runtimeValue(/* TODO: call the recorder */)
@@ -149,7 +148,7 @@ void syntheticBean(/* TODO: method arguments */) {
 }
 
 /**
- * Conditionally include functionality based on configuration property
+ * Conditionally include functionality based on configuration
  */ 
 private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoBuildTimeConfig appinfoConfig) {
     // TODO: return true if launchMode is dev or test or the appinfoConfig.alwaysInclude is true
@@ -180,14 +179,14 @@ import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
 
 class TechlabExtensionAppinfoProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(TechlabExtensionAppinfoProcessor.class);
-
     private static final String FEATURE = "techlab-extension-appinfo";
-
+  
     @BuildStep
     FeatureBuildItem feature() {
-        return new FeatureBuildItem(FEATURE);
+      return new FeatureBuildItem(FEATURE);
     }
+  
+    private static final Logger logger = LoggerFactory.getLogger(TechlabExtensionAppinfoProcessor.class);
 
     @BuildStep
     @Record(STATIC_INIT)
@@ -195,22 +194,22 @@ class TechlabExtensionAppinfoProcessor {
                        LaunchModeBuildItem launchMode,
                        AppinfoRecorder recorder,
                        BuildProducer<SyntheticBeanBuildItem> syntheticBeans) {
-
-        if(shouldInclude(launchMode, appinfoConfig)) {
-            String buildTime = appinfoConfig.recordBuildTime ? Instant.now().toString() : null;
-            String builtFor = appinfoConfig.builtFor;
-
-            logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime, builtFor);
-
-            syntheticBeans.produce(SyntheticBeanBuildItem.configure(BuildInfo.class).scope(Singleton.class)
-                    .runtimeValue(recorder.createBuildInfo(buildTime, builtFor))
-                    .unremovable()
-                    .done());
-        }
+  
+      if(shouldInclude(launchMode, appinfoConfig)) {
+        String buildTime = appinfoConfig.recordBuildTime() ? Instant.now().toString() : null;
+        String builtFor = appinfoConfig.builtFor();
+  
+        logger.info("Adding BuildInfo. RecordBuildTime={}, BuiltFor={}", appinfoConfig.recordBuildTime(), builtFor);
+  
+        syntheticBeans.produce(SyntheticBeanBuildItem.configure(BuildInfo.class).scope(Singleton.class)
+                .runtimeValue(recorder.createBuildInfo(buildTime, builtFor))
+                .unremovable()
+                .done());
+      }
     }
 
     private static boolean shouldInclude(LaunchModeBuildItem launchMode, AppinfoBuildTimeConfig appinfoConfig) {
-        return launchMode.getLaunchMode().isDevOrTest() || appinfoConfig.alwaysInclude;
+      return launchMode.getLaunchMode().isDevOrTest() || appinfoConfig.alwaysInclude();
     }
 }
 ```
@@ -231,40 +230,31 @@ information this step should also use the `shouldInclude` method to conditionall
 Some details what the implementation should do
 
 * Produce a `ServletBuildItem` (hint: `ServletBuildItem.builder(...)`)
-* BasePath should be configurable (hint: you have to add a new build-config `basePath`)
+* BasePath should be configurable (hint: use the build config `basePath`)
 * Should use the `shouldInclude` method to conditionally exclude it
 
 {{% details title="Task hint" %}}
-The additional build configuration in `AppinfoBuildTimeConfig` looks like this:
-```java
-/**
- * Specify basePath for extension endpoint
- */
-@ConfigItem(defaultValue = AppinfoNames.EXTENSION_NAME)
-String basePath;
-```
-
 The code in the `TechlabExtensionAppinfoProcessor` should look like this:
 
 ```java
-@BuildStep
-void createServlet(LaunchModeBuildItem launchMode,
+    @BuildStep
+    void createServlet(LaunchModeBuildItem launchMode,
                    AppinfoBuildTimeConfig appinfoConfig,
                    BuildProducer<ServletBuildItem> additionalBean) {
 
-    if(shouldInclude(launchMode, appinfoConfig)) {
-        String basePath = appinfoConfig.basePath;
-        if(basePath.startsWith("/")) {
+        if(shouldInclude(launchMode, appinfoConfig)) {
+          String basePath = appinfoConfig.basePath();
+          if(basePath.startsWith("/")) {
             basePath = basePath.replaceFirst("/", "");
+          }
+      
+          logger.info("Adding AppinfoServlet /{}", basePath);
+      
+          additionalBean.produce(ServletBuildItem.builder(basePath, AppinfoServlet.class.getName())
+                  .addMapping("/"+basePath)
+                  .build());
         }
-
-        logger.info("Adding AppinfoServlet /{}", basePath);
-
-        additionalBean.produce(ServletBuildItem.builder(basePath, AppinfoServlet.class.getName())
-                .addMapping("/"+basePath)
-                .build());
     }
-}
 ```
 {{% /details %}}
 
@@ -281,18 +271,18 @@ build items have a look at [All BuildItems](https://quarkus.io/guides/all-buildi
 Use this build step below to add the additional bean:
 
 ```java
-@BuildStep
-void registerAdditionalBeans(AppinfoBuildTimeConfig appinfoConfig,
+    @BuildStep
+    void registerAdditionalBeans(AppinfoBuildTimeConfig appinfoConfig,
                              LaunchModeBuildItem launchMode,
                              BuildProducer<AdditionalBeanBuildItem> additionalBean) {
 
-    if(shouldInclude(launchMode, appinfoConfig)) {
-        logger.info("Adding AppinfoService");
-        // Add AppinfoService as AdditionalBean - else it is not available at runtime.
-        additionalBean.produce(AdditionalBeanBuildItem.builder()
-                .setUnremovable()
-                .addBeanClass(AppinfoService.class)
-                .build());
+        if(shouldInclude(launchMode, appinfoConfig)) {
+          logger.info("Adding AppinfoService");
+          // Add AppinfoService as AdditionalBean - else it is not available at runtime.
+          additionalBean.produce(AdditionalBeanBuildItem.builder()
+                  .setUnremovable()
+                  .addBeanClass(AppinfoService.class)
+                  .build());
+        }
     }
-}
 ```
