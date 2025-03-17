@@ -119,7 +119,7 @@ public interface AppinfoBuildTimeConfig {
 ### Task {{% param sectionnumber %}}.2 - Defining run time configuration
 
 Our extension uses the runtime configuration `quarkus.appinfo.run-by`. Therefore, we also define this configuration
-in our runtime module. 
+in our runtime module.
 
 Use the template below for creating the `AppinfoRunTimeConfig.java` config interface in your **runtime** module. Do not
 forget to annotate the interface with correct values for `@ConfigMapping` and `@ConfigRoot`.
