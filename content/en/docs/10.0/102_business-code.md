@@ -106,7 +106,7 @@ the information on the servlet. However, for simplicity of the lab it is suffici
 
 ![Java Classes](../java-pojo.png)
 
-Create the following `AppinfoNames.java` class:
+Before you start to implement the classes `Appinfo.java` and `BuildInfo.java`  create the following `AppinfoNames.java` class:
 
 ```java
 package ch.puzzle.quarkustechlab.extensions.appinfo.runtime;
@@ -116,6 +116,8 @@ public class AppinfoNames {
   public static final String CONFIG_PREFIX = "quarkus."+ EXTENSION_NAME;
 }
 ```
+
+Now try to implement the `Appinfo.java` and `BuildInfo.java` classes based on the diagram above.
 
 {{% details title="Hint" %}}
 Your `Appinfo.java` class should look something like this:
