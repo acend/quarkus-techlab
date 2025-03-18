@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.PUZZLE_REG_TOKEN }}
 
       - name: Build Puzzle Version
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -43,7 +43,7 @@ jobs:
             registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
 
       - name: Build Mobi Version
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
