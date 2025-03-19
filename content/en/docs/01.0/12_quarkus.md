@@ -49,7 +49,7 @@ and has an active community.
 
 ## How Quarkus works
 
-When creating applications we usually have to phases before we can use our application.
+When creating applications we usually have two phases before we can use our application.
 
 * **Build-Time phase:** We compile our code in a package which will be used to run the application (usually a jar, war, ..).
 usually happens at the CI/CD pipeline or locally at the developers environment.
