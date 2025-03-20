@@ -10,7 +10,7 @@ description: >
 
 ## {{% param sectionnumber %}}.1: Distributed Systems
 
-Applications consisting of several microservices reduce the cohesion and complexity of single parts of applications massively. By enforcing a single responsibility principle on the application's architectural top layer the bottom-up vision brings a very clear image of what each part of a system does. On the other side the top-down vision of an application gets more complex. Handling errors across multiple microservices will become very frustrating and time consuming. This is very tracing comes in handy.
+Applications consisting of several microservices reduce the cohesion and complexity of single parts of applications massively. By enforcing a single responsibility principle on the application's architectural top layer the bottom-up vision brings a very clear image of what each part of a system does. On the other side the top-down vision of an application gets more complex. Handling errors across multiple microservices will become very frustrating and time consuming. This is where tracing comes in handy.
 
 
 ## {{% param sectionnumber %}}.2: Distributed Tracing with OpenTelemetry
