@@ -173,7 +173,7 @@ Both RESTassured and `@TestHTTPResource` allow us to specify the endpoint class 
 
 ### {{% param sectionnumber %}}.3.1: TestHTTPResource
 
-You can the use the `TestHTTPEndpoint` annotation to specify the endpoint path, and the path will be extracted from the provided endpoint. If you also specify a value for the `TestHTTPResource` endpoint it will be appended to the end of the endpoint path.
+You can use the `TestHTTPEndpoint` annotation to specify the endpoint path, and the path will be extracted from the provided endpoint. If you also specify a value for the `TestHTTPResource` endpoint it will be appended to the end of the endpoint path.
 
 Let's take a look at an example for our `data-producer` project:
 

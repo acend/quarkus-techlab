@@ -40,9 +40,10 @@ public void shouldRaiseAnException() throws Exception {
 }
 ```
 
-Instead we use the `assertThrows` method:
+Instead, we use the `assertThrows` method:
 
 ```java
+@Test
 public void shouldRaiseAnException() throws Exception {
     Assertions.assertThrows(Exception.class, () -> {
         //...

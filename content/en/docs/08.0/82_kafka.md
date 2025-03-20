@@ -179,7 +179,7 @@ mp.messaging.outgoing.data.value.serializer=io.quarkus.kafka.client.serializatio
 
 We define the connector which we are going to use to communicate, the topic in which the data will be sent to and the serializer for the value.
 
-If you are using the dev-services for you kafka cluster you can use the dev-ui to check the messages (remember to add the `quarkus-vertx-http` dependency in your producer).
+If you are using the dev-services for your kafka cluster you can use the dev-ui to check the messages (remember to add the `quarkus-vertx-http` dependency in your producer).
 Head over to the dev-ui and select "Topics" from the Apache Kafka Client card. When clicking on the topic-name "data", you'll see the produced messages. You'll find something like this:
 
 ```
