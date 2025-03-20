@@ -35,7 +35,7 @@ cd quarkus-rest-data-producer
 
 Build the `quarkus-rest-data-consumer`:
 ```s
-cd ../quarkus-rest-data-producer
+cd ../quarkus-rest-data-consumer
 ./mvnw clean package
 ```
 
