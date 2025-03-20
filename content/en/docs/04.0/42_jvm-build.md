@@ -62,6 +62,40 @@ In another terminal start the `quarkus-rest-data-consumer` with:
 docker run --network host quarkus-rest-data-consumer:latest
 ```
 
+{{% alert color="primary" title="Docker Windows" %}}
+
+When working with Docker Desktop on Windows, we experienced problems with the `--network host` mode. Alternatively you can use the following docker-compose file:
+
+
+```yaml
+version: '3'
+
+services:
+  producer:
+    image: quarkus-rest-data-producer:latest
+    networks:
+      - lab4
+    ports:
+      - 8080:8080
+
+  consumer:
+    image: quarkus-rest-data-consumer:latest
+    ports:
+      - 8081:8080
+    networks:
+      - lab4
+    environment:
+      - QUARKUS_HTTP_PORT=8080
+      - QUARKUS_REST_CLIENT_DATA_PRODUCER_API_URL=http://producer:8080
+
+networks:
+  lab4:
+    driver: bridge
+    ipam:
+      driver: default
+```
+{{% /alert %}}
+
 When the applications are up and running you can test the API again:
 
 ```s
