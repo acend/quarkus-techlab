@@ -402,7 +402,7 @@ curl -X POST localhost:8080/data -H "Content-Type: application/json" \
 
 Result
 ```
-{"id":null,"data":0.1,"time":"2022-01-01T00:00:00Z"}%
+{"id":1,"data":0.1,"time":"2022-01-01T00:00:00Z"}%
 ```
 
 
