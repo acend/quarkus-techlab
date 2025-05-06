@@ -40,7 +40,7 @@ You will receive a generated project including the java source code files and Do
 
 Native executables make Quarkus applications ideal for containers and serverless workloads.
 
-Make sure to have GRAALVM_HOME configured and pointing to GraalVM version 21.0.0 (Make sure to use a Java 11 version of GraalVM). Verify that your pom.xml has the proper native profile (see Maven configuration).
+Make sure to have GRAALVM_HOME configured and pointing to GraalVM version 21.0.0 (Make sure to use a Java 17 version of GraalVM). Verify that your pom.xml has the proper native profile (see Maven configuration).
 
 Create a native executable using: `./mvnw package -Pnative`. A native executable will be present in target/.
 
