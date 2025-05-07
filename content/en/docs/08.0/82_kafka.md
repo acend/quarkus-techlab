@@ -56,8 +56,9 @@ We do recommend to use the dev-services.
 [//]: # (```)
 [//]: # ({{% /alert %}})
 
+
 {{% alert color="primary" title="Error: Address already in use" %}}
-The devservices will try to start your Kafka broker on a random port. For some reason the devservices will sometimes always try to take the same port which is already taken. 
+The devservices will try to start your Kafka broker on a random port. For some reason the devservices will sometimes always try to take the same port which is already taken.
 
 In that case you simply can add the following property to your system to override the port to any given free port in your `application.properties`:
 
@@ -65,6 +66,7 @@ In that case you simply can add the following property to your system to overrid
 # application.properties
 quarkus.kafka.devservices.port=8888
 ```
+
 {{% /alert %}}
 
 {{% details title="Run without dev-services" %}}
@@ -194,15 +196,18 @@ If you are using the dev-services for your kafka cluster you can use the dev-ui 
 Head over to the dev-ui and select "Topics" from the Apache Kafka Client card. When clicking on the topic-name "data", you'll see the produced messages. You'll find something like this:
 
 ```
-129     0   13/02/2025 15:38:45     {"data":0.3588087861484209,"time":"2025-03-13T14:38:45.956236432Z"}
-128     0   13/02/2025 15:38:43     {"data":0.7354823691119821,"time":"2025-03-13T14:38:43.956618972Z"}
-127     0   13/02/2025 15:38:41     {"data":0.8793867438783177,"time":"2025-03-13T14:38:41.956167120Z"}
+129  0  13/02/2025 15:38:45  {"data":0.3588087861484209,"time":"2025-03-13T14:38:45.956236432Z"}
+128  0  13/02/2025 15:38:43  {"data":0.7354823691119821,"time":"2025-03-13T14:38:43.956618972Z"}
+127  0  13/02/2025 15:38:41  {"data":0.8793867438783177,"time":"2025-03-13T14:38:41.956167120Z"}
 ...
 ```
 
 Whenever you are using the docker-compose kafka stack you have to use the basic tooling available in the docker container. You will need to find the name of your kafka container using `docker ps`.  Then consume the data with:
 ```s
-docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic data --from-beginning
+docker exec -it docker_kafka_1 bin/kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic data \
+    --from-beginning
 ```
 
 
