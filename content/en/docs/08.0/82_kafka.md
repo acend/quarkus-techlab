@@ -56,6 +56,17 @@ We do recommend to use the dev-services.
 [//]: # (```)
 [//]: # ({{% /alert %}})
 
+{{% alert color="primary" title="Error: Address already in use" %}}
+The devservices will try to start your Kafka broker on a random port. For some reason the devservices will sometimes always try to take the same port which is already taken. 
+
+In that case you simply can add the following property to your system to override the port to any given free port in your `application.properties`:
+
+````text
+# application.properties
+quarkus.kafka.devservices.port=8888
+```
+{{% /alert %}}
+
 {{% details title="Run without dev-services" %}}
 If you choose to test your local services with a Kafka broker you can use a small docker-compose file `solution/kafka-stack/docker/docker-compose.yml`
 to start a Kafka cluster:
