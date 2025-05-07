@@ -8,7 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.jboss.resteasy.reactive.RestSseElementType;
+import org.jboss.resteasy.reactive.RestStreamElementType;
 
 import java.time.Duration;
 
@@ -37,7 +37,7 @@ public class DataResource {
     @GET
     @Path("/latest")
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    @RestSseElementType(MediaType.APPLICATION_JSON)
+    @RestStreamElementType(MediaType.APPLICATION_JSON)
     public Multi<SensorMeasurement> latest() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
                 .onItem().transform(i -> SensorMeasurement.getLatest(client).await().indefinitely());
@@ -46,7 +46,7 @@ public class DataResource {
     @GET
     @Path("/average")
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    @RestSseElementType(MediaType.APPLICATION_JSON)
+    @RestStreamElementType(MediaType.APPLICATION_JSON)
     public Multi<SensorMeasurement> average() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
                 .onItem().transform(i -> SensorMeasurement.getAverage(client).await().indefinitely());

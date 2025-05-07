@@ -577,7 +577,7 @@ We learned how to implement a reactive REST API. Now let's stream some data as `
 * `/latest` - to stream the latest persisted data
 * `/average` - to stream a current average of our data
 
-Start by creating the endpoint for receiving the latest `SensorMeasurement`. Create a `@GET` endpoint with the path `/latest` which produces a `MediaType.SERVER_SENT_EVENTS`. Extend your `SensorMeasurement` class with a function which provides you a `Uni<SensorMeasurement>` and select the measurement with the latest `Instant time`. To emit the latest measurement periodically we will use the `Multi.createFrom().ticks().every(Duration.ofSeconds(2))...` feature. The `...ticks().every(Duration.ofSeconds(2))` emits an event every two seconds. Use this to transform it into the latest measurement. To ensure your `SERVER_SENT_EVENTS` will get converted to a JSON you can use the annotation `@RestSseElementType(MediaType.APPLICATION_JSON)`.
+Start by creating the endpoint for receiving the latest `SensorMeasurement`. Create a `@GET` endpoint with the path `/latest` which produces a `MediaType.SERVER_SENT_EVENTS`. Extend your `SensorMeasurement` class with a function which provides you a `Uni<SensorMeasurement>` and select the measurement with the latest `Instant time`. To emit the latest measurement periodically we will use the `Multi.createFrom().ticks().every(Duration.ofSeconds(2))...` feature. The `...ticks().every(Duration.ofSeconds(2))` emits an event every two seconds. Use this to transform it into the latest measurement. To ensure your `SERVER_SENT_EVENTS` will get converted to a JSON you can use the annotation `@RestStreamElementType(MediaType.APPLICATION_JSON)`.
 
 {{% details title="Hint" %}}
 
@@ -586,7 +586,7 @@ Start by creating the endpoint for receiving the latest `SensorMeasurement`. Cre
     @GET
     @Path("/latest")
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    @RestSseElementType(MediaType.APPLICATION_JSON)
+    @RestStreamElementType(MediaType.APPLICATION_JSON)
     public Multi<SensorMeasurement> latest() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
                 .onItem().transform(i -> SensorMeasurement.getLatest(client).await().indefinitely());
@@ -613,7 +613,7 @@ Can you implement the similar API endpoint for calculating the average?
     @GET
     @Path("/average")
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    @RestSseElementType(MediaType.APPLICATION_JSON)
+    @RestStreamElementType(MediaType.APPLICATION_JSON)
     public Multi<SensorMeasurement> average() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(5))
                 .onItem().transform(i -> SensorMeasurement.getAverage(client).await().indefinitely());
