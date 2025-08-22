@@ -39,10 +39,10 @@ public class SensorMeasurement {
     }
 
     public Uni<SensorMeasurement> save(PgPool client) {
-        return client.preparedQuery("INSERT INTO sensormeasurements (data, time) VALUES ($1, $2) RETURNING (id, data, time)")
+        return client.preparedQuery("INSERT INTO sensormeasurements (data, time) VALUES ($1, $2) RETURNING id, data, time")
                 .execute(Tuple.of(data, time.atOffset(ZoneOffset.UTC)))
                 .onItem().transform(RowSet::iterator)
-                .onItem().transform(iterator -> iterator.hasNext() ? this : null);
+                .onItem().transform(iterator -> iterator.hasNext() ? new SensorMeasurement(iterator.next()) : null);
     }
 
     public static Uni<SensorMeasurement> getLatest(PgPool client) {
