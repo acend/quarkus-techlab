@@ -5,7 +5,7 @@ acendTraining:
       name: mobi
       replicaCount: 1
       image:
-        repository: registry.puzzle.ch/puzzle/quarkus-techlab
+        repository: quay.io/acend/quarkus-techlab
         pullPolicy: Always
         tag: ""
         tagsuffix: "-mobi"

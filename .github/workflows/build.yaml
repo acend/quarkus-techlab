@@ -29,18 +29,23 @@ jobs:
       - name: Login to Quay.io Container Registry
         uses: docker/login-action@v3
         with:
-          registry: registry.puzzle.ch
-          username: ${{ secrets.PUZZLE_REG_USERNAME }}
-          password: ${{ secrets.PUZZLE_REG_TOKEN }}
+          registry: quay.io
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_PW }}
+#        uses: docker/login-action@v3
+#        with:
+#          registry: registry.puzzle.ch
+#          username: ${{ secrets.PUZZLE_REG_USERNAME }}
+#          password: ${{ secrets.PUZZLE_REG_TOKEN }}
 
-      - name: Build Puzzle Version
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
+#      - name: Build Puzzle Version
+#        uses: docker/build-push-action@v6
+#        with:
+#          context: .
+#          file: ./Dockerfile
+#          push: true
+#          tags: |
+#            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
 
       - name: Build Mobi Version
         uses: docker/build-push-action@v6
@@ -51,7 +56,7 @@ jobs:
             TRAINING_HUGO_ENV=mobi
           push: true
           tags: |
-            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}-mobi
+            quay.io/acend/quarkus-techlab:pr-${{ github.event.pull_request.number }}-mobi
 
       - name: 'Install Helm'
         uses: azure/setup-helm@v3
@@ -70,38 +75,38 @@ jobs:
           mkdir -p $HOME/.kube
           echo "$KUBE_CONFIG" > $HOME/.kube/config
 
-      - name: Deploy Helm Release
-        env:
-          TRAINING_HELM_RELEASE: 'pr-${{ github.event.pull_request.number }}'
-          TRAINING_NAMESPACE: 'pitc-cicd-quarkus-techlab-test'
-          TRAINING_VERSION: '${{ github.sha }}'
-        run: |
-          helm upgrade $TRAINING_HELM_RELEASE acend-training-chart --install --wait \
-            --kubeconfig $HOME/.kube/config \
-            --namespace=$TRAINING_NAMESPACE \
-            --set=app.name=$HELM_RELEASE \
-            --set=app.version=$TRAINING_VERSION \
-            --repo=https://acend.github.io/helm-charts/ \
-            --values=helm-chart/values.yaml --atomic
-
-      - name: Redeploy Deployments
-        env:
-          TRAINING_HELM_RELEASE: 'pr-${{ github.event.pull_request.number }}'
-          TRAINING_NAMESPACE: 'pitc-cicd-quarkus-techlab-test'
-        run: |
-          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-puzzle \
-            --kubeconfig $HOME/.kube/config \
-            --namespace $TRAINING_NAMESPACE
-          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-mobi \
-            --kubeconfig $HOME/.kube/config \
-            --namespace $TRAINING_NAMESPACE
-
-      - name: Comment PR Environments in PR
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          message: |
-           PR Environments: 
-           * puzzle <https://quarkus-techlab-pr-${{ github.event.pull_request.number }}.ocp.cloudscale.puzzle.ch>
-           * mobi <https://quarkus-techlab-mobi-pr-${{ github.event.pull_request.number }}.ocp.cloudscale.puzzle.ch>
+#      - name: Deploy Helm Release
+#        env:
+#          TRAINING_HELM_RELEASE: 'pr-${{ github.event.pull_request.number }}'
+#          TRAINING_NAMESPACE: 'pitc-cicd-quarkus-techlab-test'
+#          TRAINING_VERSION: '${{ github.sha }}'
+#        run: |
+#          helm upgrade $TRAINING_HELM_RELEASE acend-training-chart --install --wait \
+#            --kubeconfig $HOME/.kube/config \
+#            --namespace=$TRAINING_NAMESPACE \
+#            --set=app.name=$HELM_RELEASE \
+#            --set=app.version=$TRAINING_VERSION \
+#            --repo=https://acend.github.io/helm-charts/ \
+#            --values=helm-chart/values.yaml --atomic
+#
+#      - name: Redeploy Deployments
+#        env:
+#          TRAINING_HELM_RELEASE: 'pr-${{ github.event.pull_request.number }}'
+#          TRAINING_NAMESPACE: 'pitc-cicd-quarkus-techlab-test'
+#        run: |
+#          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-puzzle \
+#            --kubeconfig $HOME/.kube/config \
+#            --namespace $TRAINING_NAMESPACE
+#          kubectl rollout restart deployment/$TRAINING_HELM_RELEASE-quarkus-techlab-mobi \
+#            --kubeconfig $HOME/.kube/config \
+#            --namespace $TRAINING_NAMESPACE
+#
+#      - name: Comment PR Environments in PR
+#        uses: marocchino/sticky-pull-request-comment@v2
+#        with:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          message: |
+#           PR Environments:
+#           * puzzle <https://quarkus-techlab-pr-${{ github.event.pull_request.number }}.ocp.cloudscale.puzzle.ch>
+#           * mobi <https://quarkus-techlab-mobi-pr-${{ github.event.pull_request.number }}.ocp.cloudscale.puzzle.ch>
 

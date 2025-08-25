@@ -32,9 +32,12 @@ jobs:
       - name: Login to Quay.io Container Registry
         uses: docker/login-action@v3
         with:
-          registry: registry.puzzle.ch
-          username: ${{ secrets.PUZZLE_REG_USERNAME }}
-          password: ${{ secrets.PUZZLE_REG_TOKEN }}
+          registry: quay.io
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_PW }}
+#          registry: registry.puzzle.ch
+#          username: ${{ secrets.PUZZLE_REG_USERNAME }}
+#          password: ${{ secrets.PUZZLE_REG_TOKEN }}
 
       - name: Build Puzzle Version
         uses: docker/build-push-action@v5
@@ -43,24 +46,24 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            registry.puzzle.ch/puzzle/quarkus-techlab:latest
+            quay.io/acend/quarkus-techlab:latest
 
-      - name: Run vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'registry.puzzle.ch/puzzle/quarkus-techlab:latest'
-          format: 'table'
-          output: 'trivy-results.txt'
-          exit-code: '0'
-          ignore-unfixed: true
-          vuln-type: 'os'
-          severity: 'CRITICAL,HIGH'
+#      - name: Run vulnerability scanner
+#        uses: aquasecurity/trivy-action@master
+#        with:
+#          image-ref: 'registry.puzzle.ch/puzzle/quarkus-techlab:latest'
+#          format: 'table'
+#          output: 'trivy-results.txt'
+#          exit-code: '0'
+#          ignore-unfixed: true
+#          vuln-type: 'os'
+#          severity: 'CRITICAL,HIGH'
 
-      - name: Archive vulnerability scan results
-        uses: actions/upload-artifact@v4
-        with:
-          name: trivy-results-main
-          path: trivy-results.txt
+#      - name: Archive vulnerability scan results
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: trivy-results-main
+#          path: trivy-results.txt
 
       - name: Build Mobi Version
         uses: docker/build-push-action@v5
@@ -71,7 +74,7 @@ jobs:
             TRAINING_HUGO_ENV=mobi
           push: true
           tags: |
-            registry.puzzle.ch/puzzle/quarkus-techlab:latest-mobi
+            quay.io/acend/quarkus-techlab:latest-mobi
 
       - name: 'Install Helm'
         uses: azure/setup-helm@v3
