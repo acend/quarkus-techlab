@@ -56,7 +56,7 @@ jobs:
             TRAINING_HUGO_ENV=mobi
           push: true
           tags: |
-            quay.io/acend/quarkus-techlab:pr-${{ github.event.pull_request.number }}-mobi
+            quay.io/acend/quarkus-lab:pr-${{ github.event.pull_request.number }}-mobi
 
       - name: 'Install Helm'
         uses: azure/setup-helm@v3
