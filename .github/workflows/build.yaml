@@ -29,18 +29,23 @@ jobs:
       - name: Login to Quay.io Container Registry
         uses: docker/login-action@v3
         with:
-          registry: registry.puzzle.ch
-          username: ${{ secrets.PUZZLE_REG_USERNAME }}
-          password: ${{ secrets.PUZZLE_REG_TOKEN }}
+          registry: quay.io
+          username: ${{ secrets.QUAYIO_USERNAME }}
+          password: ${{ secrets.QUAYIO_TOKEN }}
+#        uses: docker/login-action@v3
+#        with:
+#          registry: registry.puzzle.ch
+#          username: ${{ secrets.PUZZLE_REG_USERNAME }}
+#          password: ${{ secrets.PUZZLE_REG_TOKEN }}
 
-      - name: Build Puzzle Version
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
+#      - name: Build Puzzle Version
+#        uses: docker/build-push-action@v6
+#        with:
+#          context: .
+#          file: ./Dockerfile
+#          push: true
+#          tags: |
+#            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}
 
       - name: Build Mobi Version
         uses: docker/build-push-action@v6
@@ -51,7 +56,7 @@ jobs:
             TRAINING_HUGO_ENV=mobi
           push: true
           tags: |
-            registry.puzzle.ch/puzzle/quarkus-techlab:pr-${{ github.event.pull_request.number }}-mobi
+            quay.io/acend/quarkus-techlab:pr-${{ github.event.pull_request.number }}-mobi
 
       - name: 'Install Helm'
         uses: azure/setup-helm@v3
