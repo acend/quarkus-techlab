@@ -95,7 +95,7 @@ mvn io.quarkus.platform:quarkus-maven-plugin:{{% param "quarkusVersion" %}}:crea
 
 Remove the test classes and add the following extensions to the `pom.xml` of the projects `quarkus-cloudevents-producer` and `quarkus-cloudevents-consumer`:
 
-Dependencies in `pom.xml`:
+Add this to the `dependencies` block in `pom.xml`:
 ```xml
     <dependency>
         <groupId>io.quarkus</groupId>

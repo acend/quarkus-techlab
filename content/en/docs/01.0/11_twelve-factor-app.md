@@ -22,7 +22,7 @@ The manifesto is held generic so it applies to software systems written in any l
 
 A twelve-factor application should always be tracked by a version control system (VCS), preferrably Git. Tracking versions and changes in a software system is key to it's success and crucial for deployments.
 
-Individual applications should be held in a single repository which will provide benefits for continuous integration and delivery (CICD) approaches. Every codebasy can lead to multiple instances running on different environments coming from the same deployable.
+Individual applications should be held in a single repository which will provide benefits for continuous integration and delivery (CICD) approaches. Every codebase can lead to multiple instances running on different environments coming from the same deployable.
 
 
 ## {{% param sectionnumber %}}.2: Dependencies
